@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 110483922}
   - component: {fileID: 110483921}
   - component: {fileID: 110483920}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -258,7 +258,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 7c1ae2f0ce9f80d46bded570846c9227,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.1
+      value: 0.39
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7c1ae2f0ce9f80d46bded570846c9227,
         type: 3}
@@ -630,7 +630,7 @@ GameObject:
   - component: {fileID: 450392748}
   - component: {fileID: 450392747}
   - component: {fileID: 450392746}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -784,7 +784,7 @@ GameObject:
   - component: {fileID: 881503860}
   - component: {fileID: 881503859}
   - component: {fileID: 881503858}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -932,7 +932,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 933159670}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 02c1c5601db574a469a69a584738acbb, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -965,12 +965,16 @@ MonoBehaviour:
   jumpForce: 7
   rotationSpeed: 10
   velocity: 1
+  max_velocity: 2.5
   rotateTime: 3
   rotateDegree: 30
   onRotate: 0
   fallingThrexhold: -0.1
   groundCheckDistance: 0.3
   slopedLimit: 45
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &1464896263
 GameObject:
   m_ObjectHideFlags: 0
@@ -983,7 +987,7 @@ GameObject:
   - component: {fileID: 1464896267}
   - component: {fileID: 1464896266}
   - component: {fileID: 1464896265}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1123,7 +1127,7 @@ GameObject:
   - component: {fileID: 2064931994}
   - component: {fileID: 2064931993}
   - component: {fileID: 2064931992}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

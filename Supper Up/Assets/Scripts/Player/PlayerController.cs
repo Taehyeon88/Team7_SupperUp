@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -25,6 +26,13 @@ public class PlayerController : MonoBehaviour
         movementController.Landing();
 
         movementController.Rotate();
+
+        if (movementController.IsGrounded())
+        {
+            //Debug.Log("땅이다");
+        }
+
+        //Debug.Log(movementController.isJumping);
     }
     private void FixedUpdate()
     {
@@ -58,8 +66,17 @@ public class PlayerController : MonoBehaviour
         Gizmos.color = Color.red;
         Debug.DrawRay(transform.position, transform.forward);
 
-        Gizmos.color = Color.red;
-        Debug.DrawRay(transform.position, Vector3.down * 2f);
+
+        Vector3 origin = transform.position + Vector3.up * 0.5f;
+
+        //-------------------------------------------------------------
+
+        Vector3 start = transform.position + Vector3.up * 0.1f;
+        float radius = 0.2f;
+
+        // 시작 구
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(start, radius);
     }
 
 }

@@ -35,6 +35,8 @@ public class MovementController : MonoBehaviour
     public float slopedLimit = 45f;                  //등반 가능 최대 경사
     private bool isFalling = false;
     private bool isJumping = false;
+    private bool wasGrounded = false;
+    public LayerMask groundLayer;
 
     //내부 변수들
     private Rigidbody rb;
@@ -56,6 +58,12 @@ public class MovementController : MonoBehaviour
 
         if (!IsGrounded()) moveSpeed = 0.3f;
         else moveSpeed = currentSpeed;
+
+        AnimatorStateInfo stateInfo = playerAnimator.GetCurrentAnimatorStateInfo(0);
+        if (stateInfo.IsName("Jumping Down") && stateInfo.normalizedTime < 0.5)
+        {
+            //이동제한이 필요(기본착지, 슈퍼착지, 공중, 파쿠르) <-- 플레이어컨트롤에서 직접 간섭!!
+        }
 
         AdjustSpeed(moveVertical);
         //애니메이션
@@ -107,8 +115,11 @@ public class MovementController : MonoBehaviour
                 Vector3 left = -transform.right;
                 float temp = Vector3.Angle(cameraForward, left);
 
-                if (temp <= 90) playerAnimator.SetTrigger("Lturn");
-                else if (temp <= 180) playerAnimator.SetTrigger("Rturn");
+                if (IsGrounded() || !isJumping)
+                {
+                    if (temp <= 90) playerAnimator.SetTrigger("Lturn");
+                    else if (temp <= 180) playerAnimator.SetTrigger("Rturn");
+                }
             }
         }
         transform.rotation = Quaternion.Slerp(transform.rotation, toRoation, rotationSpeed * Time.deltaTime);
@@ -134,8 +145,10 @@ public class MovementController : MonoBehaviour
 
     public void Jumping()
     {
+        //Debug.Log(IsGrounded());
         if (IsGrounded())
         {
+            //Debug.Log("된다~~");
             playerAnimator.SetBool("IsJumping", true);
             isJumping = true;
             rb.AddForce(Vector3.up * jumpForce + moveVector * velocity * 2.5f, ForceMode.Impulse);          //위쪽으로 힘을 가해 점프
@@ -173,20 +186,23 @@ public class MovementController : MonoBehaviour
             }
         }
 
-        if (CheckDistance() < 1.2f)
+        if (IsGrounded() && !wasGrounded && isJumping)
         {
-            if(isJumping)
-            {
-                StartCoroutine(ResetValue());
-            }
+            AnimatorStateInfo stateInfo1 = playerAnimator.GetCurrentAnimatorStateInfo(0);
+            if (stateInfo1.IsName("Jumping Up")) Debug.Log("현재작동중이다");
+
+            Debug.Log("착지한다.");
+            playerAnimator.SetTrigger("IsLanding");
+            playerAnimator.SetBool("IsJumping", false);
+            isJumping = false;
         }
+        wasGrounded = IsGrounded();
     }
     private IEnumerator ResetValue()
     {
         isJumping = false;
         yield return new WaitForSeconds(1f);
         playerAnimator.SetBool("IsSupperLanding", false);
-        playerAnimator.SetBool("IsJumping", false);
     }
 
     private float CheckDistance()
@@ -200,8 +216,8 @@ public class MovementController : MonoBehaviour
 
     public bool IsGrounded()
     {
-        Vector3 temp = transform.position;
-        temp.y += 1f;
-        return Physics.SphereCast(temp, 0.1f, Vector3.down, out RaycastHit hit, 0.9f);
+        Vector3 origin = transform.position + Vector3.up * 0.1f;
+        float radius = 0.3f;
+        return Physics.CheckSphere(origin, radius, groundLayer);
     }
 }
