@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 110483922}
   - component: {fileID: 110483921}
   - component: {fileID: 110483920}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -258,7 +258,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 7c1ae2f0ce9f80d46bded570846c9227,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.1
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7c1ae2f0ce9f80d46bded570846c9227,
         type: 3}
@@ -340,11 +340,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7c1ae2f0ce9f80d46bded570846c9227,
         type: 3}
       insertIndex: -1
+      addedObject: {fileID: 933159680}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7c1ae2f0ce9f80d46bded570846c9227,
+        type: 3}
+      insertIndex: -1
       addedObject: {fileID: 933159671}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7c1ae2f0ce9f80d46bded570846c9227,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 933159676}
+      addedObject: {fileID: 933159679}
   m_SourcePrefab: {fileID: 100100000, guid: 7c1ae2f0ce9f80d46bded570846c9227, type: 3}
 --- !u!1 &330585543
 GameObject:
@@ -630,7 +634,7 @@ GameObject:
   - component: {fileID: 450392748}
   - component: {fileID: 450392747}
   - component: {fileID: 450392746}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -784,7 +788,7 @@ GameObject:
   - component: {fileID: 881503860}
   - component: {fileID: 881503859}
   - component: {fileID: 881503858}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -897,7 +901,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   thirdPersonCamera: {fileID: 330585545}
-  movementController: {fileID: 933159676}
+  moveSpeed: 5
+  jumpForce: 7
+  rotationSpeed: 10
+  velocity: 3
+  max_velocity: 3
+  rotateTime: 3
+  rotateDegree: 30
+  onRotate: 0
+  fallingThrexhold: -0.1
+  groundCheckDistance: 0.3
+  slopedLimit: 45
+  isFalling: 0
+  isJumping: 0
+  isLanding: 0
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!54 &933159672
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -932,7 +952,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 933159670}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 02c1c5601db574a469a69a584738acbb, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -948,7 +968,13 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 0.91, z: -0.003867241}
---- !u!114 &933159676
+--- !u!95 &933159677 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 7c1ae2f0ce9f80d46bded570846c9227,
+    type: 3}
+  m_PrefabInstance: {fileID: 276437209}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &933159679
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -957,20 +983,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 933159670}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a56bb6625907d543ad857915aa4523d, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d6d07e266fb8684cbfcd74ada298654, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thirdPersonCamera: {fileID: 330585545}
-  moveSpeed: 5
-  jumpForce: 7
-  rotationSpeed: 10
-  velocity: 1
-  rotateTime: 3
-  rotateDegree: 30
-  onRotate: 0
-  fallingThrexhold: -0.1
-  groundCheckDistance: 0.3
-  slopedLimit: 45
+  animator: {fileID: 933159677}
+  playerStateMachine: {fileID: 933159680}
+--- !u!114 &933159680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 933159670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 510001b181e97c142833c7c32d0915bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerController: {fileID: 933159671}
 --- !u!1 &1464896263
 GameObject:
   m_ObjectHideFlags: 0
@@ -983,7 +1013,7 @@ GameObject:
   - component: {fileID: 1464896267}
   - component: {fileID: 1464896266}
   - component: {fileID: 1464896265}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1123,7 +1153,7 @@ GameObject:
   - component: {fileID: 2064931994}
   - component: {fileID: 2064931993}
   - component: {fileID: 2064931992}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
