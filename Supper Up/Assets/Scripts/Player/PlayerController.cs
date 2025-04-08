@@ -30,15 +30,19 @@ public class PlayerController : MonoBehaviour
     private float moveDegree = 0;
     public bool onRotate = false;
 
-    [Header("Ground Check Setting")]
-    public float fallingThrexhold = -0.1f;            //떨어지는것으로 간주할 수직 속도 임계값
-    public float groundCheckDistance = 0.3f;
-    public float slopedLimit = 45f;                  //등반 가능 최대 경사
+    [Header("Veriable for Ground Check")]
     public bool isFalling = false;
     public bool isJumping = false;
     private bool wasGrounded = false;
     public bool isLanding = false;
     public LayerMask groundLayer;
+
+    [Header("Wall Climbing Setting")]
+    public float heightValue = 1f;
+    public float frontValue = 0.3f;
+    public Vector3 boxHalfExtents = Vector3.zero;
+    public LayerMask wallLayer;
+    public float ClimbSpeed = 1f; 
 
     //내부 변수들
     private Rigidbody rb;
@@ -189,6 +193,16 @@ public class PlayerController : MonoBehaviour
         }
         wasGrounded = IsGrounded();
    }
+
+    public void Climbing()
+    {
+        Vector3 origin = transform.position + Vector3.up * heightValue + Vector3.forward * frontValue;
+        Collider[] target = Physics.OverlapBox(origin, boxHalfExtents, Quaternion.identity, wallLayer);
+        if (target.Length >= 1)
+        {
+
+        }
+    }
     public float CheckDistance()
     {
         RaycastHit hit;
@@ -200,12 +214,13 @@ public class PlayerController : MonoBehaviour
     public bool IsGrounded()
     {
         Vector3 origin = transform.position + Vector3.up * 0.1f;
-        float radius = 0.3f;
+        float radius = 0.2f;
         return Physics.CheckSphere(origin, radius, groundLayer);
     }
 
     private void OnDrawGizmos()
     {
+        /*
         Vector3 cameraForward = thirdPersonCamera.transform.forward; //카메라 앞 방향
         cameraForward.y = 0f;  //수직 방향 제거
         cameraForward.Normalize();  //방향 백터 정규화(0~1) 사이의 값으로 만들어준다.
@@ -218,15 +233,19 @@ public class PlayerController : MonoBehaviour
 
 
         Vector3 origin = transform.position + Vector3.up * 0.5f;
-
+        */
         //-------------------------------------------------------------
 
+        //플레이어 바닥체크용
         Vector3 start = transform.position + Vector3.up * 0.1f;
         float radius = 0.2f;
 
-        // 시작 구
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(start, radius);
+
+        //플레이어 벽체크용
+        Vector3 origin = transform.position + Vector3.up * heightValue + Vector3.forward * frontValue;
+        Gizmos.DrawWireCube(origin, boxHalfExtents);
     }
 
 }
