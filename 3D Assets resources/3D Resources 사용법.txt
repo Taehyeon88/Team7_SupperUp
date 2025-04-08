@@ -1,5 +1,0 @@
-3D Resources 사용법
-
-1. unitypackage 파일을 유니티에 import시킨다.
-2. .fbx 파일(3D 에셋)을 유니티 씬에 넣는다.
-3. Material 파일을 3D 에셋에 드래그 앤 드랍 한다.
