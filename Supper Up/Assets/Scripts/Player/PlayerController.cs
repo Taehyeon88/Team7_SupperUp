@@ -1,4 +1,5 @@
 using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
@@ -42,7 +43,12 @@ public class PlayerController : MonoBehaviour
     public float frontValue = 0.3f;
     public Vector3 boxHalfExtents = Vector3.zero;
     public LayerMask wallLayer;
-    public float ClimbSpeed = 1f; 
+    public float climbSpeed = 1f;
+    public bool isClimbing = false;
+    private Vector3 TargetPos;
+    private float timer = 0;
+    public Vector3 climbOffset;
+    private Vector3 targetHandPos;
 
     //내부 변수들
     private Rigidbody rb;
@@ -61,6 +67,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Landing();
+        Climbing();
     }
 
     //플레이어 행동처리 함수
@@ -70,8 +77,6 @@ public class PlayerController : MonoBehaviour
         float moveVertical = Input.GetAxis("Vertical");             //앞뒤 입력(1, -1)
 
         ConstraintsMove();
-
-        Debug.Log($"{CheckDistance()}, {moveVertical}");
 
         AdjustSpeed(moveVertical);
         //애니메이션
@@ -196,13 +201,47 @@ public class PlayerController : MonoBehaviour
 
     public void Climbing()
     {
-        Vector3 origin = transform.position + Vector3.up * heightValue + Vector3.forward * frontValue;
-        Collider[] target = Physics.OverlapBox(origin, boxHalfExtents, Quaternion.identity, wallLayer);
+        Vector3 origin = transform.position + transform.up * heightValue + transform.forward * frontValue;
+        Collider[] target = Physics.OverlapBox(origin, boxHalfExtents, transform.rotation, wallLayer);
+
+        float climbHeight = origin.y + boxHalfExtents.y;
         if (target.Length >= 1)
         {
+            Debug.Log($"{target[0].transform.position.y}, {target[0].transform.localScale.y / 2}");
+            float height = target[0].transform.position.y + target[0].transform.localScale.y / 2;
+            if (height <= climbHeight && !isClimbing)
+            {
+                isClimbing = true;
+                Vector3 vel = rb.velocity;
+                vel.y = 0;
+                rb.velocity = vel;
 
+                Vector3 forward = transform.position + transform.forward * 0.25f;
+                TargetPos = new Vector3(transform.position.x, height + 0.1f, forward.z);
+                rb.useGravity = false;
+            }
+        }
+        if (isClimbing)
+        {
+            playerAnimator.SetFloat("ClimbSpeed", climbSpeed);
+
+            timer += climbSpeed * Time.deltaTime;
+            if (timer >= 1)
+            {
+                transform.position = TargetPos;
+                timer = 0;
+                Debug.Log("된다");
+                rb.useGravity = true;
+                isClimbing = false;
+            }
         }
     }
+
+    private Vector3 StartClimbPos()
+    {
+        return transform.position + transform.forward * climbOffset.z + transform.up * climbOffset.y + transform.right * climbOffset.x;
+    }
+
     public float CheckDistance()
     {
         RaycastHit hit;
@@ -218,24 +257,18 @@ public class PlayerController : MonoBehaviour
         return Physics.CheckSphere(origin, radius, groundLayer);
     }
 
+    private void OnAnimatorIK(int layerIndex)
+    {
+        playerAnimator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
+        playerAnimator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
+
+        playerAnimator.SetIKPosition(AvatarIKGoal.RightHand, targetHandPos);  //수정필요
+        playerAnimator.SetIKPosition(AvatarIKGoal.LeftHand, targetHandPos);
+
+    }
+
     private void OnDrawGizmos()
     {
-        /*
-        Vector3 cameraForward = thirdPersonCamera.transform.forward; //카메라 앞 방향
-        cameraForward.y = 0f;  //수직 방향 제거
-        cameraForward.Normalize();  //방향 백터 정규화(0~1) 사이의 값으로 만들어준다.
-
-        Gizmos.color = Color.yellow;
-        Debug.DrawRay(transform.position, cameraForward);
-
-        Gizmos.color = Color.red;
-        Debug.DrawRay(transform.position + Vector3.up, movement * 2f);
-
-
-        Vector3 origin = transform.position + Vector3.up * 0.5f;
-        */
-        //-------------------------------------------------------------
-
         //플레이어 바닥체크용
         Vector3 start = transform.position + Vector3.up * 0.1f;
         float radius = 0.2f;
@@ -244,8 +277,11 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawWireSphere(start, radius);
 
         //플레이어 벽체크용
-        Vector3 origin = transform.position + Vector3.up * heightValue + Vector3.forward * frontValue;
-        Gizmos.DrawWireCube(origin, boxHalfExtents);
+
+        Gizmos.matrix = Matrix4x4.TRS(transform.position + transform.up * heightValue + transform.forward * frontValue, transform.rotation, Vector3.one);
+
+        Vector3 origin = transform.position + transform.up * heightValue + transform.forward * frontValue;
+        Gizmos.DrawWireCube(Vector3.zero, boxHalfExtents * 2);
     }
 
 }

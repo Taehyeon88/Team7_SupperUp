@@ -23,32 +23,40 @@ public abstract class PlayerState
 
     protected void CheckTransitions()
     {
-        if (playerController.IsGrounded())
+        if (!playerController.isClimbing)
         {
-            if(Input.GetKeyDown(KeyCode.Space))
+
+            if (playerController.IsGrounded())
             {
-                stateMachine.TransitionToState(JumpingState.GetInstance());
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    stateMachine.TransitionToState(JumpingState.GetInstance());
+                }
+                else if (playerController.isLanding)
+                {
+                    stateMachine.TransitionToState(LandingState.GetInstance());
+                    Debug.Log("된다1");
+                }
+                else if (!playerController.isFalling && !playerController.isLanding)
+                {
+                    stateMachine.TransitionToState(MoveState.GetInstance());
+                }
             }
-            else if(playerController.isLanding)
+            else
             {
-                stateMachine.TransitionToState(LandingState.GetInstance());
-                Debug.Log("된다1");
-            }
-            else if (!playerController.isFalling && !playerController.isLanding)
-            {
-                stateMachine.TransitionToState(MoveState.GetInstance());
+                if (playerController.CheckDistance() > 30f && !playerController.isFalling)
+                {
+                    stateMachine.TransitionToState(FallingState.GetInstance());
+                }
+                else if (playerController.CheckDistance() < 2.2f && playerController.isFalling)
+                {
+                    stateMachine.TransitionToState(SupperLandingState.GetInstance());
+                }
             }
         }
         else
         {
-            if (playerController.CheckDistance() > 30f && !playerController.isFalling)
-            {
-                stateMachine.TransitionToState(FallingState.GetInstance());
-            }
-            else if (playerController.CheckDistance() < 2.2f && playerController.isFalling)
-            {
-                stateMachine.TransitionToState(SupperLandingState.GetInstance());
-            }
+            stateMachine.TransitionToState(ClimbingState.GetInstance());
         }
     }
 }
@@ -155,11 +163,6 @@ public class ClimbingState : PlayerState
     public override void Update()
     {
         CheckTransitions();
-    }
-
-    public override void FixedUpdate()
-    {
-
     }
     public override void Exit() { playerController.ResetVelocity(); }
 }
