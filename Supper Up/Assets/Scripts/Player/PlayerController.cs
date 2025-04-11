@@ -207,7 +207,7 @@ public class PlayerController : MonoBehaviour
         float climbHeight = origin.y + boxHalfExtents.y;
         if (target.Length >= 1)
         {
-            Debug.Log($"{target[0].transform.position.y}, {target[0].transform.localScale.y / 2}");
+            //Debug.Log($"{target[0].transform.position.y}, {target[0].transform.localScale.y / 2}");
             float height = target[0].transform.position.y + target[0].transform.localScale.y / 2;
             if (height <= climbHeight && !isClimbing)
             {
@@ -215,31 +215,34 @@ public class PlayerController : MonoBehaviour
                 Vector3 vel = rb.velocity;
                 vel.y = 0;
                 rb.velocity = vel;
+                playerAnimator.applyRootMotion = true;
+                GetComponent<Collider>().enabled = false;
 
-                Vector3 forward = transform.position + transform.forward * 0.25f;
-                TargetPos = new Vector3(transform.position.x, height + 0.1f, forward.z);
-                rb.useGravity = false;
+                Vector3 Handforward = transform.position + transform.forward * 0.5f;       //캐릭터의 손이 위치할 곳
+                targetHandPos = new Vector3(Handforward.x, height + 0.05f, Handforward.z);
+
+                Vector3 temp = new Vector3(0, 1.43f, 0.31f);                               //손의 위치와 offset만큼의 거리가 되게 이동
+                Vector3 desiredPos = targetHandPos - transform.rotation * temp;
+                transform.position = desiredPos;
+
+                Vector3 targetPos = new Vector3(transform.position.x, height + 0.05f, transform.position.z);
+                //if (Physics.Raycast(targetPos)
             }
         }
         if (isClimbing)
         {
             playerAnimator.SetFloat("ClimbSpeed", climbSpeed);
-
+            
             timer += climbSpeed * Time.deltaTime;
-            if (timer >= 1)
+            if (timer >= 2.4f)                                   //애니메이션이 끝났을 때, 초기화
             {
-                transform.position = TargetPos;
+                playerAnimator.applyRootMotion = false;
                 timer = 0;
                 Debug.Log("된다");
-                rb.useGravity = true;
+                GetComponent<Collider>().enabled = true;
                 isClimbing = false;
             }
         }
-    }
-
-    private Vector3 StartClimbPos()
-    {
-        return transform.position + transform.forward * climbOffset.z + transform.up * climbOffset.y + transform.right * climbOffset.x;
     }
 
     public float CheckDistance()
@@ -256,14 +259,31 @@ public class PlayerController : MonoBehaviour
         float radius = 0.2f;
         return Physics.CheckSphere(origin, radius, groundLayer);
     }
-
+    
     private void OnAnimatorIK(int layerIndex)
     {
-        playerAnimator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
-        playerAnimator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
+        AnimatorStateInfo stateInfo = playerAnimator.GetCurrentAnimatorStateInfo(0);
 
-        playerAnimator.SetIKPosition(AvatarIKGoal.RightHand, targetHandPos);  //수정필요
-        playerAnimator.SetIKPosition(AvatarIKGoal.LeftHand, targetHandPos);
+        if (stateInfo.IsName("Climbing"))
+        {
+            Vector3 leftHandPos = targetHandPos - transform.right * 0.4f;
+            Vector3 rightHandPos = targetHandPos + transform.right * 0.4f;
+
+            playerAnimator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
+            playerAnimator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
+            playerAnimator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
+            playerAnimator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1f);
+
+            playerAnimator.SetIKPosition(AvatarIKGoal.RightHand, rightHandPos);
+            playerAnimator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandPos);
+        }
+        else
+        {
+            playerAnimator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0f);
+            playerAnimator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0f);
+            playerAnimator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0f);
+            playerAnimator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 0f);
+        }
 
     }
 
