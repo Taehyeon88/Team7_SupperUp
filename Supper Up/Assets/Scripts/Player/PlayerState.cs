@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Timeline;
 using UnityEngine;
 
 public abstract class PlayerState
@@ -28,16 +29,17 @@ public abstract class PlayerState
 
             if (playerController.IsGrounded())
             {
-                if (Input.GetKeyDown(KeyCode.Space))
+
+                if (playerController.isLanding)
+                {
+                    stateMachine.TransitionToState(LandingState.GetInstance());
+                    //Debug.Log("된다1");
+                }
+                else if (Input.GetKeyDown(KeyCode.Space))
                 {
                     stateMachine.TransitionToState(JumpingState.GetInstance());
                 }
-                else if (playerController.isLanding)
-                {
-                    stateMachine.TransitionToState(LandingState.GetInstance());
-                    Debug.Log("된다1");
-                }
-                else if (!playerController.isFalling && !playerController.isLanding)
+                else if (!playerController.isFalling && !playerController.startLanding)
                 {
                     stateMachine.TransitionToState(MoveState.GetInstance());
                 }
@@ -88,6 +90,7 @@ public class JumpingState : PlayerState
     {
         playerController.Jumping();
         playerController.isJumping = true;
+        playerController.startLanding = true;
     }
     public override void Update()
     {
@@ -107,7 +110,11 @@ public class FallingState : PlayerState
     private FallingState() { }
     public static FallingState GetInstance() { return instance; }
 
-    public override void Enter() { playerController.isFalling = true; }
+    public override void Enter()
+    {
+        playerController.startLanding = false;
+        playerController.isFalling = true; 
+    }
     public override void Update()
     {
         playerController.Rotate(false);
@@ -128,7 +135,8 @@ public class LandingState : PlayerState
 
     public override void Enter()
     {
-        playerController.isLanding = false;
+        playerController.startLanding = false;
+        //playerController.isLanding = false;
     }
     public override void Update()
     {
@@ -160,6 +168,7 @@ public class ClimbingState : PlayerState
     private ClimbingState() { }
     public static ClimbingState GetInstance() { return instance; }
 
+    public override void Enter() { playerController.startLanding = false; }
     public override void Update()
     {
         CheckTransitions();

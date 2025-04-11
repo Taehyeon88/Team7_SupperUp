@@ -26,6 +26,7 @@ public class PlayerAnimationController : MonoBehaviour
         {
             case MoveState:
                 //기본이동은 아무일도 일어나지 않는다.
+                animator.SetBool(PARAM_IS_LANDING, false);
                 break;
             case JumpingState:
                 if (currentState is LandingState || currentState is MoveState) ChangeAnimation("Jumping");
@@ -36,7 +37,7 @@ public class PlayerAnimationController : MonoBehaviour
                 else animator.SetBool(PARAM_IS_FALLING, true);
                 break;
             case LandingState:
-                animator.SetTrigger(PARAM_IS_LANDING);
+                if (currentState is JumpingState || currentState is MoveState) animator.SetBool(PARAM_IS_LANDING, true); //자동실행
                 break;
             case SupperLandingState:
                 animator.SetBool(PARAM_IS_SUPPERLANDING, true);

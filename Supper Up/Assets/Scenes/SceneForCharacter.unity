@@ -428,7 +428,7 @@ PrefabInstance:
     - target: {fileID: 5866666021909216657, guid: 7c1ae2f0ce9f80d46bded570846c9227,
         type: 3}
       propertyPath: m_ApplyRootMotion
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1112,7 +1112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thirdPersonCamera: {fileID: 330585545}
   moveSpeed: 5
-  jumpForce: 7
+  jumpForce: 5
   rotationSpeed: 10
   velocity: 3
   max_velocity: 3
@@ -1122,6 +1122,7 @@ MonoBehaviour:
   isFalling: 0
   isJumping: 0
   isLanding: 0
+  startLanding: 0
   groundLayer:
     serializedVersion: 2
     m_Bits: 8

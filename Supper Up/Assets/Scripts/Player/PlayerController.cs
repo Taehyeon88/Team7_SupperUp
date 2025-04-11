@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     public bool isJumping = false;
     private bool wasGrounded = false;
     public bool isLanding = false;
+    public bool startLanding = false;
     public LayerMask groundLayer;
 
     [Header("Wall Climbing Setting")]
@@ -43,12 +44,12 @@ public class PlayerController : MonoBehaviour
     public float frontValue = 0.3f;
     public Vector3 boxHalfExtents = Vector3.zero;
     public LayerMask wallLayer;
-    public float climbSpeed = 1f;
     public bool isClimbing = false;
-    private Vector3 TargetPos;
-    private float timer = 0;
     public Vector3 climbOffset;
     private Vector3 targetHandPos;
+    private Vector3 targetPos;
+    private float timer = 0f;
+
 
     //내부 변수들
     private Rigidbody rb;
@@ -130,7 +131,7 @@ public class PlayerController : MonoBehaviour
         cameraForward.y = 0f;
         cameraForward.Normalize();
 
-        if (moveDegree > 0.1 && !onRotate)                               //카메라에 따라서 캐릭터회전
+        if (moveDegree > 0.1 && !onRotate)                                      //카메라에 따라서 캐릭터회전
         {
             toRoation = Quaternion.LookRotation(cameraForward, Vector2.up);
             rotationSpeed = currentRotateSpeed;
@@ -191,11 +192,23 @@ public class PlayerController : MonoBehaviour
     }
    public void Landing()
    {
+
         if (IsGrounded() && !wasGrounded && isJumping)
         {
+            //Debug.Log("된다");
             isLanding = true;
             isJumping = false;
         }
+        if (isLanding)
+        {
+            AnimatorStateInfo stateInfo = playerAnimator.GetCurrentAnimatorStateInfo(0);
+            if (stateInfo.IsName("Jumping Down") && stateInfo.normalizedTime > 0.3)
+            {
+                isLanding = false;
+            }
+            else if(stateInfo.IsName("Movement")) isLanding = false;
+        }
+
         wasGrounded = IsGrounded();
    }
 
@@ -211,35 +224,51 @@ public class PlayerController : MonoBehaviour
             float height = target[0].transform.position.y + target[0].transform.localScale.y / 2;
             if (height <= climbHeight && !isClimbing)
             {
-                isClimbing = true;
+                //isClimbing = true;
                 Vector3 vel = rb.velocity;
                 vel.y = 0;
                 rb.velocity = vel;
-                playerAnimator.applyRootMotion = true;
-                GetComponent<Collider>().enabled = false;
+                //playerAnimator.applyRootMotion = true;
+                //GetComponent<Collider>().isTrigger = true;
+
+                Vector3 forward = transform.position + transform.forward * 0.5f;           //캐릭터가 이동할 위치
+                targetPos = new Vector3(forward.x, height + 0.05f, forward.z);
 
                 Vector3 Handforward = transform.position + transform.forward * 0.5f;       //캐릭터의 손이 위치할 곳
                 targetHandPos = new Vector3(Handforward.x, height + 0.05f, Handforward.z);
 
                 Vector3 temp = new Vector3(0, 1.43f, 0.31f);                               //손의 위치와 offset만큼의 거리가 되게 이동
                 Vector3 desiredPos = targetHandPos - transform.rotation * temp;
-                transform.position = desiredPos;
 
-                Vector3 targetPos = new Vector3(transform.position.x, height + 0.05f, transform.position.z);
-                //if (Physics.Raycast(targetPos)
+                //transform.position = Vector3.Lerp(transform.position, desiredPos, timer += Time.deltaTime);
+
+                Vector3 original = new Vector3(transform.position.x, height - 0.05f, transform.position.z);
+                /*
+                if (Physics.Raycast(original, transform.forward, out RaycastHit hit, 2))
+                {
+                    toRoation = Quaternion.LookRotation(-hit.normal, Vector2.up);
+                    rotationSpeed = currentRotateSpeed;
+
+                    if (Vector3.Angle(transform.forward, -hit.normal) < 0.3f)
+                    {
+                        transform.position = desiredPos;
+                        isClimbing = true;
+                        playerAnimator.applyRootMotion = true;
+                        GetComponent<Collider>().isTrigger = true;
+                    }
+                }*/
             }
         }
         if (isClimbing)
-        {
-            playerAnimator.SetFloat("ClimbSpeed", climbSpeed);
-            
-            timer += climbSpeed * Time.deltaTime;
+        { 
+            timer += Time.deltaTime;
             if (timer >= 2.4f)                                   //애니메이션이 끝났을 때, 초기화
             {
+                transform.position = targetPos;
                 playerAnimator.applyRootMotion = false;
                 timer = 0;
                 Debug.Log("된다");
-                GetComponent<Collider>().enabled = true;
+                GetComponent<Collider>().isTrigger = false;
                 isClimbing = false;
             }
         }
@@ -256,7 +285,7 @@ public class PlayerController : MonoBehaviour
     public bool IsGrounded()
     {
         Vector3 origin = transform.position + Vector3.up * 0.1f;
-        float radius = 0.2f;
+        float radius = 0.3f;
         return Physics.CheckSphere(origin, radius, groundLayer);
     }
     
@@ -291,7 +320,7 @@ public class PlayerController : MonoBehaviour
     {
         //플레이어 바닥체크용
         Vector3 start = transform.position + Vector3.up * 0.1f;
-        float radius = 0.2f;
+        float radius = 0.3f;
 
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(start, radius);
