@@ -91,8 +91,24 @@ public class PlayerController : MonoBehaviour
 
         rb.MovePosition(rb.position + movement * (moveSpeed + velocity) * Time.deltaTime);
 
+        // 추가된 미끄러짐 효과 코드
+        // 미끄러짐 효과 추가
+        if (IsOnIce()) // 빙판 위에 있을 경우
+        {
+            Vector3 slipForce = movement * (moveSpeed * 50f) * Time.deltaTime; // moveSpeed를 사용하여 미끄러지는 힘을 추가
+            rb.AddForce(slipForce, ForceMode.Acceleration);
+        }
+
         RotateDiagonal(moveHorizontal, moveVertical, movement);
     }
+
+    // 플레이어가 빙판길에 있는지 확인하는 메서드 추가
+    private bool IsOnIce()
+    {
+        // Raycast를 사용하여 아래에 있는 오브젝트의 레이어를 확인
+        return Physics.Raycast(transform.position, Vector3.down, 1.1f, groundLayer);
+    }
+
 
     public void ConstraintsMove() //공중에 있을 시, 이속감소.
     {
