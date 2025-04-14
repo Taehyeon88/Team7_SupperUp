@@ -30,21 +30,21 @@ public class PlayerAnimationController : MonoBehaviour
                 break;
             case JumpingState:
                 if (currentState is LandingState || currentState is MoveState) ChangeAnimation("Jumping");
-                else animator.SetBool(PARAM_IS_JUMPING, true);
+                //else animator.SetBool(PARAM_IS_JUMPING, true);
                 break;
             case FallingState:
                 if (currentState is MoveState) ChangeAnimation("Falling");
-                else animator.SetBool(PARAM_IS_FALLING, true);
+                //else animator.SetBool(PARAM_IS_FALLING, true);
                 break;
             case LandingState:
-                if (currentState is JumpingState || currentState is MoveState) animator.SetBool(PARAM_IS_LANDING, true); //자동실행
+                if (currentState is JumpingState) animator.SetBool(PARAM_IS_LANDING, true); //자동실행
                 break;
             case SupperLandingState:
-                animator.SetBool(PARAM_IS_SUPPERLANDING, true);
+                if (currentState is FallingState) animator.SetTrigger(PARAM_IS_SUPPERLANDING);
                 break;
             case ClimbingState:
                 if (currentState is MoveState || currentState is JumpingState) ChangeAnimation("Climbing");
-                else animator.SetTrigger(PARAM_IS_Climbing);
+                //else if (currentState is LandingState) animator.SetTrigger(PARAM_IS_Climbing);
                 break;
         }
     }
@@ -58,6 +58,5 @@ public class PlayerAnimationController : MonoBehaviour
     {
         animator.SetBool(PARAM_IS_JUMPING, false);
         animator.SetBool(PARAM_IS_FALLING, false);
-        animator.SetBool(PARAM_IS_SUPPERLANDING, false);
     }
 }

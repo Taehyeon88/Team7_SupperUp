@@ -36,7 +36,6 @@ public class PlayerController : MonoBehaviour
     public bool isJumping = false;
     private bool wasGrounded = false;
     public bool isLanding = false;
-    public bool startLanding = false;
     public LayerMask groundLayer;
 
     [Header("Wall Climbing Setting")]
@@ -240,12 +239,12 @@ public class PlayerController : MonoBehaviour
             float height = target[0].transform.position.y + target[0].transform.localScale.y / 2;
             if (height <= climbHeight && !isClimbing)
             {
-                //isClimbing = true;
+                isClimbing = true;
                 Vector3 vel = rb.velocity;
                 vel.y = 0;
                 rb.velocity = vel;
-                //playerAnimator.applyRootMotion = true;
-                //GetComponent<Collider>().isTrigger = true;
+                playerAnimator.applyRootMotion = true;
+                GetComponent<Collider>().isTrigger = true;
 
                 Vector3 forward = transform.position + transform.forward * 0.5f;           //캐릭터가 이동할 위치
                 targetPos = new Vector3(forward.x, height + 0.05f, forward.z);
