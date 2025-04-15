@@ -3,76 +3,66 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class SpikeTrap_0 : MonoBehaviour
+public class SpikeTrap_0 : SpikeTrap_B
 {
-    [SerializeField] private float moveDistance;
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float startMoveDistance;
-    [SerializeField] private float pushForce;
-    [SerializeField] private float frontValue;
-    [SerializeField] private Vector3 halfExtents;
-    [SerializeField] private Ease PushSpickEase;
-    [SerializeField] private Ease PullSpickEase;
-    [SerializeField] private LayerMask playerMask;
+    [Header("SpikeTrap_0 Variable")]
+    [SerializeField] private float moveDistance;   //앞뒤이동거리
+    [SerializeField] private float pushTime;      //앞오로 이동시간
+    [SerializeField] private float pullTime;      //뒤오로 이동시간
+    [SerializeField] private Ease PushSpickEase;   //밀치기 애니메이션
+    [SerializeField] private Ease PullSpickEase;   //되돌오기 애니메이션
     
     //내부변수
-    private Vector3 originalPos;
     private Vector3 targetPos;
-    private PlayerController player;
-    private bool startMove = false;
     private bool isPushing = true;
+    private bool isOneTime = false;
     private Coroutine currentCoroutine;
+    private Tween pushTween;
+    private Tween pullTween;
 
-    void Start()
+    protected override void Start()
     {
-        originalPos = transform.position;
+        base.Start();
         targetPos = transform.position + transform.forward * moveDistance;
-        player = FindObjectOfType<PlayerController>();
+        SetTweens();
+    }
+    protected override void Update()
+    {
+        base.Update();
+    }
+    protected override void StartThrust()
+    {
+        currentCoroutine = StartCoroutine(C_StartThrust());
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator C_StartThrust()                     //장애물 실행함수
     {
-        CheckDistance();                 //플레이어와의 거리계산 함수
-        PushPlayer();                    //플레이어가 충돌시 밀어내는 함수
-    }
-
-    private void CheckDistance()
-    {
-        if (player != null)
-        {
-            float distance = Vector3.Distance(originalPos, player.transform.position);
-            if (distance < startMoveDistance - 1 && !startMove)
-            {
-                currentCoroutine = StartCoroutine(StartThrust());
-                startMove = true;
-            }
-            else if (distance > startMoveDistance + 1 && startMove)
-            {
-                Debug.Log("된다");
-                EndThrust();
-                startMove = false;
-            }
-        }
-    }
-
-    private IEnumerator StartThrust()           //장애물 실행함수
-    {
+        base.StartThrust();
+        Debug.Log("실행된다");
         while (true)
         {
             switch(isPushing)
             {
                 case true:
-                    transform.DOMove(targetPos, moveSpeed).SetAutoKill(false).SetEase(PushSpickEase).OnComplete(()=> isPushing = false);
+                    if (pushTween != null && !isOneTime)
+                    {
+                        pushTween.Restart();
+                        isOneTime = true;
+                    }
                 break;
                 case false:
-                    transform.DOMove(originalPos, moveSpeed).SetAutoKill(false).SetEase(PullSpickEase).OnComplete(() => isPushing = true);
-                break;
+                    if (pushTween != null && isOneTime)
+                    {
+                        pullTween.Restart();
+                        isOneTime = false;
+                    }
+                    break;
             }
             yield return null;
         }
     }
-    private void EndThrust()           //장애물 종료함수
+
+    protected override void EndThrust()
     {
         if (currentCoroutine != null)
         {
@@ -81,27 +71,26 @@ public class SpikeTrap_0 : MonoBehaviour
         }
     }
 
-    private void PushPlayer()
+    private void SetTweens()
     {
-        Vector3 origin = transform.position + transform.forward * frontValue;
-        Collider[] target = Physics.OverlapBox(origin, halfExtents, Quaternion.identity, playerMask);
-        if (target.Length > 0)
-        {
-            Rigidbody rb = target[0].gameObject.GetComponent<Rigidbody>();
-            rb.AddForce(transform.forward * pushForce, ForceMode.Impulse);
-
-        }
-
+        pushTween = transform.DOMove(targetPos, pushTime)
+                        .SetAutoKill(false)
+                        .SetEase(PushSpickEase)
+                        .OnComplete(() => isPushing = false);
+        pullTween = transform.DOMove(originalPos, pullTime)
+                        .SetAutoKill(false)
+                        .SetEase(PullSpickEase)
+                        .OnComplete(() => isPushing = true);
+        pushTween.Pause();
+        pullTween.Pause();
     }
 
-    private void OnDrawGizmos()
+    protected override void OnDrawGizmosSelected()
     {
-        Vector3 origin = transform.position + transform.forward * frontValue;
+        base.OnDrawGizmosSelected();
 
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position, transform.forward * moveDistance);
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, startMoveDistance - 1);
-        Gizmos.DrawWireCube(origin, halfExtents);
+        Gizmos.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one);
+        Gizmos.color = Color.green;
+        Gizmos.DrawRay(originalPos, transform.forward * moveDistance);
     }
 }

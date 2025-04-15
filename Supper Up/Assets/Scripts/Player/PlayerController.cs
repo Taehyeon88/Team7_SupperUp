@@ -344,7 +344,6 @@ public class PlayerController : MonoBehaviour
 
         Gizmos.matrix = Matrix4x4.TRS(transform.position + transform.up * heightValue + transform.forward * frontValue, transform.rotation, Vector3.one);
 
-        Vector3 origin = transform.position + transform.up * heightValue + transform.forward * frontValue;
         Gizmos.DrawWireCube(Vector3.zero, boxHalfExtents * 2);
     }
 
