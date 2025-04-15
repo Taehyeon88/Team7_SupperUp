@@ -363,7 +363,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 7c1ae2f0ce9f80d46bded570846c9227,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 33
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7c1ae2f0ce9f80d46bded570846c9227,
         type: 3}
@@ -414,6 +414,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7c1ae2f0ce9f80d46bded570846c9227,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 7c1ae2f0ce9f80d46bded570846c9227,
         type: 3}
@@ -1545,33 +1550,14 @@ GameObject:
   - component: {fileID: 2016189863}
   - component: {fileID: 2016189862}
   - component: {fileID: 2016189861}
-  - component: {fileID: 2016189860}
+  - component: {fileID: 2016189865}
   m_Layer: 0
-  m_Name: TEMP
+  m_Name: Spike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2016189860
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2016189859}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a56bb6625907d543ad857915aa4523d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  heightValue: 0
-  frontValue: 0.5
-  boxHalfExtents: {x: 0.5, y: 0.4, z: 0.1}
-  wallLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  ClimbSpeed: 1
 --- !u!65 &2016189861
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1652,12 +1638,35 @@ Transform:
   m_GameObject: {fileID: 2016189859}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.959, y: 2, z: 2.65}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 3.94, y: 2.5, z: -3.55}
+  m_LocalScale: {x: 1, y: 1.9759362, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2016189865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016189859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8824a281e65fa44cae95d637416842f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveDistance: 3
+  moveSpeed: 3
+  startMoveDistance: 20
+  pushForce: 3
+  frontValue: 0.65
+  halfExtents: {x: 1, y: 1.97, z: 0.3}
+  PushSpickEase: 18
+  PullSpickEase: 27
+  playerMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &2025238131
 GameObject:
   m_ObjectHideFlags: 0
