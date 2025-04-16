@@ -37,7 +37,6 @@ public class SpikeTrap_0 : SpikeTrap_B
 
     private IEnumerator C_StartThrust()                     //장애물 실행함수
     {
-        base.StartThrust();
         Debug.Log("실행된다");
         while (true)
         {

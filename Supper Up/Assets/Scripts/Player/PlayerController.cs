@@ -282,7 +282,7 @@ public class PlayerController : MonoBehaviour
                 transform.position = targetPos;
                 playerAnimator.applyRootMotion = false;
                 timer = 0;
-                Debug.Log("된다");
+                //Debug.Log("된다");
                 GetComponent<Collider>().isTrigger = false;
                 isClimbing = false;
             }

@@ -3,8 +3,15 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-public class SpikeTrap_2 : SpikeTrap_1
+public class SpikeTrap_2 : SpikeTrap_B
 {
+    [Header("SpikeTrap_1 Variable")]
+    [SerializeField] private float pushTime;      //앞오로 이동시간
+    [SerializeField] private float pullTime;      //뒤오로 이동시간
+    [SerializeField] private float rayDistance;    //레이감지거리
+    [SerializeField] private Ease PushSpickEase;   //밀치기 애니메이션
+    [SerializeField] private Ease PullSpickEase;   //되돌오기 애니메이션
+
     [Header("SpikeTrap_2 Variable")]
     [SerializeField] private float moveDistance;
     [SerializeField] private float moveTime;
@@ -13,17 +20,24 @@ public class SpikeTrap_2 : SpikeTrap_1
     //내부변수
     private Vector3 CheckPoint_1;
     private Vector3 CheckPoint_2;
-    private bool isPushing = true;
+    private bool isMoving = true;
     private Coroutine currentCoroutine;
-    private Tween pushTween;
-    private Tween pullTween;
+    private Tween MoveTween_1;
+    private Tween MoveTween_2;
+    //뾰족덫_1
+    private Sequence sequence;
+    private bool isChecking = false;
+    private bool isPushing = false;
+    private bool isOneTime = false;
+
+    Vector3 targetPos;
+    Vector3 currentPos;
 
     protected override void Start()
     {
         base.Start();
         CheckPoint_1 = transform.position + transform.right * moveDistance;
-        CheckPoint_2 = transform.position - transform.right * moveDistance;
-
+        CheckPoint_2 = transform.position;
         SetTweens();
     }
 
@@ -31,61 +45,111 @@ public class SpikeTrap_2 : SpikeTrap_1
     protected override void Update()
     {
         base.Update();
+        CheckPlayer();
     }
     protected override void StartThrust()
     {
+        isChecking = true;
         currentCoroutine = StartCoroutine(C_StartThrust());
     }
 
-    private IEnumerator C_StartThrust()                     //장애물 실행함수
+    private IEnumerator C_StartThrust()                           //장애물 실행함수
     {
-        base.StartThrust();
-        Debug.Log("실행된다");
         while (true)
         {
+            Debug.Log(isPushing);
             if (isPushing)
             {
-                if (pushTween != null) pushTween.Restart();
-                yield return new WaitUntil(() => !isPushing);
+                isMoving = true;
+                isOneTime = false;
+                yield return null;
+                continue;
             }
-            else
+            switch (isMoving)
             {
-                if (pushTween != null) pullTween.Restart();
-                yield return new WaitUntil(() => isPushing);
+                case true:
+                    if (MoveTween_1 != null && !isOneTime)
+                    {
+                        MoveTween_1.Restart();
+                        isOneTime = true;
+                    }
+                    break;
+                case false:
+                    if (MoveTween_2 != null && isOneTime)
+                    {
+                        MoveTween_2.Restart();
+                        isOneTime = false;
+                    }
+                    break;
             }
+            yield return null;
         }
     }
 
     protected override void EndThrust()
     {
+        Debug.Log("종료된다");
+        isChecking = false;
         if (currentCoroutine != null)
         {
             StopCoroutine(currentCoroutine);
             currentCoroutine = null;
         }
     }
+    private void CheckPlayer()
+    {
+        if (!isChecking || isPushing) return;
+
+        if (Physics.Raycast(transform.position, transform.forward, rayDistance, playerMask))
+        {
+            isPushing = true;
+            StopTween();
+            PlaySequence();
+        }
+    }
     private void SetTweens()
     {
         transform.DOMove(CheckPoint_1, 1);
 
-        pushTween = transform.DOMove(CheckPoint_1, moveTime)
+        MoveTween_1 = transform.DOMove(CheckPoint_1, moveTime)
                         .SetAutoKill(false)
                         .SetEase(moveEase)
-                        .OnComplete(() => isPushing = false);
-        pullTween = transform.DOMove(originalPos, moveTime)
+                        .OnComplete(() => isMoving = false);
+        MoveTween_2 = transform.DOMove(CheckPoint_2, moveTime)
                         .SetAutoKill(false)
                         .SetEase(moveEase)
-                        .OnComplete(() => isPushing = true);
-        pushTween.Pause();
-        pullTween.Pause();
+                        .OnComplete(() => isMoving = true);
+        MoveTween_1.Pause();
+        MoveTween_2.Pause();
+    }
+
+    private void StopTween()
+    {
+        MoveTween_1.Pause();
+        MoveTween_2.Pause();
+    }
+
+    private void PlaySequence()
+    {
+        sequence = DOTween.Sequence();
+
+        targetPos = transform.position + transform.forward * rayDistance;
+        currentPos = transform.position;
+
+        sequence.Append(transform.DOMove(targetPos, pushTime).SetEase(PushSpickEase))
+                .Append(transform.DOMove(currentPos, pullTime).SetEase(PullSpickEase))
+                .OnComplete(() => isPushing = false);
     }
 
     protected override void OnDrawGizmosSelected()
     {
         base.OnDrawGizmosSelected();
 
+        Gizmos.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one);
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(transform.position, transform.forward * rayDistance);
+
         Gizmos.color = Color.green;
         Gizmos.DrawRay(transform.position, transform.right * moveDistance);
-        Gizmos.DrawRay(transform.position, - transform.right * moveDistance);
     }
 }
