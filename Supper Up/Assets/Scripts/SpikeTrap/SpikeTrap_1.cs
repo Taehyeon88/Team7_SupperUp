@@ -9,6 +9,7 @@ public class SpikeTrap_1 : SpikeTrap_B
     [SerializeField] private float pushTime;      //앞오로 이동시간
     [SerializeField] private float pullTime;      //뒤오로 이동시간
     [SerializeField] private float rayDistance;    //레이감지거리
+    [SerializeField] private float heightValue;     //레이 높이낮이
     [SerializeField] private Ease PushSpickEase;   //밀치기 애니메이션
     [SerializeField] private Ease PullSpickEase;   //되돌오기 애니메이션
 
@@ -46,7 +47,9 @@ public class SpikeTrap_1 : SpikeTrap_B
     {
         if (!isChecking || isPushing) return;
 
-        if (Physics.Raycast(transform.position, transform.forward, rayDistance, playerMask))
+        Vector3 origin = transform.position + transform.up * heightValue;
+
+        if (Physics.Raycast(origin, transform.forward, rayDistance, playerMask))
         {
             sequence.Restart();
             isPushing = true;
@@ -71,7 +74,9 @@ public class SpikeTrap_1 : SpikeTrap_B
         base.OnDrawGizmosSelected();
 
         Gizmos.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one);
+
+        Vector3 origin = transform.position + transform.up * heightValue;
         Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position, transform.forward * rayDistance);
+        Gizmos.DrawRay(origin, transform.forward * rayDistance);
     }
 }
