@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -43,7 +44,8 @@ public class PlayerAnimationController : MonoBehaviour
                 if (currentState is FallingState) animator.SetTrigger(PARAM_IS_SUPPERLANDING);
                 break;
             case ClimbingState:
-                if (currentState is MoveState || currentState is JumpingState) ChangeAnimation("Climbing");
+                if (currentState is MoveState) ChangeAnimation("Climbing");
+                else if (currentState is JumpingState) ChangeAnimation_Smooth("Climbing");
                 //else if (currentState is LandingState) animator.SetTrigger(PARAM_IS_Climbing);
                 break;
         }
@@ -52,6 +54,11 @@ public class PlayerAnimationController : MonoBehaviour
     private void ChangeAnimation(string stateName)
     {
         animator.CrossFade(stateName, 0.01f, 0);
+    }
+
+    private void ChangeAnimation_Smooth(string stateName)
+    {
+        animator.CrossFade(stateName, 0.04f, 0);
     }
 
     private void ClearAllParameter()

@@ -1294,6 +1294,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4769268143467152602, guid: d588f6afa55e86d44b8626964b191f8f,
         type: 3}
+      propertyPath: heightValue
+      value: 1.63
+      objectReference: {fileID: 0}
+    - target: {fileID: 4769268143467152602, guid: d588f6afa55e86d44b8626964b191f8f,
+        type: 3}
+      propertyPath: boxHalfExtents.y
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 4769268143467152602, guid: d588f6afa55e86d44b8626964b191f8f,
+        type: 3}
       propertyPath: thirdPersonCamera
       value: 
       objectReference: {fileID: 330585545}

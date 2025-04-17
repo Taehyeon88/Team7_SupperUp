@@ -1,7 +1,6 @@
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -240,14 +239,12 @@ public class PlayerController : MonoBehaviour
             if (height <= climbHeight && !isClimbing)
             {
                 isClimbing = true;
-                Vector3 vel = rb.velocity;
-                vel.y = 0;
-                rb.velocity = vel;
                 playerAnimator.applyRootMotion = true;
+                rb.useGravity = false;
                 GetComponent<Collider>().isTrigger = true;
 
                 Vector3 forward = transform.position + transform.forward * 0.5f;           //캐릭터가 이동할 위치
-                targetPos = new Vector3(forward.x, height + 0.05f, forward.z);
+                targetPos = new Vector3(forward.x, height + 0.01f, forward.z);
 
                 Vector3 Handforward = transform.position + transform.forward * 0.5f;       //캐릭터의 손이 위치할 곳
                 targetHandPos = new Vector3(Handforward.x, height + 0.05f, Handforward.z);
@@ -255,36 +252,32 @@ public class PlayerController : MonoBehaviour
                 Vector3 temp = new Vector3(0, 1.43f, 0.31f);                               //손의 위치와 offset만큼의 거리가 되게 이동
                 Vector3 desiredPos = targetHandPos - transform.rotation * temp;
 
-                //transform.position = Vector3.Lerp(transform.position, desiredPos, timer += Time.deltaTime);
+                transform.DOMove(desiredPos, 0.3f);
 
-                Vector3 original = new Vector3(transform.position.x, height - 0.05f, transform.position.z);
-                /*
-                if (Physics.Raycast(original, transform.forward, out RaycastHit hit, 2))
+                Vector3 rayPos= new Vector3(transform.position.x, height - 0.05f, transform.position.z);
+                
+                if (Physics.Raycast(rayPos, transform.forward, out RaycastHit hit, 2))
                 {
-                    toRoation = Quaternion.LookRotation(-hit.normal, Vector2.up);
-                    rotationSpeed = currentRotateSpeed;
-
-                    if (Vector3.Angle(transform.forward, -hit.normal) < 0.3f)
-                    {
-                        transform.position = desiredPos;
-                        isClimbing = true;
-                        playerAnimator.applyRootMotion = true;
-                        GetComponent<Collider>().isTrigger = true;
-                    }
-                }*/
+                    Quaternion targetRot = Quaternion.LookRotation(-hit.normal, Vector3.up);
+                    transform.DOLocalRotateQuaternion(targetRot, 0.5f);
+                }
             }
         }
         if (isClimbing)
         { 
             timer += Time.deltaTime;
+            if (timer >= 2.2f)
+            {
+                playerAnimator.applyRootMotion = false;
+                transform.DOMove(targetPos, 0.03f);
+            }
+
             if (timer >= 2.4f)                                   //애니메이션이 끝났을 때, 초기화
             {
-                transform.position = targetPos;
-                playerAnimator.applyRootMotion = false;
-                timer = 0;
-                //Debug.Log("된다");
+                rb.useGravity = true;
                 GetComponent<Collider>().isTrigger = false;
                 isClimbing = false;
+                timer = 0;
             }
         }
     }
