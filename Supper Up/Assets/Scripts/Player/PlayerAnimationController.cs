@@ -26,7 +26,7 @@ public class PlayerAnimationController : MonoBehaviour
         switch (newState)
         {
             case MoveState:
-                //기본이동은 아무일도 일어나지 않는다.
+                if (currentState is ClimbingState) animator.SetBool(PARAM_IS_Climbing, false);
                 animator.SetBool(PARAM_IS_LANDING, false);
                 break;
             case JumpingState:
@@ -46,6 +46,7 @@ public class PlayerAnimationController : MonoBehaviour
             case ClimbingState:
                 if (currentState is MoveState) ChangeAnimation("Climbing");
                 else if (currentState is JumpingState) ChangeAnimation_Smooth("Climbing");
+                animator.SetBool(PARAM_IS_Climbing, true);
                 //else if (currentState is LandingState) animator.SetTrigger(PARAM_IS_Climbing);
                 break;
         }
@@ -58,8 +59,9 @@ public class PlayerAnimationController : MonoBehaviour
 
     private void ChangeAnimation_Smooth(string stateName)
     {
-        animator.CrossFade(stateName, 0.04f, 0);
+        animator.CrossFade(stateName, 0.1f, 0);
     }
+
 
     private void ClearAllParameter()
     {

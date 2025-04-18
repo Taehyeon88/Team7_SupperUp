@@ -30,7 +30,7 @@ public abstract class PlayerState
         {
             case MoveState:
                 if (Input.GetKeyDown(KeyCode.Space)) stateMachine.TransitionToState(JumpingState.GetInstance());     //점프상태
-                else if (playerController.isClimbing) stateMachine.TransitionToState(ClimbingState.GetInstance());   //파쿠르상태
+                else if (playerController.CheckClimbing()) stateMachine.TransitionToState(ClimbingState.GetInstance());   //파쿠르상태
                 else if (playerController.CheckDistance() > 30f && !playerController.isFalling)                      //낙하상태
                 {
                     stateMachine.TransitionToState(FallingState.GetInstance());
@@ -38,7 +38,7 @@ public abstract class PlayerState
                 break;
             case JumpingState:
                 if (playerController.isLanding) stateMachine.TransitionToState(LandingState.GetInstance());          //착지상태
-                else if (playerController.isClimbing) stateMachine.TransitionToState(ClimbingState.GetInstance());   //파쿠르상태
+                else if (playerController.CheckClimbing()) stateMachine.TransitionToState(ClimbingState.GetInstance());   //파쿠르상태
                 break;
             case FallingState:
                 if (playerController.CheckDistance() < 2.2f && playerController.isFalling)                           //슈퍼낙하상태
@@ -160,8 +160,15 @@ public class ClimbingState : PlayerState
     private static ClimbingState instance = new ClimbingState();
     private ClimbingState() { }
     public static ClimbingState GetInstance() { return instance; }
+
+    public override void Enter()
+    {
+        playerController.isClimbing = true;
+        playerController.StartClimbing();
+    }
     public override void Update()
     {
+        playerController.EndClimbing();
         CheckTransitions();
     }
     public override void Exit() { playerController.ResetVelocity(); }
