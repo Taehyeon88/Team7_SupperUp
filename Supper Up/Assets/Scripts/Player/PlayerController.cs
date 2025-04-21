@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     [Header("Player Movement")]
     public float moveSpeed = 5.0f;
     public float jumpForce = 5.0f;
+    public float jumpfrontForce = 2.5f;
     public float rotationSpeed = 10f;     //회전속도
     private float currentSpeed = 0;
     private float currentRotateSpeed = 0;
@@ -206,7 +207,7 @@ public class PlayerController : MonoBehaviour
 
     public void Jumping()
     {
-        rb.velocity = Vector3.up * jumpForce + movement * velocity * 2.5f;
+        rb.velocity = Vector3.up * jumpForce + movement * velocity * jumpfrontForce;
         //rb.AddForce(Vector3.up * jumpForce + movement * velocity * 2.5f, ForceMode.Impulse);
     }
 
