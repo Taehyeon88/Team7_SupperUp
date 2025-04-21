@@ -1,8 +1,7 @@
 using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -50,7 +49,6 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public float height;
     [HideInInspector] public Vector3 climbDirection;
 
-
     //내부 변수들
     private Rigidbody rb;
     private Animator playerAnimator;
@@ -81,15 +79,25 @@ public class PlayerController : MonoBehaviour
 
         ConstraintsMove();
 
-        AdjustSpeed(moveVertical);
-        //애니메이션
-        playerAnimator.SetFloat("FMove", moveVertical * velocity);
-        playerAnimator.SetFloat("RMove", moveHorizontal);
-
         //이동 백터 계산
         if (!onRotate) movement = (transform.forward * moveVertical + transform.right * moveHorizontal).normalized * temp;
         else movement = transform.forward * moveVertical;
         moveDegree = movement.magnitude;
+
+        if (CheckHitWall(movement))   //벽에 일정거리 이상일 경우, 이동멈추기(점프오류방지용)
+        {
+            Debug.Log("된다!");
+            AdjustSpeed(moveVertical, true);
+            movement = Vector3.zero;
+        }
+        else
+        {
+            AdjustSpeed(moveVertical, false);
+            RotateDiagonal(moveHorizontal, moveVertical, movement);
+        }
+        //애니메이션
+        playerAnimator.SetFloat("FMove", moveVertical * velocity);
+        playerAnimator.SetFloat("RMove", moveHorizontal);
 
         rb.MovePosition(rb.position + movement * (moveSpeed + velocity) * Time.deltaTime);
 
@@ -100,8 +108,6 @@ public class PlayerController : MonoBehaviour
             Vector3 slipForce = movement * (moveSpeed * 50f) * Time.deltaTime; // moveSpeed를 사용하여 미끄러지는 힘을 추가
             rb.AddForce(slipForce, ForceMode.Acceleration);
         }
-
-        RotateDiagonal(moveHorizontal, moveVertical, movement);
     }
 
     // 플레이어가 빙판길에 있는지 확인하는 메서드 추가
@@ -130,15 +136,16 @@ public class PlayerController : MonoBehaviour
     }
 
     //시간이 흐름에 따라 속도를 올려주는 코드
-    private void AdjustSpeed(float moveVertical)
+    private void AdjustSpeed(float moveVertical, bool isDownVelocity)   //1번 매개변수 : 인풋이 없을 시, 속도감소 | 2번 매개변수 
     {
-        if (Mathf.Abs(moveVertical) > 0.95f)
-        {
-            speedTimer = Mathf.Min(speedTimer += Time.deltaTime * 1.2f, max_velocity);
-        }
+        if (isDownVelocity) speedTimer = Mathf.Max(speedTimer -= Time.deltaTime * 2f, 0);
         else
         {
-            speedTimer = Mathf.Max(speedTimer -= Time.deltaTime * 2f, 0);
+            if (Mathf.Abs(moveVertical) > 0.95f)
+            {
+                speedTimer = Mathf.Min(speedTimer += Time.deltaTime * 1.2f, max_velocity);
+            }
+            else speedTimer = Mathf.Max(speedTimer -= Time.deltaTime * 2f, 0);
         }
         velocity = Mathf.Clamp(speedTimer, min_velocity, max_velocity);
     }
@@ -199,8 +206,8 @@ public class PlayerController : MonoBehaviour
 
     public void Jumping()
     {
-        rb.AddForce(Vector3.up * jumpForce + movement * velocity * 2.5f, ForceMode.Impulse);
-        //rb.AddForce(movement * velocity * 2.5f, ForceMode.Impulse);
+        rb.velocity = Vector3.up * jumpForce + movement * velocity * 2.5f;
+        //rb.AddForce(Vector3.up * jumpForce + movement * velocity * 2.5f, ForceMode.Impulse);
     }
 
     public void SupperLanding()
@@ -211,7 +218,6 @@ public class PlayerController : MonoBehaviour
     }
    public void Landing()
    {
-
         if (IsGrounded() && !wasGrounded && isJumping)
         {
             //Debug.Log("된다");
@@ -298,6 +304,27 @@ public class PlayerController : MonoBehaviour
         return Physics.CheckBox(transform.position, groundHalfExtents, Quaternion.identity, groundLayer);
     }
 
+    private bool CheckHitWall(Vector3 movement)
+    {
+        float distance = 0.33f;
+
+        List<Vector3> rayPos = new List<Vector3>();
+        rayPos.Add(transform.position + transform.up * 0.3f);
+        rayPos.Add(transform.position + transform.up * 0.8f);
+        rayPos.Add(transform.position + transform.up * 1.3f);
+        rayPos.Add(transform.position + transform.up * 1.8f);
+
+        foreach (var origin in rayPos)
+        {
+            Debug.DrawRay(origin, movement, Color.red, distance);
+            if (Physics.Raycast(origin, movement, distance))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void OnAnimatorMove()
     {
         AnimatorStateInfo stateInfo = playerAnimator.GetCurrentAnimatorStateInfo(0);
@@ -319,17 +346,15 @@ public class PlayerController : MonoBehaviour
     private void OnAnimatorIK(int layerIndex)
     {
         AnimatorStateInfo stateInfo = playerAnimator.GetCurrentAnimatorStateInfo(0);
-        if (stateInfo.IsName("Climbing") && stateInfo.normalizedTime <= 0.2f)
-        { 
+        if (stateInfo.IsName("Climbing") && stateInfo.normalizedTime <= 0.25f)
+        {
             SetAnimationWeight(1, 1);
         }
-        else if(stateInfo.IsName("Climbing") && stateInfo.normalizedTime > 0.2f && stateInfo.normalizedTime <= 0.25f)
+        else if (stateInfo.IsName("Climbing") && stateInfo.normalizedTime > 0.25f)
         {
-            SetAnimationWeight(0.5f, 0f);
-        }
-        if(stateInfo.IsName("Climbing") && stateInfo.normalizedTime > 0.25f)
-        {
-            SetAnimationWeight(0f, 0f);
+            float temp = 0.8f - stateInfo.normalizedTime;
+            temp = Mathf.Max(temp, 0);
+            SetAnimationWeight(temp, temp);
         }
         if (stateInfo.IsName("Climbing"))
         {

@@ -40,7 +40,7 @@ public class SpikeTrap_B : MonoBehaviour
             }
             else if (distance > startMoveDistance + 1 && startMove)
             {
-                Debug.Log("된다");
+                //Debug.Log("된다");
                 EndThrust();
                 startMove = false;
             }

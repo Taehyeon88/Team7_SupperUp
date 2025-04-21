@@ -58,7 +58,7 @@ public class SpikeTrap_2 : SpikeTrap_B
     {
         while (true)
         {
-            Debug.Log(isPushing);
+            //Debug.Log(isPushing);
             if (isPushing)
             {
                 isMoving = true;
@@ -89,7 +89,7 @@ public class SpikeTrap_2 : SpikeTrap_B
 
     protected override void EndThrust()
     {
-        Debug.Log("종료된다");
+        //Debug.Log("종료된다");
         isChecking = false;
         if (currentCoroutine != null)
         {
