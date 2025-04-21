@@ -1,5 +1,6 @@
 using System.Collections;
 using DG.Tweening;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
@@ -32,11 +33,11 @@ public class PlayerController : MonoBehaviour
     public bool onRotate = false;
 
     [Header("Veriable for Ground Check")]
-    public bool isFalling = false;
-    public bool isJumping = false;
+    [HideInInspector] public bool isFalling = false;
+    [HideInInspector] public bool isJumping = false;
+    [HideInInspector] public bool isLanding = false;
     private bool wasGrounded = false;
-    public bool isLanding = false;
-    public bool startLanding = false;
+    public Vector3 groundHalfExtents;
     public LayerMask groundLayer;
 
     [Header("Wall Climbing Setting")]
@@ -44,16 +45,16 @@ public class PlayerController : MonoBehaviour
     public float frontValue = 0.3f;
     public Vector3 boxHalfExtents = Vector3.zero;
     public LayerMask wallLayer;
-    public bool isClimbing = false;
-    public Vector3 climbOffset;
     private Vector3 targetHandPos;
-    private Vector3 targetPos;
-    private float timer = 0f;
+    [HideInInspector] public bool isClimbing = false;
+    [HideInInspector] public float height;
+    [HideInInspector] public Vector3 climbDirection;
 
 
     //내부 변수들
     private Rigidbody rb;
     private Animator playerAnimator;
+    private bool isOneTime = false;
 
     void Start()
     {
@@ -68,7 +69,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Landing();
-        Climbing();
     }
 
     //플레이어 행동처리 함수
@@ -76,6 +76,8 @@ public class PlayerController : MonoBehaviour
     {
         float moveHorizontal = Input.GetAxis("Horizontal");         //좌우 입력(1, -1)
         float moveVertical = Input.GetAxis("Vertical");             //앞뒤 입력(1, -1)
+
+        float temp = Mathf.Max(Mathf.Abs(moveVertical), Mathf.Abs(moveHorizontal));
 
         ConstraintsMove();
 
@@ -85,7 +87,7 @@ public class PlayerController : MonoBehaviour
         playerAnimator.SetFloat("RMove", moveHorizontal);
 
         //이동 백터 계산
-        if (!onRotate) movement = (transform.forward * moveVertical + transform.right * moveHorizontal).normalized;
+        if (!onRotate) movement = (transform.forward * moveVertical + transform.right * moveHorizontal).normalized * temp;
         else movement = transform.forward * moveVertical;
         moveDegree = movement.magnitude;
 
@@ -198,6 +200,7 @@ public class PlayerController : MonoBehaviour
     public void Jumping()
     {
         rb.AddForce(Vector3.up * jumpForce + movement * velocity * 2.5f, ForceMode.Impulse);
+        //rb.AddForce(movement * velocity * 2.5f, ForceMode.Impulse);
     }
 
     public void SupperLanding()
@@ -228,7 +231,7 @@ public class PlayerController : MonoBehaviour
         wasGrounded = IsGrounded();
    }
 
-    public void Climbing()
+    public bool CheckClimbing()
     {
         Vector3 origin = transform.position + transform.up * heightValue + transform.forward * frontValue;
         Collider[] target = Physics.OverlapBox(origin, boxHalfExtents, transform.rotation, wallLayer);
@@ -236,57 +239,49 @@ public class PlayerController : MonoBehaviour
         float climbHeight = origin.y + boxHalfExtents.y;
         if (target.Length >= 1)
         {
-            //Debug.Log($"{target[0].transform.position.y}, {target[0].transform.localScale.y / 2}");
-            float height = target[0].transform.position.y + target[0].transform.localScale.y / 2;
-            if (height <= climbHeight && !isClimbing)
-            {
-                //isClimbing = true;
-                Vector3 vel = rb.velocity;
-                vel.y = 0;
-                rb.velocity = vel;
-                //playerAnimator.applyRootMotion = true;
-                //GetComponent<Collider>().isTrigger = true;
-
-                Vector3 forward = transform.position + transform.forward * 0.5f;           //캐릭터가 이동할 위치
-                targetPos = new Vector3(forward.x, height + 0.05f, forward.z);
-
-                Vector3 Handforward = transform.position + transform.forward * 0.5f;       //캐릭터의 손이 위치할 곳
-                targetHandPos = new Vector3(Handforward.x, height + 0.05f, Handforward.z);
-
-                Vector3 temp = new Vector3(0, 1.43f, 0.31f);                               //손의 위치와 offset만큼의 거리가 되게 이동
-                Vector3 desiredPos = targetHandPos - transform.rotation * temp;
-
-                //transform.position = Vector3.Lerp(transform.position, desiredPos, timer += Time.deltaTime);
-
-                Vector3 original = new Vector3(transform.position.x, height - 0.05f, transform.position.z);
-                /*
-                if (Physics.Raycast(original, transform.forward, out RaycastHit hit, 2))
-                {
-                    toRoation = Quaternion.LookRotation(-hit.normal, Vector2.up);
-                    rotationSpeed = currentRotateSpeed;
-
-                    if (Vector3.Angle(transform.forward, -hit.normal) < 0.3f)
-                    {
-                        transform.position = desiredPos;
-                        isClimbing = true;
-                        playerAnimator.applyRootMotion = true;
-                        GetComponent<Collider>().isTrigger = true;
-                    }
-                }*/
-            }
+            height = target[0].transform.position.y + target[0].transform.localScale.y / 2;
+            climbDirection = target[0].transform.position - transform.position;
+            climbDirection.y = 0;
+            if (height <= climbHeight) return true;
         }
-        if (isClimbing)
-        { 
-            timer += Time.deltaTime;
-            if (timer >= 2.4f)                                   //애니메이션이 끝났을 때, 초기화
-            {
-                transform.position = targetPos;
-                playerAnimator.applyRootMotion = false;
-                timer = 0;
-                Debug.Log("된다");
-                GetComponent<Collider>().isTrigger = false;
-                isClimbing = false;
-            }
+        return false;
+    }
+
+    public void StartClimbing()
+    {
+        playerAnimator.applyRootMotion = true;
+        rb.useGravity = false;
+        GetComponent<Collider>().isTrigger = true;
+
+        Vector3 rayPos = new Vector3(transform.position.x, height - 0.05f, transform.position.z);
+
+        if (Physics.Raycast(rayPos, climbDirection, out RaycastHit hit2, 2))
+        {
+            Quaternion targetRot = Quaternion.LookRotation(-hit2.normal, Vector3.up);
+            transform.DOLocalRotateQuaternion(targetRot, 0.5f);
+        }
+
+        Vector3 Handforward = transform.position + transform.forward * 0.4f;       //캐릭터의 손이 위치할 곳
+        targetHandPos = new Vector3(Handforward.x, height + 0.05f, Handforward.z);
+
+        Vector3 temp = new Vector3(0, 1.43f, 0.31f);                               //손의 위치와 offset만큼의 거리가 되게 이동
+        Vector3 desiredPos = targetHandPos - transform.rotation * temp;
+
+        transform.DOMove(desiredPos, 0.3f);
+
+        isOneTime = true;
+    }
+
+    public void EndClimbing()
+    {
+        AnimatorStateInfo stateInfo = playerAnimator.GetCurrentAnimatorStateInfo(0);
+        if (stateInfo.IsName("Movement") && stateInfo.normalizedTime <= 0.8f)
+        {
+            playerAnimator.applyRootMotion = false;
+            rb.velocity = Vector3.zero;
+            isClimbing = false;
+            rb.useGravity = true;
+            GetComponent<Collider>().isTrigger = false;
         }
     }
 
@@ -300,52 +295,71 @@ public class PlayerController : MonoBehaviour
 
     public bool IsGrounded()
     {
-        Vector3 origin = transform.position + Vector3.up * 0.1f;
-        float radius = 0.3f;
-        return Physics.CheckSphere(origin, radius, groundLayer);
+        return Physics.CheckBox(transform.position, groundHalfExtents, Quaternion.identity, groundLayer);
     }
-    
+
+    private void OnAnimatorMove()
+    {
+        AnimatorStateInfo stateInfo = playerAnimator.GetCurrentAnimatorStateInfo(0);
+        if (stateInfo.IsName("Climbing"))
+        {
+            Vector3 delta = playerAnimator.deltaPosition;
+
+            if (isOneTime)
+            {
+                delta -= Vector3.up * 0.1f;
+                isOneTime = false;
+            }
+
+            rb.MovePosition(rb.position + delta);
+            rb.velocity = Vector3.zero;
+        }
+    }
+
     private void OnAnimatorIK(int layerIndex)
     {
         AnimatorStateInfo stateInfo = playerAnimator.GetCurrentAnimatorStateInfo(0);
-
+        if (stateInfo.IsName("Climbing") && stateInfo.normalizedTime <= 0.2f)
+        { 
+            SetAnimationWeight(1, 1);
+        }
+        else if(stateInfo.IsName("Climbing") && stateInfo.normalizedTime > 0.2f && stateInfo.normalizedTime <= 0.25f)
+        {
+            SetAnimationWeight(0.5f, 0f);
+        }
+        if(stateInfo.IsName("Climbing") && stateInfo.normalizedTime > 0.25f)
+        {
+            SetAnimationWeight(0f, 0f);
+        }
         if (stateInfo.IsName("Climbing"))
         {
             Vector3 leftHandPos = targetHandPos - transform.right * 0.4f;
             Vector3 rightHandPos = targetHandPos + transform.right * 0.4f;
-
-            playerAnimator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
-            playerAnimator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
-            playerAnimator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
-            playerAnimator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1f);
-
             playerAnimator.SetIKPosition(AvatarIKGoal.RightHand, rightHandPos);
             playerAnimator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandPos);
         }
-        else
-        {
-            playerAnimator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0f);
-            playerAnimator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0f);
-            playerAnimator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0f);
-            playerAnimator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 0f);
-        }
+    }
 
+    private void SetAnimationWeight(float value1, float value2)
+    {
+        playerAnimator.SetIKPositionWeight(AvatarIKGoal.RightHand, value1);
+        playerAnimator.SetIKPositionWeight(AvatarIKGoal.LeftHand, value1);
+        playerAnimator.SetIKRotationWeight(AvatarIKGoal.RightHand, value2);
+        playerAnimator.SetIKRotationWeight(AvatarIKGoal.LeftHand, value2);
     }
 
     private void OnDrawGizmos()
     {
         //플레이어 바닥체크용
-        Vector3 start = transform.position + Vector3.up * 0.1f;
-        float radius = 0.3f;
 
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(start, radius);
+        Gizmos.DrawWireCube(transform.position, groundHalfExtents * 2);
+        //Gizmos.DrawWireSphere(start, radius);
 
         //플레이어 벽체크용
 
         Gizmos.matrix = Matrix4x4.TRS(transform.position + transform.up * heightValue + transform.forward * frontValue, transform.rotation, Vector3.one);
 
-        Vector3 origin = transform.position + transform.up * heightValue + transform.forward * frontValue;
         Gizmos.DrawWireCube(Vector3.zero, boxHalfExtents * 2);
     }
 

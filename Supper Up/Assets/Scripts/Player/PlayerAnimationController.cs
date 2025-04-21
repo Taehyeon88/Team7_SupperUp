@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -25,26 +26,28 @@ public class PlayerAnimationController : MonoBehaviour
         switch (newState)
         {
             case MoveState:
-                //기본이동은 아무일도 일어나지 않는다.
+                if (currentState is ClimbingState) animator.SetBool(PARAM_IS_Climbing, false);
                 animator.SetBool(PARAM_IS_LANDING, false);
                 break;
             case JumpingState:
                 if (currentState is LandingState || currentState is MoveState) ChangeAnimation("Jumping");
-                else animator.SetBool(PARAM_IS_JUMPING, true);
+                //else animator.SetBool(PARAM_IS_JUMPING, true);
                 break;
             case FallingState:
                 if (currentState is MoveState) ChangeAnimation("Falling");
-                else animator.SetBool(PARAM_IS_FALLING, true);
+                //else animator.SetBool(PARAM_IS_FALLING, true);
                 break;
             case LandingState:
-                if (currentState is JumpingState || currentState is MoveState) animator.SetBool(PARAM_IS_LANDING, true); //자동실행
+                if (currentState is JumpingState) animator.SetBool(PARAM_IS_LANDING, true); //자동실행
                 break;
             case SupperLandingState:
-                animator.SetBool(PARAM_IS_SUPPERLANDING, true);
+                if (currentState is FallingState) animator.SetTrigger(PARAM_IS_SUPPERLANDING);
                 break;
             case ClimbingState:
-                if (currentState is MoveState || currentState is JumpingState) ChangeAnimation("Climbing");
-                else animator.SetTrigger(PARAM_IS_Climbing);
+                if (currentState is MoveState) ChangeAnimation("Climbing");
+                else if (currentState is JumpingState) ChangeAnimation_Smooth("Climbing");
+                animator.SetBool(PARAM_IS_Climbing, true);
+                //else if (currentState is LandingState) animator.SetTrigger(PARAM_IS_Climbing);
                 break;
         }
     }
@@ -54,10 +57,15 @@ public class PlayerAnimationController : MonoBehaviour
         animator.CrossFade(stateName, 0.01f, 0);
     }
 
+    private void ChangeAnimation_Smooth(string stateName)
+    {
+        animator.CrossFade(stateName, 0.1f, 0);
+    }
+
+
     private void ClearAllParameter()
     {
         animator.SetBool(PARAM_IS_JUMPING, false);
         animator.SetBool(PARAM_IS_FALLING, false);
-        animator.SetBool(PARAM_IS_SUPPERLANDING, false);
     }
 }
