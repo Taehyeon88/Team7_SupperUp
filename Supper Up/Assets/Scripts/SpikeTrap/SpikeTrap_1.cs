@@ -58,13 +58,23 @@ public class SpikeTrap_1 : SpikeTrap_B
 
     private void SetSequence()
     {
+        Tween pushTween = DOTween.To(
+            () => rb.position,
+            (x) => rb.MovePosition(x),
+            targetPos,
+            pushTime
+            ).SetAutoKill(false)
+             .SetEase(PushSpickEase)
+             .SetUpdate(UpdateType.Fixed);
 
-        Tween pushTween = transform.DOMove(targetPos, pushTime)
-                        .SetAutoKill(false)
-                        .SetEase(PushSpickEase);
-        Tween pullTween = transform.DOMove(originalPos, pullTime)
-                        .SetAutoKill(false)
-                        .SetEase(PullSpickEase);
+        Tween pullTween = DOTween.To(
+            () => rb.position,
+            (x) => rb.MovePosition(x),
+            originalPos,
+            pullTime
+            ).SetAutoKill(false)
+             .SetEase(PullSpickEase)
+             .SetUpdate(UpdateType.Fixed);
 
         sequence.Append(pushTween).Append(pullTween).SetAutoKill(false).Pause().OnComplete(()=> isPushing = false);
     }

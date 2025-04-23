@@ -16,16 +16,19 @@ public class SpikeTrap_B : MonoBehaviour
     protected Vector3 originalPos;
     private PlayerController player;
     private bool startMove = false;
+    protected Rigidbody rb;
+    private Rigidbody playerRb;
     protected virtual void Start()
     {
         originalPos = transform.position;
         player = FindObjectOfType<PlayerController>();
+        rb = GetComponent<Rigidbody>();
+        playerRb = player.GetComponent<Rigidbody>();
     }
 
     protected virtual void Update()
     {
         CheckDistance();
-        PushPlayer();                    //플레이어가 충돌시 밀어내는 함수
     }
 
     private void CheckDistance()
@@ -46,16 +49,14 @@ public class SpikeTrap_B : MonoBehaviour
             }
         }
     }
-    private void PushPlayer()
+    private void OnCollisionStay(Collision collision)
     {
-        Vector3 origin = transform.position + transform.forward * frontValue;
-        Collider[] target = Physics.OverlapBox(origin, halfExtents, transform.rotation, playerMask);
-        if (target.Length > 0)
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            Rigidbody rb = target[0].gameObject.GetComponent<Rigidbody>();
-            rb.AddForce(transform.forward * pushForce, ForceMode.Impulse);
+            playerRb.velocity = transform.forward * pushForce;
         }
     }
+
 
     protected virtual void StartThrust() { }          //장애물 실행함수
     protected virtual void EndThrust() { }            //장애물 종료함수
@@ -67,8 +68,5 @@ public class SpikeTrap_B : MonoBehaviour
 
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, startMoveDistance - 1);
-
-        Gizmos.matrix = Matrix4x4.TRS(origin, transform.rotation, Vector3.one);
-        Gizmos.DrawWireCube(Vector3.zero, halfExtents * 2);
     }
 }

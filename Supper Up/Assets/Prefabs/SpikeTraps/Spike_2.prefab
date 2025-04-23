@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4971166857120527153}
   - component: {fileID: 9167346706583878576}
   - component: {fileID: 7464990684801931779}
+  - component: {fileID: 5765817738017117841}
   - component: {fileID: 4292614080381422586}
   m_Layer: 0
   m_Name: Spike_2
@@ -106,6 +107,33 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &5765817738017117841
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8761090150327436086}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 116
+  m_CollisionDetection: 1
 --- !u!114 &4292614080381422586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,7 +147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startMoveDistance: 20
-  pushForce: 8
+  pushForce: 40
   frontValue: 0.65
   halfExtents: {x: 0.5, y: 1, z: 0.15}
   playerMask:
@@ -127,7 +155,7 @@ MonoBehaviour:
     m_Bits: 64
   pushTime: 0.3
   pullTime: 2
-  rayDistance: 4
+  rayDistance: 8
   heightValue: -0.6
   PushSpickEase: 1
   PullSpickEase: 1

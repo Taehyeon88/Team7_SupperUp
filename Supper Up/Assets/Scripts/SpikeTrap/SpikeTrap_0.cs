@@ -16,7 +16,7 @@ public class SpikeTrap_0 : SpikeTrap_B
     private Vector3 targetPos;
     private bool isPushing = true;
     private bool isOneTime = false;
-    private Coroutine currentCoroutine;
+    private bool isThrusting = false;
     private Tween pushTween;
     private Tween pullTween;
 
@@ -30,17 +30,26 @@ public class SpikeTrap_0 : SpikeTrap_B
     {
         base.Update();
     }
+
+    private void FixedUpdate()
+    {
+        Thrust();
+    }
     protected override void StartThrust()
     {
-        currentCoroutine = StartCoroutine(C_StartThrust());
+        isThrusting = true;
     }
 
-    private IEnumerator C_StartThrust()                     //장애물 실행함수
+    protected override void EndThrust()
     {
-        //Debug.Log("실행된다");
-        while (true)
+        isThrusting = false;
+    }
+
+    private void Thrust()
+    {
+        if (isThrusting)
         {
-            switch(isPushing)
+            switch (isPushing)  //장애물의 밀치기실행
             {
                 case true:
                     if (pushTween != null && !isOneTime)
@@ -48,7 +57,7 @@ public class SpikeTrap_0 : SpikeTrap_B
                         pushTween.Restart();
                         isOneTime = true;
                     }
-                break;
+                    break;
                 case false:
                     if (pushTween != null && isOneTime)
                     {
@@ -57,29 +66,31 @@ public class SpikeTrap_0 : SpikeTrap_B
                     }
                     break;
             }
-            yield return null;
-        }
-    }
-
-    protected override void EndThrust()
-    {
-        if (currentCoroutine != null)
-        {
-            StopCoroutine(currentCoroutine);
-            currentCoroutine = null;
         }
     }
 
     private void SetTweens()
     {
-        pushTween = transform.DOMove(targetPos, pushTime)
-                        .SetAutoKill(false)
-                        .SetEase(PushSpickEase)
-                        .OnComplete(() => isPushing = false);
-        pullTween = transform.DOMove(originalPos, pullTime)
-                        .SetAutoKill(false)
-                        .SetEase(PullSpickEase)
-                        .OnComplete(() => isPushing = true);
+        pushTween = DOTween.To(
+            () => rb.position,
+            x => rb.MovePosition(x),
+            targetPos,
+            pushTime
+            ).SetAutoKill(false)
+             .SetEase(PushSpickEase)
+             .OnComplete(() => isPushing = false)
+             .SetUpdate(UpdateType.Fixed);
+
+        pullTween = DOTween.To(
+            () => rb.position,
+            x => rb.MovePosition(x),
+            originalPos,
+            pullTime
+            ).SetAutoKill(false)
+             .SetEase(PullSpickEase)
+             .OnComplete(() => isPushing = true)
+             .SetUpdate(UpdateType.Fixed);
+
         pushTween.Pause();
         pullTween.Pause();
     }
