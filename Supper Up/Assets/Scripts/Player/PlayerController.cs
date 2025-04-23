@@ -49,6 +49,8 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public bool isClimbing = false;
     [HideInInspector] public float height;
     [HideInInspector] public Vector3 climbDirection;
+    public float rayHeight;
+    public float rayFront;
 
     //내부 변수들
     private Rigidbody rb;
@@ -246,10 +248,14 @@ public class PlayerController : MonoBehaviour
         float climbHeight = origin.y + boxHalfExtents.y;
         if (target.Length >= 1)
         {
-            height = target[0].transform.position.y + target[0].transform.localScale.y / 2;
-            climbDirection = target[0].transform.position - transform.position;
-            climbDirection.y = 0;
-            if (height <= climbHeight) return true;
+            Vector3 rayOrigin = transform.position + transform.up * rayHeight + transform.forward * rayFront;
+            if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 2f))
+            {
+                height = hit.point.y;
+                climbDirection = target[0].transform.position - transform.position;
+                climbDirection.y = 0;
+                if (height <= climbHeight) return true;
+            }
         }
         return false;
     }
@@ -303,6 +309,11 @@ public class PlayerController : MonoBehaviour
     public bool IsGrounded()
     {
         return Physics.CheckBox(transform.position, groundHalfExtents, Quaternion.identity, groundLayer);
+    }
+    public bool CheckFalling()
+    {
+        if (rb.velocity.y < -6) return true;
+        return false;
     }
 
     private bool CheckHitWall(Vector3 movement)
@@ -383,10 +394,13 @@ public class PlayerController : MonoBehaviour
         //Gizmos.DrawWireSphere(start, radius);
 
         //플레이어 벽체크용
-
         Gizmos.matrix = Matrix4x4.TRS(transform.position + transform.up * heightValue + transform.forward * frontValue, transform.rotation, Vector3.one);
-
         Gizmos.DrawWireCube(Vector3.zero, boxHalfExtents * 2);
+
+        //플레이어 벽타기 높이 받는용
+        Gizmos.color = Color.red;
+        Gizmos.matrix = Matrix4x4.TRS(transform.position + transform.up * rayHeight + transform.forward * rayFront, transform.rotation, Vector3.one);
+        Gizmos.DrawRay(Vector3.zero, Vector3.down);
     }
 
 }

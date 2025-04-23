@@ -81,7 +81,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 7c1ae2f0ce9f80d46bded570846c9227,
         type: 3}
       propertyPath: m_Name
-      value: Player 1
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 7c1ae2f0ce9f80d46bded570846c9227,
         type: 3}
@@ -212,6 +212,7 @@ MonoBehaviour:
   thirdPersonCamera: {fileID: 0}
   moveSpeed: 5
   jumpForce: 5
+  jumpfrontForce: 2.5
   rotationSpeed: 10
   velocity: 1
   max_velocity: 3
@@ -234,6 +235,8 @@ MonoBehaviour:
   isClimbing: 0
   height: 0
   climbDirection: {x: 0, y: 0, z: 0}
+  rayHeight: 2.93
+  rayFront: 0.35
 --- !u!114 &7405028092641453899
 MonoBehaviour:
   m_ObjectHideFlags: 0

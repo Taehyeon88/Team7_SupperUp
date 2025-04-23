@@ -31,7 +31,7 @@ public abstract class PlayerState
             case MoveState:
                 if (Input.GetKeyDown(KeyCode.Space)) stateMachine.TransitionToState(JumpingState.GetInstance());     //Á¡ÇÁ»óÅÂ
                 else if (playerController.CheckClimbing()) stateMachine.TransitionToState(ClimbingState.GetInstance());   //ÆÄÄí¸£»óÅÂ
-                else if (playerController.CheckDistance() > 30f && !playerController.isFalling)                      //³«ÇÏ»óÅÂ
+                else if (playerController.CheckDistance() > 30f && !playerController.isFalling && !playerController.IsGrounded() && playerController.CheckFalling()) //³«ÇÏ»óÅÂ
                 {
                     stateMachine.TransitionToState(FallingState.GetInstance());
                 }
@@ -39,6 +39,11 @@ public abstract class PlayerState
             case JumpingState:
                 if (playerController.isLanding) stateMachine.TransitionToState(LandingState.GetInstance());          //ÂøÁö»óÅÂ
                 else if (playerController.CheckClimbing()) stateMachine.TransitionToState(ClimbingState.GetInstance());   //ÆÄÄí¸£»óÅÂ
+                else if (playerController.CheckDistance() > 30f && !playerController.isFalling && !playerController.IsGrounded() && playerController.CheckFalling()) //³«ÇÏ»óÅÂ
+                {
+                    Debug.Log("µÈ´Ù");
+                    stateMachine.TransitionToState(FallingState.GetInstance());
+                }
                 break;
             case FallingState:
                 if (playerController.CheckDistance() < 2.2f && playerController.isFalling)                           //½´ÆÛ³«ÇÏ»óÅÂ
