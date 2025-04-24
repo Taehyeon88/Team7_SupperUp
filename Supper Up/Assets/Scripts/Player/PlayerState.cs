@@ -72,6 +72,7 @@ public class MoveState : PlayerState
     private static MoveState instance = new MoveState();
     private MoveState() { }
     public static MoveState GetInstance() { return instance; }
+
     public override void Update()
     {
         pC.Rotate(true);

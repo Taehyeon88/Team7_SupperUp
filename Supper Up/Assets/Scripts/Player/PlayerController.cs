@@ -38,12 +38,14 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public bool isLanding = false;
     [HideInInspector] public bool isHightLanding = false;
     private bool wasGrounded = false;
+    public float maxSlopeAngle = 30f;
     public Vector3 groundHalfExtents;
     public LayerMask groundLayer;
 
     //내부 변수들
     private Rigidbody rb;
     private Animator playerAnimator;
+    private RaycastHit slopeHit;
     public bool isOneTime = false;
 
     void Start()
@@ -86,9 +88,10 @@ public class PlayerController : MonoBehaviour
         playerAnimator.SetFloat("FMove", moveVertical * velocity);                          //애니메이션
         playerAnimator.SetFloat("RMove", moveHorizontal);
 
+        bool isOnSlope = IsOnSlope();                                                       //경사이동용, 코드
+        movement = isOnSlope ? AdjustDirectionToSlope(movement.normalized) : movement;
+
         rb.MovePosition(rb.position + movement * (moveSpeed + velocity) * Time.deltaTime);
-
-
         //if (IsOnIce())                                                                       // 빙판 위에 있을 경우
         //{
         //    Debug.Log("된다ㅏㅏㅏ");
@@ -104,7 +107,22 @@ public class PlayerController : MonoBehaviour
     //    return Physics.Raycast(transform.position, Vector3.down, 1.1f, groundLayer);
     //}
 
+    private bool IsOnSlope()
+    {
+        Vector3 origin = transform.position + Vector3.up * 0.1f;
+        
+        if (Physics.Raycast(origin, Vector3.down, out slopeHit, 0.5f, groundLayer))
+        {
+            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+            return angle != 0 && angle < maxSlopeAngle; 
+        }
+        return false;
+    }
 
+    private Vector3 AdjustDirectionToSlope(Vector3 direction)
+    {
+        return Vector3.ProjectOnPlane(direction, slopeHit.normal).normalized;
+    }
 
     private void ConstraintsMove() //공중에 있을 시, 이속감소.
     {

@@ -26,7 +26,6 @@ public class PlayerAnimationController : MonoBehaviour
         switch (newState)
         {
             case MoveState:
-                if (currentState is ClimbingState) animator.SetBool(PARAM_IS_Climbing, false);
                 animator.SetBool(PARAM_IS_LANDING, false);
                 break;
             case JumpingState:

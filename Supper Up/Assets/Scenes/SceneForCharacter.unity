@@ -358,7 +358,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 290942809}
-  m_Material: {fileID: 13400000, guid: 4816fb13fe85a9b4e86ceecda341c90d, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -430,13 +430,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 290942809}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.30070576, y: 0, z: 0, w: 0.953717}
-  m_LocalPosition: {x: -6.9874, y: 3.73, z: -12.55}
-  m_LocalScale: {x: 3.1948, y: 1, z: 15.337478}
+  m_LocalRotation: {x: 0.4550287, y: -0, z: -0, w: 0.8904768}
+  m_LocalPosition: {x: -6.9874, y: 3.0678, z: -11.3553}
+  m_LocalScale: {x: 3.1948, y: 1, z: 18.069082}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 35, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 54.134, y: 0, z: 0}
 --- !u!20 &330585545 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 681106943993713343, guid: 687fc872aecf81e4eaacdb774f8912d6,
