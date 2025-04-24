@@ -33,20 +33,21 @@ public class PlayerController : MonoBehaviour
     public bool onRotate = false;
 
     [Header("Veriable for Ground Check")]
-    [HideInInspector] public bool isFalling = false;
-    [HideInInspector] public bool isJumping = false;
-    [HideInInspector] public bool isLanding = false;
-    [HideInInspector] public bool isHightLanding = false;
     private bool wasGrounded = false;
     public float maxSlopeAngle = 30f;
     public Vector3 groundHalfExtents;
     public LayerMask groundLayer;
 
+    [HideInInspector] public bool isFalling = false;
+    [HideInInspector] public bool isJumping = false;
+    [HideInInspector] public bool isLanding = false;
+    [HideInInspector] public bool isHightLanding = false;
+    [HideInInspector] public bool isOneTime = false;
+
     //내부 변수들
     private Rigidbody rb;
     private Animator playerAnimator;
     private RaycastHit slopeHit;
-    public bool isOneTime = false;
 
     void Start()
     {
