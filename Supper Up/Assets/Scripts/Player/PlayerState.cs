@@ -1,20 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Timeline;
 using UnityEngine;
 
 public abstract class PlayerState
 {
-    protected PlayerStateMachine stateMachine;
-    protected PlayerController playerController;
-    protected PlayerAnimationController animationController;
+    protected PlayerStateMachine sM;
+    protected PlayerController pC;
+    protected MovementController mC;
+    protected PlayerAnimationController aniC;
 
     //초기화메서드
     public void Init(PlayerStateMachine stateMachine)
     {
-        this.stateMachine = stateMachine;
-        this.playerController = stateMachine.playerController;
-        this.animationController = stateMachine.GetComponent<PlayerAnimationController>();
+        this.sM = stateMachine;
+        this.pC = stateMachine.playerController;
+        this.mC = stateMachine.movementController;
+        this.aniC = stateMachine.GetComponent<PlayerAnimationController>();
     }
 
     public virtual void Enter() { }
@@ -24,41 +23,45 @@ public abstract class PlayerState
 
     protected void CheckTransitions()
     {
-        if (stateMachine.currentState == null) return;
+        if (sM.currentState == null) return;
 
-        switch (stateMachine.currentState)
+        switch (sM.currentState)
         {
             case MoveState:
-                if (Input.GetKeyDown(KeyCode.Space)) stateMachine.TransitionToState(JumpingState.GetInstance());     //점프상태
-                else if (playerController.CheckClimbing()) stateMachine.TransitionToState(ClimbingState.GetInstance());   //파쿠르상태
-                else if (playerController.CheckDistance() > 30f && !playerController.isFalling && !playerController.IsGrounded() && playerController.CheckFalling()) //낙하상태
+                if (Input.GetKeyDown(KeyCode.Space) && pC.IsGrounded()) sM.TransitionToState(JumpingState.GetInstance());     //점프상태
+                else if (mC.CheckClimbing()) sM.TransitionToState(ClimbingState.GetInstance());   //파쿠르상태
+                else if (pC.CheckDistance() > 25f && !pC.isFalling && !pC.IsGrounded() && pC.CheckFalling(6)) //낙하상태
                 {
-                    stateMachine.TransitionToState(FallingState.GetInstance());
+                    sM.TransitionToState(FallingState.GetInstance());
                 }
+                else if (pC.isHightLanding) sM.TransitionToState(LandingState.GetInstance());          //착지상태
                 break;
             case JumpingState:
-                if (playerController.isLanding) stateMachine.TransitionToState(LandingState.GetInstance());          //착지상태
-                else if (playerController.CheckClimbing()) stateMachine.TransitionToState(ClimbingState.GetInstance());   //파쿠르상태
-                else if (playerController.CheckDistance() > 30f && !playerController.isFalling && !playerController.IsGrounded() && playerController.CheckFalling()) //낙하상태
+                if (pC.isLanding) sM.TransitionToState(LandingState.GetInstance());          //착지상태
+                else if (mC.CheckClimbing()) sM.TransitionToState(ClimbingState.GetInstance());   //파쿠르상태
+                else if (pC.CheckDistance() > 25f && !pC.isFalling && !pC.IsGrounded() && pC.CheckFalling(6)) //낙하상태
                 {
-                    Debug.Log("된다");
-                    stateMachine.TransitionToState(FallingState.GetInstance());
+                    sM.TransitionToState(FallingState.GetInstance());
                 }
                 break;
             case FallingState:
-                if (playerController.CheckDistance() < 2.2f && playerController.isFalling)                           //슈퍼낙하상태
+                if (pC.CheckDistance() < 2.2f && pC.isFalling)                           //슈퍼낙하상태
                 {
-                    stateMachine.TransitionToState(SupperLandingState.GetInstance());
+                    sM.TransitionToState(SupperLandingState.GetInstance());
                 }
                 break;
             case LandingState:
-                if (!playerController.isLanding) stateMachine.TransitionToState(MoveState.GetInstance());            //이동상태
+                if (pC.isJumping)
+                {
+                    if (!pC.isLanding) sM.TransitionToState(MoveState.GetInstance());                 //이동상태
+                }
+                else if(!pC.isHightLanding) sM.TransitionToState(MoveState.GetInstance());            //이동상태
                 break;
             case SupperLandingState:
-                if (!playerController.isLanding) stateMachine.TransitionToState(MoveState.GetInstance());            //이동상태
+                sM.TransitionToState(MoveState.GetInstance());                                             //이동상태
                 break;
             case ClimbingState:                                                                                      
-                if (!playerController.isClimbing) stateMachine.TransitionToState(MoveState.GetInstance());           //이동상태
+                if (!mC.isClimbing) sM.TransitionToState(MoveState.GetInstance());           //이동상태
                 break;
         }
     }
@@ -71,13 +74,14 @@ public class MoveState : PlayerState
     public static MoveState GetInstance() { return instance; }
     public override void Update()
     {
-        playerController.Rotate(true);
+        pC.Rotate(true);
+        pC.CheckLanding();
         CheckTransitions();
     }
 
     public override void FixedUpdate()
     {
-        playerController.Move();
+        pC.Move();
     }
 }
 
@@ -89,18 +93,19 @@ public class JumpingState : PlayerState
 
     public override void Enter()
     {
-        playerController.Jumping();
-        playerController.isJumping = true;
+        pC.Jumping();
+        pC.isJumping = true;
     }
     public override void Update()
     {
-        playerController.Rotate(false);
+        pC.Rotate(false);
+        pC.CheckLanding();
         CheckTransitions();
     }
 
     public override void FixedUpdate()
     {
-        playerController.Move();
+        pC.Move();
     }
 }
 
@@ -112,17 +117,17 @@ public class FallingState : PlayerState
 
     public override void Enter()
     {
-        playerController.isFalling = true; 
+        pC.isFalling = true; 
     }
     public override void Update()
     {
-        playerController.Rotate(false);
+        pC.Rotate(false);
         CheckTransitions();
     }
 
     public override void FixedUpdate()
     {
-        playerController.Move();
+        pC.Move();
     }
 }
 
@@ -134,13 +139,18 @@ public class LandingState : PlayerState
 
     public override void Enter()
     {
-
+        pC.Landing(false);
     }
     public override void Update()
     {
+        pC.CheckLanding();
         CheckTransitions();
     }
-    public override void Exit() { playerController.ResetVelocity(); }
+    public override void Exit() 
+    { 
+        pC.ResetVelocity();
+        pC.isJumping = false;
+    }
 }
 
 public class SupperLandingState : PlayerState
@@ -151,13 +161,13 @@ public class SupperLandingState : PlayerState
 
     public override void Enter()
     {
-        playerController.SupperLanding();
+        pC.Landing(true);
     }
     public override void Update()
     {
         CheckTransitions();
     }
-    public override void Exit() { playerController.ResetVelocity(); }
+    public override void Exit() { pC.ResetVelocity(); }
 }
 
 public class ClimbingState : PlayerState
@@ -168,14 +178,14 @@ public class ClimbingState : PlayerState
 
     public override void Enter()
     {
-        playerController.isClimbing = true;
-        playerController.StartClimbing();
+        mC.isClimbing = true;
+        mC.StartClimbing();
     }
     public override void Update()
     {
-        playerController.EndClimbing();
+        mC.EndClimbing();
         CheckTransitions();
     }
-    public override void Exit() { playerController.ResetVelocity(); }
+    public override void Exit() { pC.ResetVelocity(); }
 }
 

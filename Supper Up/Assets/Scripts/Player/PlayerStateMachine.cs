@@ -6,12 +6,14 @@ public class PlayerStateMachine : MonoBehaviour
 {
     public PlayerState currentState;
     public PlayerController playerController;
+    public MovementController movementController;
     private PlayerAnimationController animationController;
 
     private void Awake()
     {
         playerController = GetComponent<PlayerController>();
         animationController = GetComponent<PlayerAnimationController>();
+        movementController = GetComponent<MovementController>();
     }
 
     private void Start()
