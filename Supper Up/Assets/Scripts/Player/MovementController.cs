@@ -77,7 +77,7 @@ public class MovementController : MonoBehaviour
     public void EndClimbing()
     {
         AnimatorStateInfo stateInfo = playerAnimator.GetCurrentAnimatorStateInfo(0);
-        if (stateInfo.IsName("Movement") && stateInfo.normalizedTime <= 0.8f)
+        if (stateInfo.IsName("Climbing") && stateInfo.normalizedTime >= 0.7f)
         {
             playerAnimator.applyRootMotion = false;
             rb.velocity = Vector3.zero;

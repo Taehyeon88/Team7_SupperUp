@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour
 
         if (CheckHitWall(movement))                                                         //벽에 일정거리 이상일 경우, 이동멈추기(점프오류방지용)
         {
-            Debug.Log("된다!");
+            //Debug.Log("벽에서 가깝다!");
             AdjustSpeed(moveVertical, true);
             movement = Vector3.zero;
         }
@@ -93,20 +93,8 @@ public class PlayerController : MonoBehaviour
         movement = isOnSlope ? AdjustDirectionToSlope(movement.normalized) : movement;
 
         rb.MovePosition(rb.position + movement * (moveSpeed + velocity) * Time.deltaTime);
-        //if (IsOnIce())                                                                       // 빙판 위에 있을 경우
-        //{
-        //    Debug.Log("된다ㅏㅏㅏ");
-        //    Vector3 slipForce = movement * (moveSpeed * 50f) * Time.deltaTime;
-        //    rb.AddForce(slipForce, ForceMode.Acceleration);
-        //}
-    }
 
-    // 플레이어가 빙판길에 있는지 확인하는 메서드 추가
-    //private bool IsOnIce()
-    //{
-    //    // Raycast를 사용하여 아래에 있는 오브젝트의 레이어를 확인
-    //    return Physics.Raycast(transform.position, Vector3.down, 1.1f, groundLayer);
-    //}
+    }
 
     private bool IsOnSlope()
     {
@@ -234,7 +222,10 @@ public class PlayerController : MonoBehaviour
    {
         if (isJumping)
         {
-            if (IsGrounded() && !wasGrounded) isLanding = true;
+            if (IsGrounded() && !wasGrounded)
+            {
+                isLanding = true;
+            }
         }
         else if (CheckDistance() < 2.2f && !IsGrounded() && CheckFalling(1))
         {
