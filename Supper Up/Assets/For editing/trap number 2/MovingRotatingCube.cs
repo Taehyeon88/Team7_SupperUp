@@ -7,6 +7,7 @@ public class MovingRotatingCube : MonoBehaviour
     public float moveSpeed = 2f; // 이동 속도
     public float rotationSpeed = 50f; // 회전 속도
     public float moveDistance = 3f; // 이동 거리
+    public float pauseDuration = 0.5f; // 회전 후 대기 시간
 
     private Vector3 initialPosition;
     private float currentMovement;
@@ -86,13 +87,22 @@ public class MovingRotatingCube : MonoBehaviour
             yield return null; // 한 프레임 대기
         }
 
-        // 새로운 회전 방향 선택
+        // 회전 완료 후 잠시 대기
+        yield return new WaitForSeconds(pauseDuration); // 대기 시간
+
+        // 다음 회전 방향 선택
         ChooseRandomRotationAxis(); // 무작위 회전 방향 재선정
         rotating = false; // 회전 완료 표시
     }
 
     void ChooseRandomRotationAxis()
     {
-        currentRotationAxis = Random.Range(0, 4); // 0에서 3 범위의 랜덤 값을 선택 (위, 오른쪽, 아래, 왼쪽)
+        int newAxis;
+        do
+        {
+            newAxis = Random.Range(0, 4); // 0에서 3 범위의 랜덤 값을 선택 (위, 오른쪽, 아래, 왼쪽)
+        } while (currentRotationAxis == 1 && newAxis == 3); // 현재 오른쪽(1)에서 왼쪽(3)으로의 전환 방지
+
+        currentRotationAxis = newAxis; // 새로운 회전 방향 설정
     }
 }
