@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using DG.Tweening;
 using UnityEngine;
 
@@ -49,14 +50,13 @@ public class SpikeTrap_B : MonoBehaviour
             }
         }
     }
-    private void OnCollisionStay(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             playerRb.velocity = transform.forward * pushForce;
         }
     }
-
 
     protected virtual void StartThrust() { }          //장애물 실행함수
     protected virtual void EndThrust() { }            //장애물 종료함수

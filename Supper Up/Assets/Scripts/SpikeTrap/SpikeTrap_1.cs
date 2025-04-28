@@ -58,23 +58,35 @@ public class SpikeTrap_1 : SpikeTrap_B
 
     private void SetSequence()
     {
-        Tween pushTween = DOTween.To(
-            () => rb.position,
-            (x) => rb.MovePosition(x),
-            targetPos,
-            pushTime
-            ).SetAutoKill(false)
-             .SetEase(PushSpickEase)
-             .SetUpdate(UpdateType.Fixed);
+        //Tween pushTween = DOTween.To(
+        //    () => rb.position,
+        //    (x) => rb.MovePosition(x),
+        //    targetPos,
+        //    pushTime
+        //    ).SetAutoKill(false)
+        //     .SetEase(PushSpickEase)
+        //     .SetUpdate(UpdateType.Fixed);
 
-        Tween pullTween = DOTween.To(
-            () => rb.position,
-            (x) => rb.MovePosition(x),
-            originalPos,
-            pullTime
-            ).SetAutoKill(false)
-             .SetEase(PullSpickEase)
-             .SetUpdate(UpdateType.Fixed);
+        //Tween pullTween = DOTween.To(
+        //    () => rb.position,
+        //    (x) => rb.MovePosition(x),
+        //    originalPos,
+        //    pullTime
+        //    ).SetAutoKill(false)
+        //     .SetEase(PullSpickEase)
+        //     .SetUpdate(UpdateType.Fixed);
+
+        Tween pushTween = rb.DOMove(targetPos, pushTime)
+            .SetAutoKill(false)
+            .SetEase(PushSpickEase)
+            .OnComplete(() => isPushing = false)
+            .SetUpdate(UpdateType.Fixed);
+
+        Tween pullTween = rb.DOMove(originalPos, pullTime)
+            .SetAutoKill(false)
+            .SetEase(PullSpickEase)
+            .OnComplete(() => isPushing = true)
+            .SetUpdate(UpdateType.Fixed);
 
         sequence.Append(pushTween).Append(pullTween).SetAutoKill(false).Pause().OnComplete(()=> isPushing = false);
     }
