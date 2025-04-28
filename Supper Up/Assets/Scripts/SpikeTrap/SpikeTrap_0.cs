@@ -113,6 +113,6 @@ public class SpikeTrap_0 : SpikeTrap_B
 
         Gizmos.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one);
         Gizmos.color = Color.green;
-        Gizmos.DrawRay(originalPos, transform.forward * moveDistance);
+        Gizmos.DrawRay(transform.position, transform.forward * moveDistance);
     }
 }

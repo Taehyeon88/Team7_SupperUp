@@ -23,6 +23,8 @@ public class MovementController : MonoBehaviour
     private Animator playerAnimator;
     private PlayerController playerController;
 
+    private bool endClimbing = false;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -76,14 +78,19 @@ public class MovementController : MonoBehaviour
 
     public void EndClimbing()
     {
-        AnimatorStateInfo stateInfo = playerAnimator.GetCurrentAnimatorStateInfo(0);
-        if (stateInfo.IsName("Climbing") && stateInfo.normalizedTime >= 0.7f)
+        AnimatorTransitionInfo transInfo = playerAnimator.GetAnimatorTransitionInfo(0);
+        if (transInfo.IsName("Climbing -> Movement"))
+        {
+            endClimbing = true;
+        }
+        else if (endClimbing)
         {
             playerAnimator.applyRootMotion = false;
             rb.velocity = Vector3.zero;
             isClimbing = false;
             rb.useGravity = true;
             GetComponent<Collider>().isTrigger = false;
+            endClimbing = false;
         }
     }
     private void OnAnimatorIK(int layerIndex)

@@ -115,7 +115,7 @@ public class PlayerController : MonoBehaviour
 
     private void ConstraintsMove() //공중에 있을 시, 이속감소.
     {
-        if (CheckDistance() > 1.1f)
+        if (CheckDistance() > 1.1f && !IsGrounded())
         {
             moveSpeed = 0.1f;
             velocity = min_velocity;
@@ -255,6 +255,7 @@ public class PlayerController : MonoBehaviour
 
     public bool IsGrounded()
     {
+        Debug.Log("바닥여부체크: " + Physics.CheckBox(transform.position, groundHalfExtents, Quaternion.identity, groundLayer));
         return Physics.CheckBox(transform.position, groundHalfExtents, Quaternion.identity, groundLayer);
     }
     public bool CheckFalling(float value)
