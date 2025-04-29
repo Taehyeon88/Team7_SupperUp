@@ -139,18 +139,6 @@ public class SpikeTrap_2 : SpikeTrap_B
         targetPos = transform.position + transform.forward * rayDistance;
         currentPos = transform.position;
 
-        //Tween pushTween = DOTween.To(
-        //    () => rb.position,
-        //    (x) => rb.MovePosition(x),
-        //    targetPos, pushTime
-        //    ).SetEase(PushSpickEase);
-
-        //Tween pullTween = DOTween.To(
-        //    () => rb.position,
-        //    (x) => rb.MovePosition(x),
-        //    currentPos, pullTime
-        //    ).SetEase(PullSpickEase);
-
         Tween pushTween = rb.DOMove(targetPos, pushTime)
                   .SetEase(PushSpickEase)
                   .SetUpdate(UpdateType.Fixed);
