@@ -58,23 +58,6 @@ public class SpikeTrap_1 : SpikeTrap_B
 
     private void SetSequence()
     {
-        //Tween pushTween = DOTween.To(
-        //    () => rb.position,
-        //    (x) => rb.MovePosition(x),
-        //    targetPos,
-        //    pushTime
-        //    ).SetAutoKill(false)
-        //     .SetEase(PushSpickEase)
-        //     .SetUpdate(UpdateType.Fixed);
-
-        //Tween pullTween = DOTween.To(
-        //    () => rb.position,
-        //    (x) => rb.MovePosition(x),
-        //    originalPos,
-        //    pullTime
-        //    ).SetAutoKill(false)
-        //     .SetEase(PullSpickEase)
-        //     .SetUpdate(UpdateType.Fixed);
 
         Tween pushTween = rb.DOMove(targetPos, pushTime)
             .SetAutoKill(false)
@@ -97,8 +80,8 @@ public class SpikeTrap_1 : SpikeTrap_B
 
         Gizmos.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one);
 
-        Vector3 origin = transform.position + transform.up * heightValue;
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(origin, transform.forward * rayDistance);
+        //Vector3 origin = transform.position + transform.up * heightValue;
+        //Gizmos.color = Color.red;
+        //Gizmos.DrawRay(origin, transform.forward * rayDistance);
     }
 }
