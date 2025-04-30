@@ -1003,7 +1003,7 @@ GameObject:
   - component: {fileID: 7405028092641453899}
   m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1096,7 +1096,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &149659351453951126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1133,15 +1133,15 @@ MonoBehaviour:
   rotateTime: 3
   rotateDegree: 30
   onRotate: 0
-  isFalling: 0
-  isJumping: 0
-  isLanding: 0
-  isHightLanding: 0
   maxSlopeAngle: 30
   groundHalfExtents: {x: 0.19, y: 0.02, z: 0.19}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
+  isFalling: 0
+  isJumping: 0
+  isLanding: 0
+  isHightLanding: 0
   isOneTime: 0
 --- !u!114 &2806515906443287524
 MonoBehaviour:

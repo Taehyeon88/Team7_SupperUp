@@ -255,7 +255,7 @@ public class PlayerController : MonoBehaviour
 
     public bool IsGrounded()
     {
-        Debug.Log("바닥여부체크: " + Physics.CheckBox(transform.position, groundHalfExtents, Quaternion.identity, groundLayer));
+        //Debug.Log("바닥여부체크: " + Physics.CheckBox(transform.position, groundHalfExtents, Quaternion.identity, groundLayer));
         return Physics.CheckBox(transform.position, groundHalfExtents, Quaternion.identity, groundLayer);
     }
     public bool CheckFalling(float value)
