@@ -9,8 +9,6 @@ public class SpikeTrap_B : MonoBehaviour
     [Header("Base SpikeTrap Variable")]
     [SerializeField] private float startMoveDistance;  //작동시작거리
     [SerializeField] private float pushForce;          //밀쳐내는 힘
-    [SerializeField] private float frontValue;         //플레이어감지 범위설정
-    [SerializeField] private Vector3 halfExtents;
     [SerializeField] protected LayerMask playerMask;     //플레이어감지
 
     //내부변수
@@ -64,8 +62,6 @@ public class SpikeTrap_B : MonoBehaviour
 
     protected virtual void OnDrawGizmosSelected()
     {
-        Vector3 origin = transform.position + transform.forward * frontValue;
-
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, startMoveDistance - 1);
     }

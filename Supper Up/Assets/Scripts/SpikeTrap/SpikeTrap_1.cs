@@ -19,6 +19,8 @@ public class SpikeTrap_1 : SpikeTrap_B
     private bool isChecking = false;
     private bool isPushing = false;
 
+    private Vector3 startPos;
+
     private void Awake()
     {
         sequence = DOTween.Sequence();
@@ -80,8 +82,8 @@ public class SpikeTrap_1 : SpikeTrap_B
 
         Gizmos.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, Vector3.one);
 
-        //Vector3 origin = transform.position + transform.up * heightValue;
-        //Gizmos.color = Color.red;
-        //Gizmos.DrawRay(origin, transform.forward * rayDistance);
+        Vector3 origin = transform.position + transform.up * heightValue;
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(origin, transform.forward * rayDistance);
     }
 }

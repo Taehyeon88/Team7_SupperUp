@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
         else movement = transform.forward * moveVertical;
         moveDegree = movement.magnitude;
 
-        if (CheckHitWall(movement))                                                         //벽에 일정거리 이상일 경우, 이동멈추기(점프오류방지용)
+        if (CheckHitWall(movement.normalized))                                                         //벽에 일정거리 이상일 경우, 이동멈추기(점프오류방지용)
         {
             //Debug.Log("벽에서 가깝다!");
             AdjustSpeed(moveVertical, true);
