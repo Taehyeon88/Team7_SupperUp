@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class MovementController : MonoBehaviour
@@ -26,6 +27,9 @@ public class MovementController : MonoBehaviour
 
     private bool endClimbing = false;
 
+    private Vector3 test;
+    private Vector3 test2;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -41,12 +45,19 @@ public class MovementController : MonoBehaviour
         if (target.Length >= 1)
         {
             Vector3 rayOrigin = transform.position + transform.up * rayHeight + transform.forward * rayFront;
-            if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 2f))
+            if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 2f))                    //레이캐스트로 벽타기대상의 높이을 받는다.
             {
+                test = origin + Vector3.up * boxHalfExtents.y;
+                test2 = hit.point;
                 height = hit.point.y;
-                climbDirection = target[0].transform.position - transform.position;
-                climbDirection.y = 0;
-                if (height <= climbHeight) return true;
+                Debug.Log($"사물 높이 : {hit.point.y}, 벽타기가능 높이 : {climbHeight}");
+
+                if (Vector3.Angle(Vector3.up, hit.normal) <= playerController.maxSlopeAngle + 2f)
+                {
+                    climbDirection = target[0].transform.position - transform.position;
+                    climbDirection.y = 0;
+                    if (height <= climbHeight) return true;
+                }
             }
         }
         return false;
@@ -144,6 +155,11 @@ public class MovementController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(test, 0.1f);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawSphere(test2, 0.1f);
+
         //플레이어 벽체크용
         Gizmos.matrix = Matrix4x4.TRS(transform.position + transform.up * heightValue + transform.forward * frontValue, transform.rotation, Vector3.one);
         Gizmos.DrawWireCube(Vector3.zero, boxHalfExtents * 2);

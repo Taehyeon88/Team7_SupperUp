@@ -6978,6 +6978,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2806515906443287524, guid: 3d71caa8f71766e419494be794e8a3dd,
         type: 3}
+      propertyPath: rayHeight
+      value: 2.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 2806515906443287524, guid: 3d71caa8f71766e419494be794e8a3dd,
+        type: 3}
       propertyPath: boxHalfExtents.z
       value: 0.1
       objectReference: {fileID: 0}

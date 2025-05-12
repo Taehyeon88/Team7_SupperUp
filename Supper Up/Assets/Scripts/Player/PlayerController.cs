@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public bool isJumping = false;
     [HideInInspector] public bool isLanding = false;
     [HideInInspector] public bool isHightLanding = false;
+    [HideInInspector] public bool isTrusted = false;
 
     //내부 변수들
     private Rigidbody rb;
@@ -219,7 +220,6 @@ public class PlayerController : MonoBehaviour
     }
    public void CheckLanding()
    {
-        Debug.Log("현재높이 : " + CheckDistance());
         if (isJumping)
         {
             if (IsGrounded() && !wasGrounded)  //점프후, 착지모션

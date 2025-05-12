@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public abstract class PlayerState
@@ -35,6 +36,7 @@ public abstract class PlayerState
                     sM.TransitionToState(FallingState.GetInstance());
                 }
                 else if (pC.isHightLanding) sM.TransitionToState(LandingState.GetInstance());                 //착지상태
+                else if (pC.isTrusted) sM.TransitionToState(FallingState.GetInstance());                      //장애물로 일해 밀쳐진 상태
                 break;
             case JumpingState:
                 if (pC.isLanding) sM.TransitionToState(LandingState.GetInstance());                           //착지상태
@@ -43,6 +45,7 @@ public abstract class PlayerState
                 {
                     sM.TransitionToState(FallingState.GetInstance());
                 }
+                else if (pC.isTrusted) sM.TransitionToState(FallingState.GetInstance());                      //장애물로 일해 밀쳐진 상태
                 break;
             case FallingState:
                 if (pC.CheckDistance() < 2.2f && pC.isFalling)                           //슈퍼낙하상태
@@ -120,7 +123,8 @@ public class FallingState : PlayerState
 
     public override void Enter()
     {
-        pC.isFalling = true;
+        if (!pC.isTrusted) pC.isFalling = true;
+        else sM.StartCoroutine(WaitSuperLanding());
     }
     public override void Update()
     {
@@ -131,6 +135,13 @@ public class FallingState : PlayerState
     public override void FixedUpdate()
     {
         pC.Move();
+        pC.isTrusted = false;
+    }
+
+    IEnumerator WaitSuperLanding()
+    {
+        yield return new WaitForSeconds(1f);
+        pC.isFalling = true;
     }
 }
 

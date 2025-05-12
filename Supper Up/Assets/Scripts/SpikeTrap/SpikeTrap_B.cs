@@ -53,6 +53,7 @@ public class SpikeTrap_B : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             playerRb.velocity = transform.forward * pushForce;
+            player.isTrusted = true;
         }
     }
 

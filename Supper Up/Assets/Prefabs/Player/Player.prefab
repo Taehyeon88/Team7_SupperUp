@@ -1142,6 +1142,7 @@ MonoBehaviour:
   isJumping: 0
   isLanding: 0
   isHightLanding: 0
+  isTrusted: 0
 --- !u!114 &2806515906443287524
 MonoBehaviour:
   m_ObjectHideFlags: 0

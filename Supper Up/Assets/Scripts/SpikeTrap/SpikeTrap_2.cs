@@ -112,8 +112,6 @@ public class SpikeTrap_2 : SpikeTrap_B
     }
     private void SetTweens()
     {
-        transform.DOMove(CheckPoint_1, 1);
-
         MoveTween_1 = transform.DOMove(CheckPoint_1, moveTime)
                         .SetAutoKill(false)
                         .SetEase(moveEase)
