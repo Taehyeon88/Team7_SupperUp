@@ -42,7 +42,6 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public bool isJumping = false;
     [HideInInspector] public bool isLanding = false;
     [HideInInspector] public bool isHightLanding = false;
-    [HideInInspector] public bool isOneTime = false;
 
     //내부 변수들
     private Rigidbody rb;
@@ -220,16 +219,19 @@ public class PlayerController : MonoBehaviour
     }
    public void CheckLanding()
    {
+        Debug.Log("현재높이 : " + CheckDistance());
         if (isJumping)
         {
-            if (IsGrounded() && !wasGrounded)
+            if (IsGrounded() && !wasGrounded)  //점프후, 착지모션
             {
                 isLanding = true;
             }
         }
-        else if (CheckDistance() < 2.2f && !IsGrounded() && CheckFalling(1))
+        else if (CheckDistance() < 2.2f && !IsGrounded() && CheckFalling(1) && !isHightLanding && CheckDistance() > 1.3f)  //이동후, 높은 곳에서 착지모션
         {
             isHightLanding = true;
+            //Debug.Log("착지높이 : " + CheckDistance());
+            //Debug.Log("일반착지 활성화");
         }
 
         if (isLanding || isHightLanding)
@@ -266,7 +268,7 @@ public class PlayerController : MonoBehaviour
 
     private bool CheckHitWall(Vector3 movement)
     {
-        float distance = 0.33f;
+        float distance = 0.32f;
 
         List<Vector3> rayPos = new List<Vector3>();
         rayPos.Add(transform.position + transform.up * 0.3f);
@@ -276,31 +278,13 @@ public class PlayerController : MonoBehaviour
 
         foreach (var origin in rayPos)
         {
-            //Debug.DrawRay(origin, movement, Color.red, distance);
+            Debug.DrawRay(origin, movement * distance, Color.red);
             if (Physics.Raycast(origin, movement, distance))
             {
                 return true;
             }
         }
         return false;
-    }
-
-    private void OnAnimatorMove()
-    {
-        AnimatorStateInfo stateInfo = playerAnimator.GetCurrentAnimatorStateInfo(0);
-        if (stateInfo.IsName("Climbing"))
-        {
-            Vector3 delta = playerAnimator.deltaPosition;
-
-            if (isOneTime)
-            {
-                delta -= Vector3.up * 0.1f;
-                isOneTime = false;
-            }
-
-            rb.MovePosition(rb.position + delta);
-            rb.velocity = Vector3.zero;
-        }
     }
 
     private void OnDrawGizmos()

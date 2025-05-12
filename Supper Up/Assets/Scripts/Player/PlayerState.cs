@@ -73,6 +73,7 @@ public class MoveState : PlayerState
     public override void Enter()
     {
         pC.isJumping = false;     //점프초기화용
+        pC.isHightLanding = false;
     }
     public override void Update()
     {
@@ -120,7 +121,6 @@ public class FallingState : PlayerState
     public override void Enter()
     {
         pC.isFalling = true;
-        pC.isJumping = false;     //점프초기화용
     }
     public override void Update()
     {
@@ -185,7 +185,6 @@ public class ClimbingState : PlayerState
     public override void Enter()
     {
         mC.isClimbing = true;
-        pC.isJumping = false;     //점프초기화용
         mC.StartClimbing();
     }
     public override void Update()

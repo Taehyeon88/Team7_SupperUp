@@ -14,6 +14,7 @@ public class MovementController : MonoBehaviour
     [HideInInspector] public bool isClimbing = false;
     [HideInInspector] public float height;
     [HideInInspector] public Vector3 climbDirection;
+    [HideInInspector] public bool isOneTime = false;
     public float rayHeight;
     public float rayFront;
 
@@ -73,7 +74,7 @@ public class MovementController : MonoBehaviour
 
         transform.DOMove(desiredPos, 0.3f);
 
-        playerController.isOneTime = true;
+        isOneTime = true;
     }
 
     public void EndClimbing()
@@ -121,6 +122,24 @@ public class MovementController : MonoBehaviour
         playerAnimator.SetIKPositionWeight(AvatarIKGoal.LeftHand, value1);
         playerAnimator.SetIKRotationWeight(AvatarIKGoal.RightHand, value2);
         playerAnimator.SetIKRotationWeight(AvatarIKGoal.LeftHand, value2);
+    }
+
+    private void OnAnimatorMove()
+    {
+        AnimatorStateInfo stateInfo = playerAnimator.GetCurrentAnimatorStateInfo(0);
+        if (stateInfo.IsName("Climbing"))
+        {
+            Vector3 delta = playerAnimator.deltaPosition;
+
+            if (isOneTime)
+            {
+                delta -= Vector3.up * 0.1f;
+                isOneTime = false;
+            }
+
+            rb.MovePosition(rb.position + delta);
+            rb.velocity = Vector3.zero;
+        }
     }
 
     private void OnDrawGizmos()

@@ -1142,7 +1142,6 @@ MonoBehaviour:
   isJumping: 0
   isLanding: 0
   isHightLanding: 0
-  isOneTime: 0
 --- !u!114 &2806515906443287524
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1157,13 +1156,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   heightValue: 1.63
   frontValue: 0.24
-  boxHalfExtents: {x: 0.22, y: 0.35, z: 0.08}
+  boxHalfExtents: {x: 0.22, y: 0.35, z: 0.1}
   wallLayer:
     serializedVersion: 2
     m_Bits: 8
   isClimbing: 0
   height: 0
   climbDirection: {x: 0, y: 0, z: 0}
+  isOneTime: 0
   rayHeight: 2.93
   rayFront: 0.35
 --- !u!114 &7405028092641453899
