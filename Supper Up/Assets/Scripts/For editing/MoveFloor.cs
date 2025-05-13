@@ -4,16 +4,14 @@ using UnityEngine;
 
 public class MoveFloor : MonoBehaviour
 {
-    //UD_Floor
     float initPositionY;
     float initPositionX;
     public float distance;
     public float turningPoint;
-    //UD_Floor & LR_Floor
+
     public bool turnSwitch;
     public float moveSpeed;
 
-    //RT_Floor
     public float rotateSpeed;
 
     void Awake()
@@ -22,11 +20,13 @@ public class MoveFloor : MonoBehaviour
         {
             initPositionY = transform.position.y;
             turningPoint = initPositionY - distance;
+            turnSwitch = true; // 초기 상태
         }
         if (gameObject.name == "LR_Floor")
         {
             initPositionX = transform.position.x;
             turningPoint = initPositionX - distance;
+            turnSwitch = true; // 초기 상태
         }
     }
 
@@ -45,20 +45,21 @@ public class MoveFloor : MonoBehaviour
 
         if (turnSwitch)
         {
-            transform.position = transform.position + new Vector3(0, 1, 0) * moveSpeed * Time.deltaTime;
+            transform.position += new Vector3(0, moveSpeed * Time.deltaTime, 0);
         }
         else
         {
-            transform.position = transform.position + new Vector3(0, -1, 0) * moveSpeed * Time.deltaTime;
+            transform.position += new Vector3(0, -moveSpeed * Time.deltaTime, 0);
         }
     }
+
     void rotate()
     {
         transform.Rotate(Vector3.right * rotateSpeed * Time.deltaTime);
     }
+
     void leftRight()
     {
-
         float currentPositionX = transform.position.x;
 
         if (currentPositionX >= initPositionX + distance)
@@ -72,13 +73,12 @@ public class MoveFloor : MonoBehaviour
 
         if (turnSwitch)
         {
-            transform.position = transform.position + new Vector3(1, 0, 0) * moveSpeed * Time.deltaTime;
+            transform.position += new Vector3(moveSpeed * Time.deltaTime, 0, 0);
         }
         else
         {
-            transform.position = transform.position + new Vector3(-1, 0, 0) * moveSpeed * Time.deltaTime;
+            transform.position += new Vector3(-moveSpeed * Time.deltaTime, 0, 0);
         }
-
     }
 
     void Update()
