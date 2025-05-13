@@ -152,5 +152,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 8334761217305517376, guid: d588f6afa55e86d44b8626964b191f8f, type: 3}
   cameraDistance: 7
+  collisionLayer:
+    serializedVersion: 2
+    m_Bits: 8
   mouseSenesitivity: 150
   radius: 5

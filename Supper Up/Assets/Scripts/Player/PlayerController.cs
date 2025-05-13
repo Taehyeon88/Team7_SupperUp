@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public bool isJumping = false;
     [HideInInspector] public bool isLanding = false;
     [HideInInspector] public bool isHightLanding = false;
+    [HideInInspector] public bool isSuperLanding = false;
     [HideInInspector] public bool isTrusted = false;
 
     //내부 변수들
@@ -128,6 +129,7 @@ public class PlayerController : MonoBehaviour
     {
         velocity = min_velocity;
         speedTimer = 0;
+        rb.velocity = new Vector3(0, rb.velocity.y, 0);
     }
 
     //시간이 흐름에 따라 속도를 올려주는 코드
@@ -220,6 +222,7 @@ public class PlayerController : MonoBehaviour
     }
    public void CheckLanding()
    {
+        //Debug.Log("실시간 착지 여부: " + CheckDistance());
         if (isJumping)
         {
             if (IsGrounded() && !wasGrounded)  //점프후, 착지모션
@@ -227,10 +230,10 @@ public class PlayerController : MonoBehaviour
                 isLanding = true;
             }
         }
-        else if (CheckDistance() < 2.2f && !IsGrounded() && CheckFalling(1) && !isHightLanding && CheckDistance() > 1.3f)  //이동후, 높은 곳에서 착지모션
+        else if (CheckDistance() < 2.2f && !IsGrounded() && CheckFalling(1) && !isHightLanding)  //이동후, 높은 곳에서 착지모션
         {
-            isHightLanding = true;
-            //Debug.Log("착지높이 : " + CheckDistance());
+            if(!isSuperLanding) isHightLanding = true;
+            //Debug.Log("현재착지여부: " + CheckDistance());
             //Debug.Log("일반착지 활성화");
         }
 

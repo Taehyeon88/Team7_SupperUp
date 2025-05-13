@@ -13225,6 +13225,11 @@ PrefabInstance:
       propertyPath: mouseSenesitivity
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 5209052177483369570, guid: 687fc872aecf81e4eaacdb774f8912d6,
+        type: 3}
+      propertyPath: collisionLayer.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 7800637653171983416, guid: 687fc872aecf81e4eaacdb774f8912d6,
         type: 3}
       propertyPath: m_LocalPosition.x

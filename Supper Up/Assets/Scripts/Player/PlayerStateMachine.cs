@@ -8,12 +8,14 @@ public class PlayerStateMachine : MonoBehaviour
     public PlayerController playerController;
     public MovementController movementController;
     private PlayerAnimationController animationController;
+    public CameraController cameraController { get; private set; }
 
     private void Awake()
     {
         playerController = GetComponent<PlayerController>();
         animationController = GetComponent<PlayerAnimationController>();
         movementController = GetComponent<MovementController>();
+        cameraController = FindObjectOfType<CameraController>();
     }
 
     private void Start()

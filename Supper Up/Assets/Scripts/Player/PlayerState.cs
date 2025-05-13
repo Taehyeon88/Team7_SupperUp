@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class PlayerState
@@ -77,6 +78,7 @@ public class MoveState : PlayerState
     {
         pC.isJumping = false;     //점프초기화용
         pC.isHightLanding = false;
+        sM.StartCoroutine(WaitLanding());
     }
     public override void Update()
     {
@@ -88,6 +90,12 @@ public class MoveState : PlayerState
     public override void FixedUpdate()
     {
         pC.Move();
+    }
+
+    IEnumerator WaitLanding()
+    {
+        yield return new WaitForSeconds(1f);
+        pC.isSuperLanding = false;
     }
 }
 
@@ -123,7 +131,11 @@ public class FallingState : PlayerState
 
     public override void Enter()
     {
-        if (!pC.isTrusted) pC.isFalling = true;
+        if (!pC.isTrusted)
+        {
+            pC.isFalling = true;
+            sM.cameraController.StartCameraShake(0.05f);
+        }
         else sM.StartCoroutine(WaitSuperLanding());
     }
     public override void Update()
@@ -136,6 +148,11 @@ public class FallingState : PlayerState
     {
         pC.Move();
         pC.isTrusted = false;
+    }
+
+    public override void Exit()
+    {
+        sM.cameraController.StopCameraShake();
     }
 
     IEnumerator WaitSuperLanding()
@@ -176,6 +193,7 @@ public class SupperLandingState : PlayerState
     public override void Enter()
     {
         pC.Landing(true);
+        pC.isSuperLanding = true;
     }
     public override void Update()
     {

@@ -155,10 +155,10 @@ public class MovementController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(test, 0.1f);
-        Gizmos.color = Color.blue;
-        Gizmos.DrawSphere(test2, 0.1f);
+        //Gizmos.color = Color.red;
+        //Gizmos.DrawSphere(test, 0.1f);
+        //Gizmos.color = Color.blue;
+        //Gizmos.DrawSphere(test2, 0.1f);
 
         //플레이어 벽체크용
         Gizmos.matrix = Matrix4x4.TRS(transform.position + transform.up * heightValue + transform.forward * frontValue, transform.rotation, Vector3.one);
