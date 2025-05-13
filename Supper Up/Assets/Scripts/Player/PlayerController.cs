@@ -269,6 +269,11 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
+    public float GetVelocityMegitude()
+    {
+        return rb.velocity.magnitude;
+    }
+
     private bool CheckHitWall(Vector3 movement)
     {
         float distance = 0.32f;

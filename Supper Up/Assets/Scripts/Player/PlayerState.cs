@@ -89,12 +89,12 @@ public class MoveState : PlayerState
 
     public override void FixedUpdate()
     {
-        pC.Move();
+        if(!pC.isSuperLanding) pC.Move();
     }
 
     IEnumerator WaitLanding()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.7f);
         pC.isSuperLanding = false;
     }
 }
@@ -134,9 +134,9 @@ public class FallingState : PlayerState
         if (!pC.isTrusted)
         {
             pC.isFalling = true;
-            sM.cameraController.StartCameraShake(0.05f);
         }
         else sM.StartCoroutine(WaitSuperLanding());
+        sM.cameraController.StartCameraShake(0.05f);
     }
     public override void Update()
     {
@@ -147,17 +147,21 @@ public class FallingState : PlayerState
     public override void FixedUpdate()
     {
         pC.Move();
-        pC.isTrusted = false;
+        if (pC.CheckDistance() < 10f)
+        {
+            sM.cameraController.ReadyToStopCameraShake();
+        }
     }
 
     public override void Exit()
     {
         sM.cameraController.StopCameraShake();
+        pC.isTrusted = false;
     }
 
     IEnumerator WaitSuperLanding()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.3f);
         pC.isFalling = true;
     }
 }
