@@ -17,6 +17,7 @@ public class SpikeTrap_B : MonoBehaviour
     private bool startMove = false;
     protected Rigidbody rb;
     private Rigidbody playerRb;
+
     protected virtual void Start()
     {
         originalPos = transform.position;
