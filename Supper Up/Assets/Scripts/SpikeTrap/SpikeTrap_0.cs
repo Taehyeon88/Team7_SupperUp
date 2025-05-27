@@ -44,7 +44,6 @@ public class SpikeTrap_0 : SpikeTrap_B
     {
         isThrusting = false;
     }
-
     private void Thrust()
     {
         if (isThrusting)
@@ -54,13 +53,17 @@ public class SpikeTrap_0 : SpikeTrap_B
                 case true:
                     if (pushTween != null && !isOneTime)
                     {
+                        SoundManager.instance.FadeSound_S(audioSources[pushId], 1f);
+                        SoundManager.instance.FadeSound_S(audioSources[pullId], 0f, true);
                         pushTween.Restart();
                         isOneTime = true;
                     }
                     break;
                 case false:
-                    if (pushTween != null && isOneTime)
+                    if (pullTween != null && isOneTime)
                     {
+                        SoundManager.instance.FadeSound_S(audioSources[pullId], 1f);
+                        SoundManager.instance.FadeSound_S(audioSources[pushId], 0f, true);
                         pullTween.Restart();
                         isOneTime = false;
                     }
@@ -71,26 +74,6 @@ public class SpikeTrap_0 : SpikeTrap_B
 
     private void SetTweens()
     {
-        //pushTween = DOTween.To(
-        //    () => rb.position,
-        //    x => rb.MovePosition(x),
-        //    targetPos,
-        //    pushTime
-        //    ).SetAutoKill(false)
-        //     .SetEase(PushSpickEase)
-        //     .OnComplete(() => isPushing = false)
-        //     .SetUpdate(UpdateType.Fixed);
-
-        //pullTween = DOTween.To(
-        //    () => rb.position,
-        //    x => rb.MovePosition(x),
-        //    originalPos,
-        //    pullTime
-        //    ).SetAutoKill(false)
-        //     .SetEase(PullSpickEase)
-        //     .OnComplete(() => isPushing = true)
-        //     .SetUpdate(UpdateType.Fixed);
-
         pushTween = rb.DOMove(targetPos, pushTime)
             .SetAutoKill(false)
             .SetEase(PushSpickEase)

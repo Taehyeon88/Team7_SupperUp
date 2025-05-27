@@ -108,6 +108,9 @@ public class SpikeTrap_2 : SpikeTrap_B
             isPushing = true;
             StopTween();
             PlaySequence();
+
+            SoundManager.instance.FadeSound_S(audioSources[pushId], 1f);
+            SoundManager.instance.FadeSound_S(audioSources[pullId], 0f, true);
         }
     }
     private void SetTweens()
@@ -139,11 +142,18 @@ public class SpikeTrap_2 : SpikeTrap_B
 
         Tween pushTween = rb.DOMove(targetPos, pushTime)
                   .SetEase(PushSpickEase)
-                  .SetUpdate(UpdateType.Fixed);
+                  .SetUpdate(UpdateType.Fixed)
+                  .OnComplete(() =>{
+                      SoundManager.instance.FadeSound_S(audioSources[pullId], 1f);
+                      SoundManager.instance.FadeSound_S(audioSources[pushId], 0f, true);}
+                  );
 
         Tween pullTween = rb.DOMove(currentPos, pullTime)
-            .SetEase(PullSpickEase)
-            .SetUpdate(UpdateType.Fixed);
+                 .SetEase(PullSpickEase)
+                 .SetUpdate(UpdateType.Fixed)
+                 .OnComplete(() => {
+                     SoundManager.instance.FadeSound_S(audioSources[pullId], 0f, true);}
+                 );
 
         sequence.Append(pushTween)
                 .Append(pullTween)

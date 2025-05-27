@@ -18,12 +18,31 @@ public class SpikeTrap_B : MonoBehaviour
     protected Rigidbody rb;
     private Rigidbody playerRb;
 
+    protected List<AudioSource> audioSources = new List<AudioSource>();
+    protected int rayId;
+    protected int pushId;
+    protected int pullId;
+
     protected virtual void Start()
     {
         originalPos = transform.position;
         player = FindObjectOfType<PlayerController>();
         rb = GetComponent<Rigidbody>();
         playerRb = player.GetComponent<Rigidbody>();
+
+        AudioSource[] t_audioSources = GetComponents<AudioSource>();
+        for (int i = 0; i < t_audioSources.Length; i++)
+        {
+            audioSources.Add(t_audioSources[i]);
+            string name = SoundManager.instance.FindAudioWithClip(t_audioSources[i].clip);
+
+            switch (name)
+            {
+                case "Ray": rayId = i; break;
+                case "Push": pushId = i; break;
+                case "Pull": pullId = i; break;
+            }
+        }
     }
 
     protected virtual void Update()
@@ -38,12 +57,13 @@ public class SpikeTrap_B : MonoBehaviour
             float distance = Vector3.Distance(originalPos, player.transform.position);
             if (distance < startMoveDistance - 1 && !startMove)
             {
+                SoundManager.instance.FadeSound_S(audioSources[rayId], 1f);
                 StartThrust();
                 startMove = true;
             }
             else if (distance > startMoveDistance + 1 && startMove)
             {
-                //Debug.Log("µÈ´Ù");
+                SoundManager.instance.FadeSound_S(audioSources[rayId], 0f);
                 EndThrust();
                 startMove = false;
             }
