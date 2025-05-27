@@ -4,40 +4,42 @@ using UnityEngine;
 
 public class Cannon : MonoBehaviour
 {
-    public GameObject cannonBallPrefab; // 대포에서 발사할 공 프리팹
-    public float fireForce = 500f; // 발사 속도
-    public float fireRate = 2f; // 발사 간격
-    public float ballLifetime = 5f; // 공의 생존 시간
-    public float cannonBallOffset = 1f; // 대포에서 대포알까지의 거리(offset)
+    [Header("Gun Settings")]
+    public float fireRate = 1f; // 초당 발사 횟수
+    public float bulletSpeed = 20f; // 총알 속도
+    public float bulletLifetime = 3f; // 총알 수명
+
+    [Header("References")]
+    public GameObject bulletPrefab; // 총알 프리팹
+    public Transform firePoint; // 총알이 발사되는 위치
+
+    private float nextFireTime;
 
     void Start()
     {
-        StartCoroutine(FireCannon());
+        nextFireTime = 0f;
     }
 
-    IEnumerator FireCannon()
+    void Update()
     {
-        while (true)
+        // 발사 시간이 되면 총알 발사
+        if (Time.time >= nextFireTime)
         {
             Fire();
-            yield return new WaitForSeconds(fireRate);
+            nextFireTime = Time.time + 1f / fireRate;
         }
     }
 
     void Fire()
     {
-        // 대포에서 공을 생성, 대포의 위치에 맞춰 조정
-        Vector3 spawnPosition = transform.position + transform.forward * cannonBallOffset; // 대포알 위치 조정
-        GameObject cannonBall = Instantiate(cannonBallPrefab, spawnPosition, transform.rotation);
-        Rigidbody rb = cannonBall.GetComponent<Rigidbody>();
+        // 총알 생성
+        GameObject bulletObject = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
 
-        if (rb != null)
+        // Bullet 스크립트에 속도 전달
+        CannonBall bullet = bulletObject.GetComponent<CannonBall>();
+        if (bullet != null)
         {
-            // 대포의 전방으로 힘을 주어 발사
-            rb.AddForce(transform.forward * fireForce);
+            bullet.Initialize(bulletSpeed, bulletLifetime);
         }
-
-        // 공의 생존 시간 설정
-        Destroy(cannonBall, ballLifetime);
     }
 }
