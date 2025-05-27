@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public bool isHightLanding = false;
     [HideInInspector] public bool isSuperLanding = false;
     [HideInInspector] public bool isTrusted = false;
+    [HideInInspector] public bool isOneTime = false;
 
     //내부 변수들
     private Rigidbody rb;
@@ -52,7 +53,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;          //마우스 커서를 잠그고 숨긴다
+        //Cursor.lockState = CursorLockMode.Locked;          //마우스 커서를 잠그고 숨긴다
 
         rb = GetComponent<Rigidbody>();
         playerAnimator = GetComponent<Animator>();
@@ -61,7 +62,7 @@ public class PlayerController : MonoBehaviour
     }
 
     //플레이어 행동처리 함수
-    public void Move()
+    public void Move(bool useMoveSound)
     {
         float moveHorizontal = Input.GetAxis("Horizontal");         //좌우 입력(1, -1)
         float moveVertical = Input.GetAxis("Vertical");             //앞뒤 입력(1, -1)
@@ -89,6 +90,34 @@ public class PlayerController : MonoBehaviour
         
         playerAnimator.SetFloat("FMove", moveVertical * velocity);                          //애니메이션
         playerAnimator.SetFloat("RMove", moveHorizontal);
+
+        if (!SoundManager.instance.CheckSoundPlay(GetGroundTypeString()) && movement.magnitude > 0.1f && useMoveSound)
+        {
+            if (!isOneTime)
+            {
+                if (GetGroundTypeString() == "Walk(wood)")
+                {
+                    SoundManager.instance.FadeSound("Walk(wood)", 1f);
+                    SoundManager.instance.FadeSound("Walk(stone)", 0f);
+                }
+                else if(GetGroundTypeString() == "Walk(stone)")
+                {
+                    SoundManager.instance.FadeSound("Walk(stone)", 1f);
+                    SoundManager.instance.FadeSound("Walk(wood)", 0f);
+                }
+                isOneTime = true;
+            }
+        }
+        else if(movement.magnitude < 0.05f)
+        {
+            if (isOneTime)
+            {
+                SoundManager.instance.FadeSound(GetGroundTypeString(), 0f);
+                isOneTime = false;
+            }
+        }
+        float velocityforSound = Mathf.Max(1, velocity * 0.9f); 
+        SoundManager.instance.IncreasePitch(GetGroundTypeString(), velocityforSound);
 
         bool isOnSlope = IsOnSlope();                                                       //경사이동용, 코드
         movement = isOnSlope ? AdjustDirectionToSlope(movement.normalized) : movement;
@@ -232,7 +261,10 @@ public class PlayerController : MonoBehaviour
         }
         else if (CheckDistance() < 2.2f && !IsGrounded() && CheckFalling(1) && !isHightLanding)  //이동후, 높은 곳에서 착지모션
         {
-            if(!isSuperLanding) isHightLanding = true;
+            if (!isSuperLanding)
+            {
+                isHightLanding = true;
+            }
             //Debug.Log("현재착지여부: " + CheckDistance());
             //Debug.Log("일반착지 활성화");
         }
@@ -262,6 +294,16 @@ public class PlayerController : MonoBehaviour
     {
         //Debug.Log("바닥여부체크: " + Physics.CheckBox(transform.position, groundHalfExtents, Quaternion.identity, groundLayer));
         return Physics.CheckBox(transform.position, groundHalfExtents, Quaternion.identity, groundLayer);
+    }
+    public string GetGroundTypeString()
+    {
+        Vector3 origin = transform.position + Vector3.up * 0.1f;
+        if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, 10.5f, groundLayer))
+        {
+            if (hit.collider.CompareTag("Wood")) return "Walk(wood)";
+            else if (hit.collider.CompareTag("Stone")) return "Walk(stone)";
+        }
+        return "";
     }
     public bool CheckFalling(float value)
     {

@@ -85,11 +85,23 @@ public class MoveState : PlayerState
         pC.Rotate(true);
         pC.CheckLanding();
         CheckTransitions();
+        if (pC.CheckDistance() > 2.2f && !pC.IsGrounded())
+        {
+            SoundManager.instance.FadeSound("Walk(stone)", 0f);
+            SoundManager.instance.FadeSound("Walk(wood)", 0f);
+        }
     }
 
     public override void FixedUpdate()
     {
-        if(!pC.isSuperLanding) pC.Move();
+        if(!pC.isSuperLanding) pC.Move(true);
+    }
+
+    public override void Exit()
+    {
+        SoundManager.instance.FadeSound("Walk(stone)", 0f);
+        SoundManager.instance.FadeSound("Walk(wood)", 0f);
+        pC.isOneTime = false;
     }
 
     IEnumerator WaitLanding()
@@ -119,7 +131,7 @@ public class JumpingState : PlayerState
 
     public override void FixedUpdate()
     {
-        pC.Move();
+        pC.Move(false);
     }
 }
 
@@ -137,6 +149,8 @@ public class FallingState : PlayerState
         }
         else sM.StartCoroutine(WaitSuperLanding());
         sM.cameraController.StartCameraShake(0.05f);
+
+        SoundManager.instance.FadeSound("Falling", 1f);
     }
     public override void Update()
     {
@@ -146,7 +160,7 @@ public class FallingState : PlayerState
 
     public override void FixedUpdate()
     {
-        pC.Move();
+        pC.Move(false);
         if (pC.CheckDistance() < 10f)
         {
             sM.cameraController.ReadyToStopCameraShake();
@@ -157,6 +171,8 @@ public class FallingState : PlayerState
     {
         sM.cameraController.StopCameraShake();
         pC.isTrusted = false;
+
+        SoundManager.instance.FadeSound("Falling", 0f, true);
     }
 
     IEnumerator WaitSuperLanding()
@@ -175,6 +191,8 @@ public class LandingState : PlayerState
     public override void Enter()
     {
         pC.Landing(false);
+        if (pC.GetGroundTypeString() == "Walk(wood)") SoundManager.instance.PlaySound("Landing(wood)");
+        else if (pC.GetGroundTypeString() == "Walk(stone)") SoundManager.instance.PlaySound("Landing(stone)");
     }
     public override void Update()
     {
@@ -198,6 +216,8 @@ public class SupperLandingState : PlayerState
     {
         pC.Landing(true);
         pC.isSuperLanding = true;
+        if(pC.GetGroundTypeString() == "Walk(wood)") SoundManager.instance.PlaySound("SuperLanding(wood)");
+        else if(pC.GetGroundTypeString() == "Walk(stone)") SoundManager.instance.PlaySound("SuperLanding(stone)");
     }
     public override void Update()
     {
