@@ -31,26 +31,24 @@ public class SoundManager : MonoBehaviour
     public List<Sound> sounds = new List<Sound>();
     public AudioMixer audioMixer;
 
-    private string SOPath = "ScriptableObjects/SpecialSounds/SpecialObjects";
-
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
-            //DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
 
-        SpecialObjectsDataSO s_ObjectSO = Resources.Load<SpecialObjectsDataSO>(SOPath);
+        FindObjectsTool.FindObjectsWithTag();
 
-        if (s_ObjectSO != null)
-        {
-            Debug.Log(s_ObjectSO.torches.Count);
-        }
+         List<GameObject> spikeTraps2 = new List<GameObject>(FindObjectsTool.spikeTraps);
+         List<GameObject> torches2 = new List<GameObject>(FindObjectsTool.torches);
+
+        Debug.Log(FindObjectsTool.spikeTraps.Count);
+        Debug.Log(FindObjectsTool.torches.Count);
 
         foreach (Sound sound in sounds)
         {
@@ -80,8 +78,8 @@ public class SoundManager : MonoBehaviour
 
                 switch (name)
                 {
-                    case SpecialObjectsDataSO.spikeName:
-                        foreach (var obj in s_ObjectSO.spikeTraps)
+                    case FindObjectsTool.spikeName:
+                        foreach (var obj in FindObjectsTool.spikeTraps)
                         {
                             sound.source = obj.AddComponent<AudioSource>();
                             sound.source.clip = sound.clip;
@@ -93,8 +91,8 @@ public class SoundManager : MonoBehaviour
                         }
                     break;
 
-                    case SpecialObjectsDataSO.torchName:
-                        foreach (var obj in s_ObjectSO.torches)
+                    case FindObjectsTool.torchName:
+                        foreach (var obj in FindObjectsTool.torches)
                         {
                             sound.source = obj.AddComponent<AudioSource>();
                             sound.source.clip = sound.clip;
@@ -173,5 +171,39 @@ public class SoundManager : MonoBehaviour
                 else soundToPlay.source.DOFade(value, fadeDuration).OnComplete(() => soundToPlay.source.Stop());
             }
         }
+    }
+
+    public void FadeSound_S(AudioSource audioSource, float value, bool isUseStop = false)
+    {
+        float fadeDuration = 0.2f;
+
+        if (audioSource != null)
+        {
+            if (value == 1)
+            {
+                audioSource.Play();
+                audioSource.DOFade(value, fadeDuration);
+            }
+            else
+            {
+                if (!isUseStop) audioSource.DOFade(value, fadeDuration).OnComplete(() => audioSource.Pause());
+                else audioSource.DOFade(value, fadeDuration).OnComplete(() => audioSource.Stop());
+            }
+        }
+    }
+
+    public string FindAudioWithClip(AudioClip clip)
+    {
+        Sound sound = sounds.Find(sound => sound.clip == clip);
+
+        if (sound != null)
+        {
+            string name = sound.name;
+            name = name.Substring(name.IndexOf("_") + 1);
+
+            Debug.Log(name);
+            return name;
+        }
+        return " ";
     }
 }
