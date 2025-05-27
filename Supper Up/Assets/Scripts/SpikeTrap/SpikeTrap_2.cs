@@ -50,6 +50,7 @@ public class SpikeTrap_2 : SpikeTrap_B
     }
     protected override void StartThrust()
     {
+        SoundManager.instance.FadeSound_S(audioSources[rayId], 1f);
         isChecking = true;
         currentCoroutine = StartCoroutine(C_StartThrust());
     }
@@ -89,7 +90,7 @@ public class SpikeTrap_2 : SpikeTrap_B
 
     protected override void EndThrust()
     {
-        //Debug.Log("종료된다");
+        SoundManager.instance.FadeSound_S(audioSources[rayId], 0f);
         isChecking = false;
         if (currentCoroutine != null)
         {

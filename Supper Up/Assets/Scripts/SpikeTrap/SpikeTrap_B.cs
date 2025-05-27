@@ -57,13 +57,11 @@ public class SpikeTrap_B : MonoBehaviour
             float distance = Vector3.Distance(originalPos, player.transform.position);
             if (distance < startMoveDistance - 1 && !startMove)
             {
-                SoundManager.instance.FadeSound_S(audioSources[rayId], 1f);
                 StartThrust();
                 startMove = true;
             }
             else if (distance > startMoveDistance + 1 && startMove)
             {
-                SoundManager.instance.FadeSound_S(audioSources[rayId], 0f);
                 EndThrust();
                 startMove = false;
             }

@@ -38,10 +38,12 @@ public class SpikeTrap_1 : SpikeTrap_B
     }
     protected override void StartThrust()  //레이로 플레이어감지
     {
+        SoundManager.instance.FadeSound_S(audioSources[rayId], 1f);
         isChecking = true;
     }
     protected override void EndThrust()
     {
+        SoundManager.instance.FadeSound_S(audioSources[rayId], 0f);
         isChecking = false;
     }
 
