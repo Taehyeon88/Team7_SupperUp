@@ -53,8 +53,11 @@ public class SpikeTrap_0 : SpikeTrap_B
                 case true:
                     if (pushTween != null && !isOneTime)
                     {
-                        SoundManager.instance.FadeSound_S(audioSources[pushId], 1f);
-                        SoundManager.instance.FadeSound_S(audioSources[pullId], 0f, true);
+                        if (SoundManager.instance != null)
+                        {
+                            SoundManager.instance.FadeSound_S(audioSources[pushId], 1f);
+                            SoundManager.instance.FadeSound_S(audioSources[pullId], 0f, true);
+                        }
                         pushTween.Restart();
                         isOneTime = true;
                     }
@@ -62,8 +65,11 @@ public class SpikeTrap_0 : SpikeTrap_B
                 case false:
                     if (pullTween != null && isOneTime)
                     {
-                        SoundManager.instance.FadeSound_S(audioSources[pullId], 1f);
-                        SoundManager.instance.FadeSound_S(audioSources[pushId], 0f, true);
+                        if (SoundManager.instance != null)
+                        {
+                            SoundManager.instance.FadeSound_S(audioSources[pullId], 1f);
+                            SoundManager.instance.FadeSound_S(audioSources[pushId], 0f, true);
+                        }
                         pullTween.Restart();
                         isOneTime = false;
                     }

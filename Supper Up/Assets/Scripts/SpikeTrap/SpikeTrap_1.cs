@@ -38,12 +38,14 @@ public class SpikeTrap_1 : SpikeTrap_B
     }
     protected override void StartThrust()  //레이로 플레이어감지
     {
-        SoundManager.instance.FadeSound_S(audioSources[rayId], 1f);
+        if (SoundManager.instance != null)
+            SoundManager.instance.FadeSound_S(audioSources[rayId], 1f);
         isChecking = true;
     }
     protected override void EndThrust()
     {
-        SoundManager.instance.FadeSound_S(audioSources[rayId], 0f);
+        if (SoundManager.instance != null)
+            SoundManager.instance.FadeSound_S(audioSources[rayId], 0f);
         isChecking = false;
     }
 
@@ -57,9 +59,11 @@ public class SpikeTrap_1 : SpikeTrap_B
         {
             sequence.Restart();
             isPushing = true;
-
-            SoundManager.instance.FadeSound_S(audioSources[pushId], 1f);
-            SoundManager.instance.FadeSound_S(audioSources[pullId], 0f, true);
+            if (SoundManager.instance != null)
+            {
+                SoundManager.instance.FadeSound_S(audioSources[pushId], 1f);
+                SoundManager.instance.FadeSound_S(audioSources[pullId], 0f, true);
+            }
         }
     }
 
@@ -71,8 +75,12 @@ public class SpikeTrap_1 : SpikeTrap_B
             .SetEase(PushSpickEase)
             .OnComplete(() => { 
                 isPushing = false;
-                SoundManager.instance.FadeSound_S(audioSources[pullId], 1f);
-                SoundManager.instance.FadeSound_S(audioSources[pushId], 0f, true);}
+                if (SoundManager.instance != null)
+                {
+                    SoundManager.instance.FadeSound_S(audioSources[pullId], 1f);
+                    SoundManager.instance.FadeSound_S(audioSources[pushId], 0f, true);
+                }
+            }
             )
             .SetUpdate(UpdateType.Fixed);
 
@@ -81,7 +89,8 @@ public class SpikeTrap_1 : SpikeTrap_B
             .SetEase(PullSpickEase)
             .OnComplete(() => { 
                 isPushing = true;
-                SoundManager.instance.FadeSound_S(audioSources[pullId], 0f, true);}
+                if (SoundManager.instance != null)
+                    SoundManager.instance.FadeSound_S(audioSources[pullId], 0f, true);}
             )
             .SetUpdate(UpdateType.Fixed);
 

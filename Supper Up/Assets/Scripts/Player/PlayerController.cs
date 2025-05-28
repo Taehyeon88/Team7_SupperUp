@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        //Cursor.lockState = CursorLockMode.Locked;          //마우스 커서를 잠그고 숨긴다
+        Cursor.lockState = CursorLockMode.Locked;          //마우스 커서를 잠그고 숨긴다
 
         rb = GetComponent<Rigidbody>();
         playerAnimator = GetComponent<Animator>();
@@ -91,33 +91,36 @@ public class PlayerController : MonoBehaviour
         playerAnimator.SetFloat("FMove", moveVertical * velocity);                          //애니메이션
         playerAnimator.SetFloat("RMove", moveHorizontal);
 
-        if (!SoundManager.instance.CheckSoundPlay(GetGroundTypeString()) && movement.magnitude > 0.1f && useMoveSound)
+        if (SoundManager.instance != null)
         {
-            if (!isOneTime)
+            if (!SoundManager.instance.CheckSoundPlay(GetGroundTypeString()) && movement.magnitude > 0.1f && useMoveSound)
             {
-                if (GetGroundTypeString() == "Walk(wood)")
+                if (!isOneTime)
                 {
-                    SoundManager.instance.FadeSound("Walk(wood)", 1f);
-                    SoundManager.instance.FadeSound("Walk(stone)", 0f);
+                    if (GetGroundTypeString() == "Walk(wood)")
+                    {
+                        SoundManager.instance.FadeSound("Walk(wood)", 1f);
+                        SoundManager.instance.FadeSound("Walk(stone)", 0f);
+                    }
+                    else if (GetGroundTypeString() == "Walk(stone)")
+                    {
+                        SoundManager.instance.FadeSound("Walk(stone)", 1f);
+                        SoundManager.instance.FadeSound("Walk(wood)", 0f);
+                    }
+                    isOneTime = true;
                 }
-                else if(GetGroundTypeString() == "Walk(stone)")
-                {
-                    SoundManager.instance.FadeSound("Walk(stone)", 1f);
-                    SoundManager.instance.FadeSound("Walk(wood)", 0f);
-                }
-                isOneTime = true;
             }
-        }
-        else if(movement.magnitude < 0.05f)
-        {
-            if (isOneTime)
+            else if (movement.magnitude < 0.05f)
             {
-                SoundManager.instance.FadeSound(GetGroundTypeString(), 0f);
-                isOneTime = false;
+                if (isOneTime)
+                {
+                    SoundManager.instance.FadeSound(GetGroundTypeString(), 0f);
+                    isOneTime = false;
+                }
             }
+            float velocityforSound = Mathf.Max(1, velocity * 0.9f);
+            SoundManager.instance.IncreasePitch(GetGroundTypeString(), velocityforSound);
         }
-        float velocityforSound = Mathf.Max(1, velocity * 0.9f); 
-        SoundManager.instance.IncreasePitch(GetGroundTypeString(), velocityforSound);
 
         bool isOnSlope = IsOnSlope();                                                       //경사이동용, 코드
         movement = isOnSlope ? AdjustDirectionToSlope(movement.normalized) : movement;

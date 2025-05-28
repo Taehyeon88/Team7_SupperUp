@@ -50,7 +50,8 @@ public class SpikeTrap_2 : SpikeTrap_B
     }
     protected override void StartThrust()
     {
-        SoundManager.instance.FadeSound_S(audioSources[rayId], 1f);
+        if (SoundManager.instance != null)
+            SoundManager.instance.FadeSound_S(audioSources[rayId], 1f);
         isChecking = true;
         currentCoroutine = StartCoroutine(C_StartThrust());
     }
@@ -90,7 +91,8 @@ public class SpikeTrap_2 : SpikeTrap_B
 
     protected override void EndThrust()
     {
-        SoundManager.instance.FadeSound_S(audioSources[rayId], 0f);
+        if (SoundManager.instance != null)
+            SoundManager.instance.FadeSound_S(audioSources[rayId], 0f);
         isChecking = false;
         if (currentCoroutine != null)
         {
@@ -109,9 +111,11 @@ public class SpikeTrap_2 : SpikeTrap_B
             isPushing = true;
             StopTween();
             PlaySequence();
-
-            SoundManager.instance.FadeSound_S(audioSources[pushId], 1f);
-            SoundManager.instance.FadeSound_S(audioSources[pullId], 0f, true);
+            if (SoundManager.instance != null)
+            {
+                SoundManager.instance.FadeSound_S(audioSources[pushId], 1f);
+                SoundManager.instance.FadeSound_S(audioSources[pullId], 0f, true);
+            }
         }
     }
     private void SetTweens()
@@ -145,15 +149,20 @@ public class SpikeTrap_2 : SpikeTrap_B
                   .SetEase(PushSpickEase)
                   .SetUpdate(UpdateType.Fixed)
                   .OnComplete(() =>{
-                      SoundManager.instance.FadeSound_S(audioSources[pullId], 1f);
-                      SoundManager.instance.FadeSound_S(audioSources[pushId], 0f, true);}
+                      if (SoundManager.instance != null)
+                      {
+                          SoundManager.instance.FadeSound_S(audioSources[pullId], 1f);
+                          SoundManager.instance.FadeSound_S(audioSources[pushId], 0f, true);
+                      }
+                  }
                   );
 
         Tween pullTween = rb.DOMove(currentPos, pullTime)
                  .SetEase(PullSpickEase)
                  .SetUpdate(UpdateType.Fixed)
                  .OnComplete(() => {
-                     SoundManager.instance.FadeSound_S(audioSources[pullId], 0f, true);}
+                     if (SoundManager.instance != null)
+                         SoundManager.instance.FadeSound_S(audioSources[pullId], 0f, true);}
                  );
 
         sequence.Append(pushTween)

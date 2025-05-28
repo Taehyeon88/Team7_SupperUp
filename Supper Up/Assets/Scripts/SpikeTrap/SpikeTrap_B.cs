@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using DG.Tweening;
 using UnityEngine;
@@ -31,6 +32,9 @@ public class SpikeTrap_B : MonoBehaviour
         playerRb = player.GetComponent<Rigidbody>();
 
         AudioSource[] t_audioSources = GetComponents<AudioSource>();
+
+        if (t_audioSources.Length <= 0) return;
+
         for (int i = 0; i < t_audioSources.Length; i++)
         {
             audioSources.Add(t_audioSources[i]);
