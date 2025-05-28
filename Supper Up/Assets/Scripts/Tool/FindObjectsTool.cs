@@ -40,7 +40,11 @@ public class FindObjectsTool : MonoBehaviour
                 }
             }
         }
+    }
 
-        
+    public static void ResetSetting()
+    {
+        spikeTraps.Clear();
+        torches.Clear();
     }
 }

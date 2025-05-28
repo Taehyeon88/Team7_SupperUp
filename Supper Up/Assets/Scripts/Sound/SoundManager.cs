@@ -31,6 +31,9 @@ public class SoundManager : MonoBehaviour
     public List<Sound> sounds = new List<Sound>();
     public AudioMixer audioMixer;
 
+    private List<AudioSource> soundSources = new List<AudioSource>();
+    private List<AudioSource> playingSources = new List<AudioSource>();
+
     private void Awake()
     {
         if (instance == null)
@@ -40,12 +43,14 @@ public class SoundManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+            return;
         }
-
+        soundSources.Clear();
+        FindObjectsTool.ResetSetting();
         FindObjectsTool.FindObjectsWithTag();
 
-         List<GameObject> spikeTraps2 = new List<GameObject>(FindObjectsTool.spikeTraps);
-         List<GameObject> torches2 = new List<GameObject>(FindObjectsTool.torches);
+        List<GameObject> spikeTraps2 = new List<GameObject>(FindObjectsTool.spikeTraps);
+        List<GameObject> torches2 = new List<GameObject>(FindObjectsTool.torches);
 
         Debug.Log(FindObjectsTool.spikeTraps.Count);
         Debug.Log(FindObjectsTool.torches.Count);
@@ -60,6 +65,8 @@ public class SoundManager : MonoBehaviour
                 sound.source.pitch = sound.pitch;
                 sound.source.loop = sound.loop;
                 sound.source.outputAudioMixerGroup = sound.mixerGroup;
+
+                soundSources.Add(sound.source);
             }
             else
             {
@@ -81,6 +88,7 @@ public class SoundManager : MonoBehaviour
                     case FindObjectsTool.spikeName:
                         foreach (var obj in FindObjectsTool.spikeTraps)
                         {
+                            Debug.Log("된다");
                             sound.source = obj.AddComponent<AudioSource>();
                             sound.source.clip = sound.clip;
                             sound.source.volume = sound.volume;
@@ -88,8 +96,10 @@ public class SoundManager : MonoBehaviour
                             sound.source.loop = sound.loop;
                             if (sound.is3D) sound.source.spatialBlend = 1f;
                             sound.source.outputAudioMixerGroup = sound.mixerGroup;
+
+                            soundSources.Add(sound.source);
                         }
-                    break;
+                        break;
 
                     case FindObjectsTool.torchName:
                         foreach (var obj in FindObjectsTool.torches)
@@ -103,11 +113,15 @@ public class SoundManager : MonoBehaviour
                             sound.source.outputAudioMixerGroup = sound.mixerGroup;
 
                             sound.source.Play();
+
+                            soundSources.Add(sound.source);
                         }
-                    break;
+                        break;
                 }
             }
         }
+
+        Debug.Log($"총 사운드의 개수는 : {soundSources.Count}");
     }
 
 
@@ -167,7 +181,7 @@ public class SoundManager : MonoBehaviour
             }
             else
             {
-                if(!isUseStop) soundToPlay.source.DOFade(value, fadeDuration).OnComplete(() => soundToPlay.source.Pause());
+                if (!isUseStop) soundToPlay.source.DOFade(value, fadeDuration).OnComplete(() => soundToPlay.source.Pause());
                 else soundToPlay.source.DOFade(value, fadeDuration).OnComplete(() => soundToPlay.source.Stop());
             }
         }
@@ -205,5 +219,26 @@ public class SoundManager : MonoBehaviour
             return name;
         }
         return " ";
+    }
+
+    public void PauseAllSounds()
+    {
+        playingSources.Clear();
+        foreach (var soundSource in soundSources)
+        {
+            if (soundSource.isPlaying)
+            {
+                playingSources.Add(soundSource);
+                FadeSound_S(soundSource, 0f);
+            }
+        }
+    }
+
+    public void RePlayAllSounds()
+    {
+        foreach (var soundSource in playingSources)
+        {
+            FadeSound_S(soundSource, 1f);
+        }
     }
 }

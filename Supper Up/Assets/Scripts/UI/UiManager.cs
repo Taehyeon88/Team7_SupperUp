@@ -8,17 +8,21 @@ public class UiManager : MonoBehaviour
 {
     public static UiManager instance;
 
+    [Header("Title UI")]
     //Tile씬 변수
     [SerializeField] private Button playButton;
     [SerializeField] private Button settingButton;
     [SerializeField] private Button ExitButton;
 
+    [Header("Pause UI")]
     //Pause씬 변수
     [SerializeField] private Button reGameButton;
     [SerializeField] private Button continueButton;
     [SerializeField] private Button settingButton2;
     [SerializeField] private Button exitGameButton;
 
+    [Header("Setting UI")]
+    [SerializeField] private GameObject settingCanvas;
     //내부변수들
     private Scene currentScene;
     private bool onSetting = false;
@@ -27,7 +31,6 @@ public class UiManager : MonoBehaviour
 
     //한번만 실행
     private bool isOneTime = false;
-    private bool isOneTime2 = false;
 
     //Pause씬 활성화전달변수
     [HideInInspector] public bool onPause = false;
@@ -81,6 +84,13 @@ public class UiManager : MonoBehaviour
         playButton = GameObject.Find("PlayButton").GetComponent<Button>();
         settingButton = GameObject.Find("SettingButton").GetComponent<Button>();
         ExitButton = GameObject.Find("ExitButton").GetComponent<Button>();
+
+        settingCanvas = GameObject.Find("SettingCanvas");
+
+        if (settingCanvas != null)
+        {
+            settingCanvas.SetActive(false);
+        }
         SetButtonDeligate_T();
     }
     private void Initialize_P()   //게임 플레이 씬 초기화 함수
@@ -95,6 +105,9 @@ public class UiManager : MonoBehaviour
         settingButton2.onClick.AddListener(OnSettingMenu);
         exitGameButton.onClick.AddListener(GoToTitle);
         pauseCanvas.SetActive(false);
+
+        settingCanvas = GameObject.Find("SettingCanvas");
+        settingCanvas.SetActive(false);
     }
 
 
@@ -115,7 +128,7 @@ public class UiManager : MonoBehaviour
 
     private void OnSettingMenu()  //세팅 시작함수
     {
-
+        settingCanvas.SetActive(true);
     }
 
     private void Exit()   //게임종료함수
@@ -139,6 +152,7 @@ public class UiManager : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.None;
 
+        SoundManager.instance.PauseAllSounds();
         pauseCanvas.SetActive(true);
         onPause = true;
         Time.timeScale = 0f;
@@ -146,11 +160,12 @@ public class UiManager : MonoBehaviour
 
     private void ContinueGame()   //게임 계속하기 함수
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        Time.timeScale = 1f;
 
+        Cursor.lockState = CursorLockMode.Locked;
+        SoundManager.instance.RePlayAllSounds();
         pauseCanvas.SetActive(false);
         onPause = false;
-        Time.timeScale = 1f;
     }
 
     private void GoToTitle()   //타이틀화면으로 이동함수

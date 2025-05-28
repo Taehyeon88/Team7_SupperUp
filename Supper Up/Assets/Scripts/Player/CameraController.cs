@@ -13,7 +13,7 @@ public class CameraController : MonoBehaviour
 
     private float CurrentX = 0.0f;
     private float CurrentY = 45.0f;
-    public float mouseSenesitivity = 100.0f;
+    public float mouseSenesitivity { private get; set; }
 
     private const float Y_ANGLE_MIN = -75.0f;
     private const float Y_ANGLE_MAX = 85.0f;

@@ -16,6 +16,10 @@ public class AudioMixerController : MonoBehaviour
         musicMasterSlider.onValueChanged.AddListener(SetMasterVolume);
         musicBGMSlider.onValueChanged.AddListener(SetBGMVolume);
         musicSFXSlider.onValueChanged.AddListener(SetSFXVolume);
+
+        SetMasterVolume(SettingManager.sound_Master);
+        SetBGMVolume(SettingManager.sound_BGM);
+        SetSFXVolume(SettingManager.sound_SFX);
     }
 
     public void SetMasterVolume(float volume)
