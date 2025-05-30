@@ -7,10 +7,20 @@ using System.IO;
 using UnityEngine;
 using Newtonsoft.Json;
 
+public class DialogRowData
+{
+    public int? id;
+    public string text;
+    public int? nextId;
+    public string choiceText;
+    public int? choiceNextId;
+    public int? choicePoint;
+}
+
 public class JsonToScriptableConverter : EditorWindow
 {
     private string jsonFilePath = "";                                //JSON 파일 경로 문자열 값
-    private string outputFolder = "Assets/Resources/ScriptableObjects/sounds"; //출력 SO 파일 경로값
+    private string outputFolder = "Assets/ScriptableObjects/Dialogs";        //출력 SO 파일 경로값
     private bool createDatabase = true;
 
     [MenuItem("Tools/JSON to Scriptable Objects")]
@@ -41,82 +51,89 @@ public class JsonToScriptableConverter : EditorWindow
                 EditorUtility.DisplayDialog("Error", "Please sellect a JSON file firest!", "OK");
                 return;
             }
-            ConvertJsonToScriptableObjects();
         }
     }
 
-    private void ConvertJsonToScriptableObjects()
+    private void ConvertJsonToDialogScriptableObjects()
     {
-        //폴더 생성
         if (!Directory.Exists(outputFolder))
         {
             Directory.CreateDirectory(outputFolder);
         }
 
-        //JSON 파일 읽
-        string jsonText = File.ReadAllText(jsonFilePath);  //Json 파일을 읽는다.
+        string jsonText = File.ReadAllText(jsonFilePath);
 
         try
         {
-            //JSON 파싱
-            List<SoundData> soundDataList = JsonConvert.DeserializeObject<List<SoundData>>(jsonText);
+            List<DialogRowData> rowDataList = JsonConvert.DeserializeObject<List<DialogRowData>>(jsonText);
 
-            List<SoundSO> createdSounds = new List<SoundSO>();
+            Dictionary<int, DialogSO> dialogMap = new Dictionary<int, DialogSO>();
+            List<DialogSO> createDialogs = new List<DialogSO>();
 
-            //각 아이템 데이터를 스크립터를 오브젝트로 변환
-            foreach (var soundData in soundDataList)
+            //1단계 : 대화 항목 생성
+            foreach (var rowData in rowDataList)
             {
-                SoundSO soundSO = ScriptableObject.CreateInstance<SoundSO>();
-
-                //데이터 복사
-                soundSO.id = soundData.id;
-                soundSO.pitch = soundData.pitch;
-                soundSO.volume = soundData.volume;
-                soundSO.loop = soundData.loop;
-                soundSO.is3D = soundData.is3D;
-                soundSO.maxDistance = soundData.maxDistance;
-
-                //열거형 변환
-                if (System.Enum.TryParse(soundData.soundTypeString, out SoundType parsedtype))
+                if (rowData.id.HasValue)
                 {
-                    soundSO.soundType = parsedtype;
+                    DialogSO dialogSO = ScriptableObject.CreateInstance<DialogSO>();
+
+                    dialogSO.id = rowData.id.Value;
+                    dialogSO.text = rowData.text;
+                    dialogSO.nextId = rowData.nextId.HasValue ? rowData.nextId.Value : -1;
+                    dialogSO.choices = new List<DialogChoiceSO>();
+
+                    dialogMap[dialogSO.id] = dialogSO;
+                    createDialogs.Add(dialogSO);
                 }
-                else
-                {
-                    Debug.LogWarning($"사운드 '{soundData.id}'의 유허하지 않은 타입: {soundData.soundTypeString}");
-                }
-                soundSO.soundObjectType = soundData.soundObjectType;
-
-                //스크립터블 오브젝트 저장
-                string assetPath = $"{outputFolder}/Sound_{soundData.id}.asset";
-                AssetDatabase.CreateAsset(soundSO, assetPath);
-
-                //에셋이르 지정
-                soundSO.name = $"sound_{soundData.id}";
-                createdSounds.Add(soundSO);
-
-                EditorUtility.SetDirty(soundSO);
             }
-
-            //데이터베이스 생성
-            if (createDatabase && createdSounds.Count > 0)
+            //2단계 : 선택지 항목 처리 및 연결
+            foreach (var rowData in rowDataList)
             {
-                SoundDatabaseSO database = ScriptableObject.CreateInstance<SoundDatabaseSO>();
-                database.sounds = createdSounds;
+                if (!rowData.id.HasValue && !string.IsNullOrEmpty(rowData.choiceText) && rowData.choiceNextId.HasValue && rowData.choicePoint.HasValue)
+                {
+                    int parentId = -1; //이전 행의 ID를 부모ID로 사용
 
-                AssetDatabase.CreateAsset(database, $"{outputFolder}/SoundDatabase.asset");
-                EditorUtility.SetDirty(database);
+                    //이 선택지 바로 위에 있는 대화(id가 있는 항목)을 찾음
+                    int currentIndex = rowDataList.IndexOf(rowData);
+                    for (int i = currentIndex - 1; i >= 0; i--)
+                    {
+                        if (rowDataList[i].id.HasValue)
+                        {
+                            parentId = rowDataList[i].id.Value;
+                            break;
+                        }
+                    }
+
+                    //부모 ID를 찾지 못했거나 부모 ID가 -1인 경우 (쳣 번째 항목)
+                    if (parentId == -1)
+                    {
+                        Debug.LogWarning($"선택지 '{rowData.choiceText}'의 부모 대화를 찾을 수 없습니다.");
+                    }
+
+                    if (dialogMap.TryGetValue(parentId, out DialogSO parentDialog))
+                    {
+                        DialogChoiceSO choiceSO = ScriptableObject.CreateInstance<DialogChoiceSO>();
+                        choiceSO.text = rowData.choiceText;
+                        choiceSO.nextId = rowData.choiceNextId.Value;
+                        choiceSO.choicePoint = rowData.choicePoint.Value;
+
+                        //선택지 에셋 저장
+                        string choiceAssetPath = $"{outputFolder}/Choice_{parentId}_{parentDialog.choices.Count + 1}.asset";
+                        EditorUtility.SetDirty(choiceSO);
+
+                        parentDialog.choices.Add(choiceSO);
+                    }
+                    else
+                    {
+                        Debug.Log($"선택지 '{rowData.choiceText}'를 연결할 대화 (ID : {parentId})를 찾을 수 없습니다.");
+                    }
+                }
             }
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-
-            EditorUtility.DisplayDialog("Sucess", $"Created {createdSounds.Count} scriptalbe objects!", "OK");
         }
         catch (System.Exception e)
         {
-            EditorUtility.DisplayDialog("Error", $"Failed to Convert JSON: {e.Message}", "OK");
-            Debug.LogError($"JSON 변환 오류: {e}");
+            EditorUtility.DisplayDialog("Error", $"Failed to convert JSON: {e.Message}", "OK");
+            Debug.LogError($"JSON 변환 오류 : {e} ");
         }
     }
 

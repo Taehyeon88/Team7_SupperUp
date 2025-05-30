@@ -144,7 +144,7 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: SpikeTrap_Ray
     clip: {fileID: 8300000, guid: c0e56fe9d4bcac24a859745841af3bdc, type: 3}
-    volume: 0.85
+    volume: 0.6
     pitch: 1
     loop: 1
     is3D: 1
@@ -154,7 +154,7 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: SpikeTrap_Pull
     clip: {fileID: 8300000, guid: 36f2da2d9fc7f7044a0ab35cc0575949, type: 3}
-    volume: 1
+    volume: 0.8
     pitch: 1
     loop: 0
     is3D: 1
@@ -164,7 +164,7 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: SpikeTrap_Push
     clip: {fileID: 8300000, guid: 49ce1d1b95bcffd44b2795749230445a, type: 3}
-    volume: 1
+    volume: 0.8
     pitch: 1
     loop: 0
     is3D: 1

@@ -94,6 +94,8 @@ public class SoundManager : MonoBehaviour
                             sound.source.volume = sound.volume;
                             sound.source.pitch = sound.pitch;
                             sound.source.loop = sound.loop;
+                            sound.source.maxDistance = 10f;
+                            sound.source.rolloffMode = AudioRolloffMode.Linear;
                             if (sound.is3D) sound.source.spatialBlend = 1f;
                             sound.source.outputAudioMixerGroup = sound.mixerGroup;
 
@@ -109,6 +111,8 @@ public class SoundManager : MonoBehaviour
                             sound.source.volume = sound.volume;
                             sound.source.pitch = sound.pitch;
                             sound.source.loop = sound.loop;
+                            sound.source.maxDistance = 10f;
+                            sound.source.rolloffMode = AudioRolloffMode.Linear;
                             if (sound.is3D) sound.source.spatialBlend = 1f;
                             sound.source.outputAudioMixerGroup = sound.mixerGroup;
 
@@ -215,7 +219,6 @@ public class SoundManager : MonoBehaviour
             string name = sound.name;
             name = name.Substring(name.IndexOf("_") + 1);
 
-            Debug.Log(name);
             return name;
         }
         return " ";
@@ -229,7 +232,7 @@ public class SoundManager : MonoBehaviour
             if (soundSource.isPlaying)
             {
                 playingSources.Add(soundSource);
-                FadeSound_S(soundSource, 0f);
+                soundSource.Pause();
             }
         }
     }

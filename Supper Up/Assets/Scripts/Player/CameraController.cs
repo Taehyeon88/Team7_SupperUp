@@ -33,6 +33,9 @@ public class CameraController : MonoBehaviour
     private void Start()
     {
         defaultDistance = cameraDistance;;
+
+        if (mouseSenesitivity == 0)
+            mouseSenesitivity = 100f;
     }
     void Update()
     {
