@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6270552960128099538}
   - component: {fileID: 8691435475632761057}
   - component: {fileID: 7889612242160071361}
+  - component: {fileID: 478539327879181821}
   m_Layer: 0
   m_Name: cannon
   m_TagString: Untagged
@@ -28,8 +29,8 @@ Transform:
   m_GameObject: {fileID: 5748515378893770469}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -16.005, y: 4.31, z: -3.85}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -12.95, y: 3.19, z: -18.03}
+  m_LocalScale: {x: 1.2652, y: 1.2652, z: 2.5638015}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -62,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 5efc0fdea8481654dbecfd05d453209f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -105,3 +106,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &478539327879181821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5748515378893770469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f7081ebbbb5a454093d42b8c062fb37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireRate: 1
+  bulletSpeed: 20
+  bulletLifetime: 3
+  bulletPrefab: {fileID: 2879200908320278716, guid: 5ede76a680e99d94b81be3b08449fac2,
+    type: 3}
+  firePoint: {fileID: 1168020428557973449}
