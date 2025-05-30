@@ -71,6 +71,7 @@ public class JsonToScriptableConverter : EditorWindow
 
             Dictionary<int, DialogSO> dialogMap = new Dictionary<int, DialogSO>();
             List<DialogSO> createDialogs = new List<DialogSO>();
+            List<DialogChoiceSO> createDialogChoices = new List<DialogChoiceSO>();
 
             //1단계 : 대화 항목 생성
             foreach (var rowData in rowDataList)
@@ -125,6 +126,7 @@ public class JsonToScriptableConverter : EditorWindow
                         EditorUtility.SetDirty(choiceSO);
 
                         parentDialog.choices.Add(choiceSO);
+                        createDialogChoices.Add(choiceSO);
                     }
                     else
                     {
@@ -146,10 +148,11 @@ public class JsonToScriptableConverter : EditorWindow
                 EditorUtility.SetDirty(dialog);
             }
 
-            if (createDatabase && createDialogs.Count > 0)
+            if (createDatabase && createDialogs.Count > 0 && createDialogChoices.Count > 0)
             {
                 DialogDatebaseSO database = ScriptableObject.CreateInstance<DialogDatebaseSO>();
                 database.dialogs = createDialogs;
+                database.choiceDialogs = createDialogChoices;
 
                 AssetDatabase.CreateAsset(database, $"{outputFolder}/DialogDatabase.asset");
                 EditorUtility.SetDirty(database);
