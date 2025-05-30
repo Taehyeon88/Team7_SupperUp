@@ -51,6 +51,8 @@ public class JsonToScriptableConverter : EditorWindow
                 EditorUtility.DisplayDialog("Error", "Please sellect a JSON file firest!", "OK");
                 return;
             }
+
+            ConvertJsonToDialogScriptableObjects();
         }
     }
 
@@ -119,6 +121,7 @@ public class JsonToScriptableConverter : EditorWindow
 
                         //선택지 에셋 저장
                         string choiceAssetPath = $"{outputFolder}/Choice_{parentId}_{parentDialog.choices.Count + 1}.asset";
+                        AssetDatabase.CreateAsset(choiceSO, choiceAssetPath);
                         EditorUtility.SetDirty(choiceSO);
 
                         parentDialog.choices.Add(choiceSO);
@@ -129,6 +132,33 @@ public class JsonToScriptableConverter : EditorWindow
                     }
                 }
             }
+
+            //3단계 : 대화 스크립터블 오브젝트 저장
+            foreach (var dialog in createDialogs)
+            {
+                //스크립터블 오브젝트 저장 - ID를 4자리 숫자로 포멧팅
+                string assetPath = $"{outputFolder}/Dialog_{dialog.id.ToString("D4")}.asset";
+                AssetDatabase.CreateAsset( dialog, assetPath );
+
+                //에셋 이름 저장
+                dialog.name = $"Dialog_{dialog.id.ToString("D4")}";
+
+                EditorUtility.SetDirty(dialog);
+            }
+
+            if (createDatabase && createDialogs.Count > 0)
+            {
+                DialogDatebaseSO database = ScriptableObject.CreateInstance<DialogDatebaseSO>();
+                database.dialogs = createDialogs;
+
+                AssetDatabase.CreateAsset(database, $"{outputFolder}/DialogDatabase.asset");
+                EditorUtility.SetDirty(database);
+            }
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            EditorUtility.DisplayDialog("Success", $"Created {createDialogs.Count} dialog scriptable objects!", "Ok");
         }
         catch (System.Exception e)
         {

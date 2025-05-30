@@ -332,7 +332,7 @@ public class PlayerController : MonoBehaviour
         foreach (var origin in rayPos)
         {
             Debug.DrawRay(origin, movement * distance, Color.red);
-            if (Physics.Raycast(origin, movement, distance))
+            if (Physics.Raycast(origin, movement, distance, groundLayer))
             {
                 return true;
             }
