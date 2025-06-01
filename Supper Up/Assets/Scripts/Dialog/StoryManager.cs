@@ -8,7 +8,7 @@ public class StoryManager : MonoBehaviour
 {
     public static StoryManager Instance {  get; private set; }
 
-    [Header("Dialog References")]
+    [Header("Story References")]
     [SerializeField] private StoryDatebaseSO storyDatabase;
 
     [Header("UI References")]
@@ -17,9 +17,13 @@ public class StoryManager : MonoBehaviour
     [SerializeField] private List<TextMeshProUGUI> choiceTexts = new List<TextMeshProUGUI>();
     public List<GameObject> choiceObjects = new List<GameObject>();
 
-    [Header("Dialog Settings")]
+    [Header("Narration Settings")]
     [SerializeField] private float typingSpeed = 0.05f;
     [SerializeField] private bool useTypewriterEffect = true;
+
+    [Header("EndGame Settings")]
+    [SerializeField] private GameObject endGamePanal;
+    [SerializeField] private TextMeshProUGUI endingText;
 
     private bool isTyping = false;
     private Coroutine typingCoroutine;
@@ -241,5 +245,34 @@ public class StoryManager : MonoBehaviour
         {
             Debug.Log("해당 선택지를 찾을 수 없습니다.");
         }
+    }
+
+    public void EndGame()
+    {
+        endGamePanal.SetActive(true);
+        StoryEndingSO endingData = storyDatabase.GetEndingById(GameManager.Instance.CheckEnding());
+
+        //해당 엔딩 텍스트 적용
+        if (endingData == null) return;
+        string[] t_temp = endingData.text.Split("_");
+        string _endingText = $"{t_temp[0]}-{t_temp[1]}";
+        _endingText += "\n";
+        _endingText += "\n";
+        _endingText += t_temp[2];
+
+        endingText.text = _endingText;
+
+
+        //해당 엔딩 나레이션 작동
+        string i_temp = endingData.id.ToString();
+        i_temp = i_temp.Substring(i_temp.Length - 1);
+        int id = int.Parse(i_temp);
+
+        Debug.Log(id);
+
+        SoundManager.instance.PlaySound("Ending_" + id);
+        //엔딩 사운드 추가
+
+        //엔딩 텍스트가 희미하보기 시작하는 연출 추가
     }
 }

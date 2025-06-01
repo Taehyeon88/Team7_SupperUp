@@ -12,11 +12,13 @@ public class StoryDatebaseSO : ScriptableObject
 
     private Dictionary<int, StoryNarrationSO> narrationsById;
     private Dictionary<string, StoryChoiceSO> StorychoicesByText;
+    private Dictionary<int, StoryEndingSO> endingsById;
 
     public void Initialize()
     {
         narrationsById = new Dictionary<int, StoryNarrationSO>();
         StorychoicesByText = new Dictionary<string, StoryChoiceSO>();
+        endingsById = new Dictionary<int, StoryEndingSO>();
 
         foreach (var dialog in narrations)
         {
@@ -31,6 +33,14 @@ public class StoryDatebaseSO : ScriptableObject
             if (choice != null)
             {
                 StorychoicesByText[choice.text] = choice;
+            }
+        }
+
+        foreach (var ending in storyEndings)
+        {
+            if (ending != null)
+            {
+                endingsById[ending.id] = ending;
             }
         }
     }
@@ -53,6 +63,17 @@ public class StoryDatebaseSO : ScriptableObject
 
         if (StorychoicesByText.TryGetValue(text, out StoryChoiceSO choice))
             return choice;
+
+        return null;
+    }
+
+    public StoryEndingSO GetEndingById(int id)
+    {
+        if (endingsById == null)
+            Initialize();
+
+        if (endingsById.TryGetValue(id, out StoryEndingSO ending))
+            return ending;
 
         return null;
     }
