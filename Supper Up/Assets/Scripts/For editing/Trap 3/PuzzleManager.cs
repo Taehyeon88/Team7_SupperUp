@@ -1,27 +1,43 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class PuzzleManager : MonoBehaviour
 {
-    public PressurePlate[] plates;
-    public GameObject bridge;
-    private List<int> correctSequence = new List<int> { 1, 2, 3, 8, 7, 12, 13, 14, 19, 18, 17, 22, 23, 24, 25 };
-    private List<int> playerSequence = new List<int>();
+    public GameObject[] platforms;
+    public GameObject bridgePrefab; // 다리 프리팹
+    public Vector3 bridgeSpawnPosition; // 다리가 생성될 위치
+    public Color initialColor = Color.white;
+    public Color correctColor = Color.green;
+    public Color wrongColor = Color.red;
 
-    public void ActivatePlate(int plateNumber)
+    private List<int> correctSequence = new List<int> { 1, 2, 5, 6, 9 };
+    private List<int> playerSequence = new List<int>();
+    private bool puzzleSolved = false;
+
+    void Start()
     {
-        playerSequence.Add(plateNumber);
+        // 시작할 때는 다리가 없습니다.
+    }
+
+    public void StepOnPlatform(int platformIndex)
+    {
+        if (puzzleSolved) return;
+
+        Debug.Log($"Stepped on platform {platformIndex}");
+
+        playerSequence.Add(platformIndex);
+        platforms[platformIndex - 1].GetComponent<Renderer>().material.color = correctColor;
+
         CheckSequence();
     }
 
-    private void CheckSequence()
+    void CheckSequence()
     {
         bool isCorrect = true;
         for (int i = 0; i < playerSequence.Count; i++)
         {
-            if (i >= correctSequence.Count || playerSequence[i] != correctSequence[i])
+            if (playerSequence[i] != correctSequence[i])
             {
                 isCorrect = false;
                 break;
@@ -32,29 +48,50 @@ public class PuzzleManager : MonoBehaviour
         {
             if (playerSequence.Count == correctSequence.Count)
             {
-                CompletePuzzle();
+                PuzzleSolved();
             }
-            plates[playerSequence[playerSequence.Count - 1] - 1].SetColor(Color.yellow);
         }
         else
         {
-            FailPuzzle();
+            StartCoroutine(ResetPlatforms());
         }
     }
 
-    private void CompletePuzzle()
+    void PuzzleSolved()
     {
-        Debug.Log("퍼즐 완료!");
-        bridge.SetActive(true);
+        puzzleSolved = true;
+        Debug.Log("Puzzle solved! Creating the bridge.");
+        CreateBridge();
     }
 
-    private void FailPuzzle()
+    void CreateBridge()
     {
-        Debug.Log("퍼즐 실패!");
-        foreach (int plateNumber in playerSequence)
+        if (bridgePrefab != null)
         {
-            plates[plateNumber - 1].SetColor(Color.red);
+            GameObject bridge = Instantiate(bridgePrefab, bridgeSpawnPosition, Quaternion.identity);
+            Debug.Log("Bridge created successfully.");
         }
+        else
+        {
+            Debug.LogError("Bridge prefab is not assigned in the inspector!");
+        }
+    }
+
+    IEnumerator ResetPlatforms()
+    {
+        Debug.Log("Resetting platforms");
+        foreach (GameObject platform in platforms)
+        {
+            platform.GetComponent<Renderer>().material.color = wrongColor;
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        foreach (GameObject platform in platforms)
+        {
+            platform.GetComponent<Renderer>().material.color = initialColor;
+        }
+
         playerSequence.Clear();
     }
 }
