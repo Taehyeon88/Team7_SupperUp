@@ -7,20 +7,22 @@ using System.IO;
 using UnityEngine;
 using Newtonsoft.Json;
 
-public class DialogRowData
+public class StoryRowData
 {
     public int? id;
     public string text;
     public int? nextId;
     public string choiceText;
     public int? choiceNextId;
-    public int? choicePoint;
+    public string eventCondition;
+    public string eventText;
+    public int? eventNextId;
 }
 
 public class JsonToScriptableConverter : EditorWindow
 {
     private string jsonFilePath = "";                                //JSON 파일 경로 문자열 값
-    private string outputFolder = "Assets/ScriptableObjects/Dialogs";        //출력 SO 파일 경로값
+    private string outputFolder = "Assets/ScriptableObjects/Story";        //출력 SO 파일 경로값
     private bool createDatabase = true;
 
     [MenuItem("Tools/JSON to Scriptable Objects")]
@@ -67,32 +69,45 @@ public class JsonToScriptableConverter : EditorWindow
 
         try
         {
-            List<DialogRowData> rowDataList = JsonConvert.DeserializeObject<List<DialogRowData>>(jsonText);
+            List<StoryRowData> rowDataList = JsonConvert.DeserializeObject<List<StoryRowData>>(jsonText);
 
-            Dictionary<int, DialogSO> dialogMap = new Dictionary<int, DialogSO>();
-            List<DialogSO> createDialogs = new List<DialogSO>();
-            List<DialogChoiceSO> createDialogChoices = new List<DialogChoiceSO>();
+            Dictionary<int, StoryNarrationSO> NarrationMap = new Dictionary<int, StoryNarrationSO>();
+            List<StoryNarrationSO> createNarrations = new List<StoryNarrationSO>();
+            List<StoryChoiceSO> createStoryChoices = new List<StoryChoiceSO>();
+            List<StoryEventSO> createStoryEvents = new List<StoryEventSO>();
+            List<StoryEndingSO> createEndings = new List<StoryEndingSO>();
 
-            //1단계 : 대화 항목 생성
+            //1단계 : 나레이션 항목 생성
             foreach (var rowData in rowDataList)
             {
-                if (rowData.id.HasValue)
+                if (rowData.id.HasValue && rowData.nextId.HasValue)  //id와 nextId가 있어야 한다 <-- 나레이션조건
                 {
-                    DialogSO dialogSO = ScriptableObject.CreateInstance<DialogSO>();
+                    StoryNarrationSO NarrationSO = ScriptableObject.CreateInstance<StoryNarrationSO>();
 
-                    dialogSO.id = rowData.id.Value;
-                    dialogSO.text = rowData.text;
-                    dialogSO.nextId = rowData.nextId.HasValue ? rowData.nextId.Value : -1;
-                    dialogSO.choices = new List<DialogChoiceSO>();
+                    NarrationSO.id = rowData.id.Value;
+                    NarrationSO.text = rowData.text;
+                    NarrationSO.nextId = rowData.nextId.HasValue ? rowData.nextId.Value : -1;
+                    NarrationSO.choices = new List<StoryChoiceSO>();
+                    NarrationSO.events = new List<StoryEventSO>();
 
-                    dialogMap[dialogSO.id] = dialogSO;
-                    createDialogs.Add(dialogSO);
+                    NarrationMap[NarrationSO.id] = NarrationSO;
+                    createNarrations.Add(NarrationSO);
+                }
+                else if(rowData.id.HasValue && !string.IsNullOrEmpty(rowData.eventCondition))
+                {
+                    StoryEndingSO endingSO = ScriptableObject.CreateInstance<StoryEndingSO>();
+
+                    endingSO.id = rowData.id.Value;
+                    endingSO.text = rowData.text;
+                    endingSO.condition = rowData.eventCondition;
+
+                    createEndings.Add(endingSO);
                 }
             }
-            //2단계 : 선택지 항목 처리 및 연결
+            //2단계 : 선택지 항목 처리 및 연결 + 이벤트 항목 처리 및 연결
             foreach (var rowData in rowDataList)
             {
-                if (!rowData.id.HasValue && !string.IsNullOrEmpty(rowData.choiceText) && rowData.choiceNextId.HasValue && rowData.choicePoint.HasValue)
+                if (!rowData.id.HasValue)
                 {
                     int parentId = -1; //이전 행의 ID를 부모ID로 사용
 
@@ -113,20 +128,37 @@ public class JsonToScriptableConverter : EditorWindow
                         Debug.LogWarning($"선택지 '{rowData.choiceText}'의 부모 대화를 찾을 수 없습니다.");
                     }
 
-                    if (dialogMap.TryGetValue(parentId, out DialogSO parentDialog))
+                    if (NarrationMap.TryGetValue(parentId, out StoryNarrationSO parentDialog))
                     {
-                        DialogChoiceSO choiceSO = ScriptableObject.CreateInstance<DialogChoiceSO>();
-                        choiceSO.text = rowData.choiceText;
-                        choiceSO.nextId = rowData.choiceNextId.Value;
-                        choiceSO.choicePoint = rowData.choicePoint.Value;
+                        if (!string.IsNullOrEmpty(rowData.choiceText) && rowData.choiceNextId.HasValue)   //선택지조건
+                        {
+                            StoryChoiceSO choiceSO = ScriptableObject.CreateInstance<StoryChoiceSO>();
+                            choiceSO.text = rowData.choiceText;
+                            choiceSO.nextId = rowData.choiceNextId.Value;
 
-                        //선택지 에셋 저장
-                        string choiceAssetPath = $"{outputFolder}/Choice_{parentId}_{parentDialog.choices.Count + 1}.asset";
-                        AssetDatabase.CreateAsset(choiceSO, choiceAssetPath);
-                        EditorUtility.SetDirty(choiceSO);
+                            //선택지 에셋 저장
+                            string choiceAssetPath = $"{outputFolder}/Choice_{parentId}_{parentDialog.choices.Count + 1}.asset";
+                            AssetDatabase.CreateAsset(choiceSO, choiceAssetPath);
+                            EditorUtility.SetDirty(choiceSO);
 
-                        parentDialog.choices.Add(choiceSO);
-                        createDialogChoices.Add(choiceSO);
+                            parentDialog.choices.Add(choiceSO);
+                            createStoryChoices.Add(choiceSO);
+                        }
+                        else if (!string.IsNullOrEmpty(rowData.eventCondition) && !string.IsNullOrEmpty(rowData.eventText) && rowData.eventNextId.HasValue)  //이벤트조건
+                        {
+                            StoryEventSO eventSO = ScriptableObject.CreateInstance<StoryEventSO>();
+                            eventSO.eventText = rowData.eventText;
+                            eventSO.condition = rowData.eventCondition;
+                            eventSO.nextId = rowData.eventNextId.Value;
+
+                            //선택지 에셋 저장
+                            string eventAssetPath = $"{outputFolder}/Event_{parentId}_{parentDialog.events.Count + 1}.asset";
+                            AssetDatabase.CreateAsset(eventSO, eventAssetPath);
+                            EditorUtility.SetDirty(eventSO);
+
+                            parentDialog.events.Add(eventSO);
+                            createStoryEvents.Add(eventSO);
+                        }
                     }
                     else
                     {
@@ -135,33 +167,45 @@ public class JsonToScriptableConverter : EditorWindow
                 }
             }
 
-            //3단계 : 대화 스크립터블 오브젝트 저장
-            foreach (var dialog in createDialogs)
+            //3단계 : 나레이션 스크립터블 오브젝트 저장
+            foreach (var narration in createNarrations)
             {
                 //스크립터블 오브젝트 저장 - ID를 4자리 숫자로 포멧팅
-                string assetPath = $"{outputFolder}/Dialog_{dialog.id.ToString("D4")}.asset";
-                AssetDatabase.CreateAsset( dialog, assetPath );
+                string assetPath = $"{outputFolder}/Narration_{narration.id.ToString("D4")}.asset";
+                AssetDatabase.CreateAsset( narration, assetPath );
 
                 //에셋 이름 저장
-                dialog.name = $"Dialog_{dialog.id.ToString("D4")}";
+                narration.name = $"Narration_{narration.id.ToString("D4")}";
 
-                EditorUtility.SetDirty(dialog);
+                EditorUtility.SetDirty(narration);
             }
 
-            if (createDatabase && createDialogs.Count > 0 && createDialogChoices.Count > 0)
+            foreach (var ending in createEndings)
             {
-                DialogDatebaseSO database = ScriptableObject.CreateInstance<DialogDatebaseSO>();
-                database.dialogs = createDialogs;
-                database.choiceDialogs = createDialogChoices;
+                string assetPath = $"{outputFolder}/Ending_{ending.id.ToString("D4")}.asset";
+                AssetDatabase.CreateAsset(ending, assetPath);
 
-                AssetDatabase.CreateAsset(database, $"{outputFolder}/DialogDatabase.asset");
+                ending.name = $"Ending_{ending.id.ToString("D4")}";
+
+                EditorUtility.SetDirty(ending);
+            }
+
+            if (createDatabase && createNarrations.Count > 0 && createStoryChoices.Count > 0)
+            {
+                StoryDatebaseSO database = ScriptableObject.CreateInstance<StoryDatebaseSO>();
+                database.narrations = createNarrations;
+                database.storyChoices = createStoryChoices;
+                database.storyEvents = createStoryEvents;
+                database.storyEndings = createEndings;
+
+                AssetDatabase.CreateAsset(database, $"{outputFolder}/StoryDatabase.asset");
                 EditorUtility.SetDirty(database);
             }
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            EditorUtility.DisplayDialog("Success", $"Created {createDialogs.Count} dialog scriptable objects!", "Ok");
+            EditorUtility.DisplayDialog("Success", $"Created {createNarrations.Count} Story scriptable objects!", "Ok");
         }
         catch (System.Exception e)
         {

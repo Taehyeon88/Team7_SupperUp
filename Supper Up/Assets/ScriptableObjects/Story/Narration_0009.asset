@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2af2d9dac98f70d48b271e7d5b185df1, type: 3}
+  m_Name: Narration_0009
+  m_EditorClassIdentifier: 
+  id: 9
+  text: "\uC2DD\uB2F9\uC5D0\uC11C \uC8FD \uD55C \uADF8\uB987\uC73C\uB85C \uD5C8\uAE30\uB97C
+    \uCC44\uC6B4 \uC8FC\uC778\uACF5\uC740 \uACE7\uC7A5 \uB300\uC7A5\uAC04\uC73C\uB85C
+    \uD5A5\uD55C\uB2E4. \n\uC7A5\uBE44\uB97C \uC815\uBE44\uD558\uB358 \uC911, \uBCBD\uC5D0
+    \uAC78\uB824 \uC788\uB294 \uACE0\uAE09 \uAC80\uC774 \uB208\uC5D0 \uB748\uB2E4.
+    \n\uAC80\uC740 \uC8FC\uC778\uACF5\uC758 \uC5EC\uBE44\uB85C\uB294 \uB3C4\uC800\uD788
+    \uC0B4 \uC218 \uC5C6\uC5B4 \uBCF4\uC600\uC9C0\uB9CC, \uBB38\uB4DD \uBA70\uCE60
+    \uC804\uC758 \uBCF4\uBB3C\uC774 \uB5A0\uC624\uB978\uB2E4."
+  nextId: -2
+  choices: []
+  events:
+  - {fileID: 11400000, guid: 8888ac079b617ff4aa50799975d5dbf2, type: 2}
+  - {fileID: 11400000, guid: f62d0c82e5c737b42bd0ca430016455a, type: 2}

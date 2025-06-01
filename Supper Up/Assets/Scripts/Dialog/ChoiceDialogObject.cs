@@ -15,9 +15,9 @@ public class ChoiceDialogObject : MonoBehaviour
     {
         if (collision.collider.CompareTag("Player") && !isOneTime)
         {
-            if (DialogManager.Instance != null)
+            if (StoryManager.Instance != null)
             {
-                DialogManager.Instance.SelectChoice(choiceObjectId);
+                StoryManager.Instance.SelectChoice(choiceObjectId);
             }
             isOneTime = true;
         }

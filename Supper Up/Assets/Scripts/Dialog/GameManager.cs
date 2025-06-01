@@ -7,9 +7,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     //스토리 데이터
-    public int choicePoint_1 = 0;
-    public int choicePoint_2 = 0;
-    
+    public List<string> choiceds = new List<string>();    //선택지에서 선택된 선택지 누적 데이터
+
     void Awake()
     {
         if (Instance == null)
@@ -20,6 +19,15 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
             return;
+        }
+    }
+
+    private void Update()
+    {
+        if (choiceds.Count >= 4)
+        {
+            Debug.Log(string.Join(",", choiceds));        
+        
         }
     }
 }

@@ -81,14 +81,14 @@ public class SoundManager : MonoBehaviour
                 {
                     name = sound.name.ToLower();
                 }
-                Debug.Log("특별한 사운드의 이름은 :" + name);
+                //Debug.Log("특별한 사운드의 이름은 :" + name);
 
                 switch (name)
                 {
                     case FindObjectsTool.spikeName:
                         foreach (var obj in FindObjectsTool.spikeTraps)
                         {
-                            Debug.Log("된다");
+                            //Debug.Log("된다");
                             sound.source = obj.AddComponent<AudioSource>();
                             sound.source.clip = sound.clip;
                             sound.source.volume = sound.volume;

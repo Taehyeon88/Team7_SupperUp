@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c23b0f30a560dc74d8067e84d0a19aea, type: 3}
+  m_Name: Event_9_1
+  m_EditorClassIdentifier: 
+  condition: "\uBCF4\uBB3C\uC744 \uCC59\uAE34\uB2E4"
+  eventText: "\uC8FC\uC778\uACF5\uC740 \uC77C\uB9D0\uC758 \uB9DD\uC124\uC784 \uC5C6\uC774
+    \uBCF4\uBB3C\uC744 \uAEBC\uB0B4 \uAC80\uC744 \uAD6C\uC785\uD55C\uB2E4. \n\uC190\uC5D0
+    \uB4E4\uC5B4\uC628 \uAC80\uC740 \uBB35\uC9C1\uD558\uACE0 \uB0A0\uCE74\uB85C\uC6E0\uC73C\uBA70,
+    \uB9CC\uC871\uC2A4\uB7EC\uC6B4 \uD45C\uC815\uC73C\uB85C \uAC80\uC9D1\uC744 \uD5C8\uB9AC\uC5D0
+    \uCC2C\uB2E4."
+  nextId: 10
