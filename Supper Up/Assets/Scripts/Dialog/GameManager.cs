@@ -15,24 +15,24 @@ public class GameManager : MonoBehaviour
     //스토리 데이터
     public List<string> choiceds = new List<string>();    //선택지에서 선택된 선택지 누적 데이터
 
-    [Header("살아서 집으로 돌아가고 싶다")]
-    public bool choice_1_1 = false;
-    [Header("죽고 싶지 않다")]
-    public bool choice_1_2 = false;
-    [Header("나는 기사를 될 것이다")]
-    public bool choice_1_3 = false;
-    [Header("물을 챙긴다")]
-    public bool choice_2_1 = false;
-    [Header("물을 챙기지 않는다")]
-    public bool choice_2_2 = false;
-    [Header("보물을 챙긴다")]
-    public bool choice_3_1 = false;
-    [Header("보물을 챙기지 않는다")]
-    public bool choice_3_2 = false;
-    [Header("모두 죽인다")]
-    public bool choice_4_1 = false;
-    [Header("살려보낸다")]
-    public bool choice_4_2 = false;
+    //[Header("살아서 집으로 돌아가고 싶다")]
+    //public bool choice_1_1 = false;
+    //[Header("죽고 싶지 않다")]
+    //public bool choice_1_2 = false;
+    //[Header("나는 기사를 될 것이다")]
+    //public bool choice_1_3 = false;
+    //[Header("물을 챙긴다")]
+    //public bool choice_2_1 = false;
+    //[Header("물을 챙기지 않는다")]
+    //public bool choice_2_2 = false;
+    //[Header("보물을 챙긴다")]
+    //public bool choice_3_1 = false;
+    //[Header("보물을 챙기지 않는다")]
+    //public bool choice_3_2 = false;
+    //[Header("모두 죽인다")]
+    //public bool choice_4_1 = false;
+    //[Header("살려보낸다")]
+    //public bool choice_4_2 = false;
 
 
     void Awake()
@@ -56,23 +56,23 @@ public class GameManager : MonoBehaviour
         
         }
 
-        if (choice_1_1) AddValueOneTime("살아서 집으로 돌아가고 싶다");
-        if (choice_1_2) AddValueOneTime("죽고 싶지 않다");
-        if (choice_1_3) AddValueOneTime("나는 기사를 될 것이다");
-        if (choice_2_1) AddValueOneTime("물을 챙긴다");
-        if (choice_2_2) AddValueOneTime("물을 챙기지 않는다");
-        if (choice_3_1) AddValueOneTime("보물을 챙긴다");
-        if (choice_3_2) AddValueOneTime("보물을 챙기지 않는다");
-        if (choice_4_1) AddValueOneTime("모두 죽인다");
-        if (choice_4_2) AddValueOneTime("살려보낸다");
+        //if (choice_1_1) AddValueOneTime("살아서 집으로 돌아가고 싶다");
+        //if (choice_1_2) AddValueOneTime("죽고 싶지 않다");
+        //if (choice_1_3) AddValueOneTime("나는 기사를 될 것이다");
+        //if (choice_2_1) AddValueOneTime("물을 챙긴다");
+        //if (choice_2_2) AddValueOneTime("물을 챙기지 않는다");
+        //if (choice_3_1) AddValueOneTime("보물을 챙긴다");
+        //if (choice_3_2) AddValueOneTime("보물을 챙기지 않는다");
+        //if (choice_4_1) AddValueOneTime("모두 죽인다");
+        //if (choice_4_2) AddValueOneTime("살려보낸다");
     }
 
-    private void AddValueOneTime(string text)
-    {
-        if (choiceds.Contains(text)) return;
+    //private void AddValueOneTime(string text)
+    //{
+    //    if (choiceds.Contains(text)) return;
 
-        choiceds.Add(text);
-    }
+    //    choiceds.Add(text);
+    //}
 
     public int CheckEnding()
     {
