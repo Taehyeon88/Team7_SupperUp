@@ -11,21 +11,21 @@ public class CannonObject : MonoBehaviour
     [SerializeField] private GameObject head;
     [SerializeField] private float rotateSpeed = 1f;
 
-    [SerializeField] private GameObject bullerPf;
+    [SerializeField] private GameObject bulletPf;
     [SerializeField] private float firePower = 2f;
     [SerializeField] private float fireDuration = 5f;
 
     private const float Maxheight = 3f;
     private float timer = 0f;
 
-    //내부변수
+    // 내부변수
     private PlayerController player;
+
     void Start()
     {
         player = FindObjectOfType<PlayerController>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         CheckPlayer();
@@ -38,7 +38,7 @@ public class CannonObject : MonoBehaviour
         float playerH = player.transform.position.y;
         float cannonH = transform.position.y;
 
-        if (dis > maxDistance || playerH < cannonH - 0.5f || playerH > cannonH + Maxheight) return; //최대거리 및 높이제한
+        if (dis > maxDistance || playerH < cannonH - 0.5f || playerH > cannonH + Maxheight) return; // 최대거리 및 높이제한
 
         Vector3 dir = (player.transform.position - transform.position).normalized;
         float dot = Vector3.Dot(dir, transform.forward);
@@ -62,7 +62,8 @@ public class CannonObject : MonoBehaviour
         float t = 1f - Mathf.Exp(-rotateSpeed * Time.deltaTime);
         head.transform.rotation = Quaternion.Slerp(transform.rotation, lookRot, t);
 
-        head.transform.rotation.y = (1 - t) 
+        // 삭제 또는 주석 처리
+        // head.transform.rotation.y = (1 - t); 
     }
 
     private void CheckFire()
@@ -79,7 +80,7 @@ public class CannonObject : MonoBehaviour
     {
         Vector3 firePos = head.transform.position + head.transform.forward;
         Vector3 dir = (player.transform.position - firePos).normalized;
-        GameObject bullet = Instantiate(bullerPf, firePos, Quaternion.identity);
+        GameObject bullet = Instantiate(bulletPf, firePos, Quaternion.identity);
         bullet.GetComponent<CannonBullet>().Attack(firePower, dir);
     }
 

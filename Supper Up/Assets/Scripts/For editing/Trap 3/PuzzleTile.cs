@@ -16,11 +16,11 @@ public class PuzzleTile : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.CompareTag("Player"))
+        if (collision.collider.CompareTag("Player"))
         {
-            Debug.Log($"Player entered platform {platformIndex}");
+            Debug.Log($"Player collided with platform {platformIndex}");
             if (puzzleManager != null)
             {
                 puzzleManager.StepOnPlatform(platformIndex);
