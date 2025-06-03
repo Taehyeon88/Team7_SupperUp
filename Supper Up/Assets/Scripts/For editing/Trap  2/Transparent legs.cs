@@ -1,35 +1,51 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Transparentlegs : MonoBehaviour
 {
-    private bool isFalling = false;
-
     [Header("Timing Settings")]
     [SerializeField]
-    private float disappearDelay = 2f; // 사라지는 시간 (유니티 인스펙터에서 조정 가능)
+    private float fallDelay = 2f;        // 플레이어 접촉 후 사라지는 시간
+    [SerializeField]
+    private float respawnDelay = 5f;     // 사라졌다 다시 나타나는 시간
 
+    private bool isTriggered = false;    // 중복 방지용
+
+    // 원래 위치 저장 (필요시)
+    private Vector3 originalPosition;
+
+    void Start()
+    {
+        originalPosition = transform.position;
+    }
+
+    // 충돌 감지
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player") && !isFalling)
+        if (collision.gameObject.CompareTag("Player") && !isTriggered)
         {
-            StartCoroutine(Fall());
+            StartCoroutine(DestroyAndRespawn());
         }
     }
 
-    private IEnumerator Fall()
+    private IEnumerator DestroyAndRespawn()
     {
-        isFalling = true; // 상태를 '떨어진'으로 변경
+        isTriggered = true;
 
-        // 사라지기 전의 대기 시간
-        yield return new WaitForSeconds(disappearDelay);
+        // 일정 시간 후에 다리 사라짐
+        yield return new WaitForSeconds(fallDelay);
+        gameObject.SetActive(false); // 비활성화 - 사라짐
 
-        // 다리를 비활성화 (사라짐)
-        gameObject.SetActive(false);
+        // 일정 시간 후 다시 활성화 (다시 생김)
+        yield return new WaitForSeconds(respawnDelay);
+        gameObject.SetActive(true); // 다시 활성화 (다시 나타남)
+    }
 
-        // 다시 밟을 수 있도록 상태 초기화 (발판이 비활성화된 후 상태를 초기화합니다)
-        isFalling = false;
+    private void OnEnable()
+    {
+        // 오브젝트 재활성화 될 때 초기화
+        isTriggered = false;
+        // 필요시 위치, 색상 초기화 등 추가 가능
+        // transform.position = originalPosition;  // 위치 초기화
     }
 }
-
