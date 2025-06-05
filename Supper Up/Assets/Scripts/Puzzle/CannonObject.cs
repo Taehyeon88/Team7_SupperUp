@@ -90,7 +90,7 @@ public class CannonObject : MonoBehaviour
 
     private void CheckFirePos(Vector3 externalForce, Vector3 startPos, Vector3 initialVelocity, float mass, GameObject bullet)
     {
-        time += Time.deltaTime;
+        time += Time.deltaTime / 1.5f;
         Vector3 gravity = Physics.gravity;
         Vector3 acceleration = externalForce / mass + gravity;
 

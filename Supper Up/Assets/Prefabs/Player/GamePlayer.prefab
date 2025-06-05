@@ -574,7 +574,7 @@ MonoBehaviour:
   groundHalfExtents: {x: 0.19, y: 0.02, z: 0.19}
   groundLayer:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 136
   isFalling: 0
   isJumping: 0
   isLanding: 0

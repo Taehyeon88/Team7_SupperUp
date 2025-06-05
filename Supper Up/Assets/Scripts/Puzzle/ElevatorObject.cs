@@ -93,7 +93,6 @@ public class ElevatorObject : MonoBehaviour
                 currenPos = transform.position;
                 Vector3 dir = currenPos - prevPos;
                 playerRb.MovePosition(playerRb.position +  dir);
-                Debug.Log($"{transform.position}, {dir}");
 
                 prevPos = currenPos;
             
