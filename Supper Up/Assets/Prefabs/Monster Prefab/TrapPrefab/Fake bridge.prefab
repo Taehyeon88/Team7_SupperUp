@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 8302324607564446927}
   - component: {fileID: 3314022174068968979}
   - component: {fileID: 1341329358001006569}
-  - component: {fileID: 1854872347599430407}
+  - component: {fileID: 8409591081227758757}
   m_Layer: 3
   m_Name: Fake bridge
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 8356777036867674374}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.93, y: 0.37, z: -3.95}
+  m_LocalPosition: {x: -14.54, y: 2.34, z: -10.47}
   m_LocalScale: {x: 10, y: 0.2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -106,7 +106,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1854872347599430407
+--- !u!114 &8409591081227758757
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,4 +118,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64928d76bf25fb44aaf662a6820bc673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disappearDelay: 2
+  vanishDelay: 5
+  reappearDelay: 5

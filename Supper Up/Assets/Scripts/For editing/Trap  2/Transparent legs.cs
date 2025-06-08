@@ -1,65 +1,46 @@
-using System.Collections;
 using UnityEngine;
+using System.Collections;
 
-public class Transparentlegs : MonoBehaviour
+public class TransparentLegs : MonoBehaviour
 {
-    [Header("Timing Settings")]
-    [SerializeField]
-    private float fallDelay = 2f;        // 플레이어 접촉 후 사라지는 시간
-    [SerializeField]
-    private float respawnDelay = 5f;     // 사라졌다 다시 나타나는 시간
+    public float vanishDelay = 5.0f;      // 플레이어가 밟고 난 후 사라지는 시간 (초)
+    public float reappearDelay = 5.0f;    // 사라졌다가 다시 나타나는 시간 (초)
 
-    private bool isTriggered = false;    // 중복 방지용
+    private bool isTriggered = false;     // 중복 Trigger 방지용
 
-    // 원래 위치 저장 (필요시)
-    private Vector3 originalPosition;
-    private Collider collider;
-    private MeshRenderer renderer;
+    private Renderer gimmick_Rend;          // 렌더러 컴포넌트 (보이기/숨기기)
+    private Collider gimmick_Col;           // 콜라이더 컴포넌트 (충돌 감지)
 
-    void Start()
+    void Awake()
     {
-        originalPosition = transform.position;
-        collider = GetComponent<Collider>();
-        renderer = GetComponent<MeshRenderer>();
+        gimmick_Rend = GetComponent<Renderer>();
+        gimmick_Col = GetComponent<Collider>();
     }
 
-    // 충돌 감지
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player") && !isTriggered)
+        // 태그가 "Player"인 오브젝트와 충돌하면 시작
+        if (!isTriggered && collision.transform.CompareTag("Player"))
         {
-            StartCoroutine(DestroyAndRespawn());
+            isTriggered = true; // 다시 트리거 방지
+            StartCoroutine(VanishAndReappear());
         }
     }
 
-    private IEnumerator DestroyAndRespawn()
+    private IEnumerator VanishAndReappear()
     {
-        isTriggered = true;
+        // 일정 시간 후 투명/비활성화
+        yield return new WaitForSeconds(vanishDelay);
 
-        // 일정 시간 후에 다리 사라짐
-        yield return new WaitForSeconds(fallDelay);
+        gimmick_Rend.enabled = false;
+        gimmick_Col.enabled = false;
 
-        //Debug.Log(respawnDelay);
+        // 일정 시간 후 다시 활성화
+        yield return new WaitForSeconds(reappearDelay);
 
-        collider.enabled = false;
-        renderer.enabled = false;
+        gimmick_Rend.enabled = true;
+        gimmick_Col.enabled = true;
 
-        // 일정 시간 후 다시 활성화 (다시 생김)
-        yield return new WaitForSeconds(respawnDelay);
-
-        Debug.Log(respawnDelay);
-
-        isTriggered = false;
-
-        collider.enabled = true;
-        renderer.enabled = true;
-    }
-
-    private void OnEnable()
-    {
-        // 오브젝트 재활성화 될 때 초기화
-        isTriggered = false;
-        // 필요시 위치, 색상 초기화 등 추가 가능
-        // transform.position = originalPosition;  // 위치 초기화
+        isTriggered = false; // 다시 트리거 허용
     }
 }
