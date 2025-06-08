@@ -776,7 +776,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0ec2c23ff975e842a5f1e234488f503, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startMoveDistance: 10
+  startMoveDistance: 100
   pushForce: 40
   playerMask:
     serializedVersion: 2

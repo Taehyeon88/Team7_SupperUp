@@ -13,10 +13,14 @@ public class Transparentlegs : MonoBehaviour
 
     // 원래 위치 저장 (필요시)
     private Vector3 originalPosition;
+    private Collider collider;
+    private MeshRenderer renderer;
 
     void Start()
     {
         originalPosition = transform.position;
+        collider = GetComponent<Collider>();
+        renderer = GetComponent<MeshRenderer>();
     }
 
     // 충돌 감지
@@ -34,11 +38,21 @@ public class Transparentlegs : MonoBehaviour
 
         // 일정 시간 후에 다리 사라짐
         yield return new WaitForSeconds(fallDelay);
-        gameObject.SetActive(false); // 비활성화 - 사라짐
+
+        //Debug.Log(respawnDelay);
+
+        collider.enabled = false;
+        renderer.enabled = false;
 
         // 일정 시간 후 다시 활성화 (다시 생김)
         yield return new WaitForSeconds(respawnDelay);
-        gameObject.SetActive(true); // 다시 활성화 (다시 나타남)
+
+        Debug.Log(respawnDelay);
+
+        isTriggered = false;
+
+        collider.enabled = true;
+        renderer.enabled = true;
     }
 
     private void OnEnable()

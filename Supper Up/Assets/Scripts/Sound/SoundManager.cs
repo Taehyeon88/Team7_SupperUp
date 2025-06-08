@@ -52,8 +52,8 @@ public class SoundManager : MonoBehaviour
         List<GameObject> spikeTraps2 = new List<GameObject>(FindObjectsTool.spikeTraps);
         List<GameObject> torches2 = new List<GameObject>(FindObjectsTool.torches);
 
-        Debug.Log(FindObjectsTool.spikeTraps.Count);
-        Debug.Log(FindObjectsTool.torches.Count);
+        //Debug.Log(FindObjectsTool.spikeTraps.Count);
+        //Debug.Log(FindObjectsTool.torches.Count);
 
         foreach (Sound sound in sounds)
         {

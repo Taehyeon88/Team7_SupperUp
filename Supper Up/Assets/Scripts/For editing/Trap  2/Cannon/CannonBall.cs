@@ -1,25 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO.Pipes;
 using UnityEngine;
 
 public class CannonBall : MonoBehaviour
 {
     private float speed;
     private float lifetime;
+    private Vector3 fireDirection;
     public float pushForce = 10f; // 플레이어를 밀어내는 힘
 
-    public void Initialize(float bulletSpeed, float bulletLifetime)
+    public void Initialize(float bulletSpeed, float bulletLifetime, Vector3 dir)
     {
         speed = bulletSpeed;
         lifetime = bulletLifetime;
+        fireDirection = dir;
+
+        GetComponent<Rigidbody>().AddForce(dir * speed, ForceMode.Impulse);
+
         Destroy(gameObject, lifetime);
     }
 
-    void Update()
-    {
-        // 총알을 앞으로 이동
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
-    }
+    //void Update()
+    //{
+    //    // 총알을 앞으로 이동
+    //    transform.Translate(fireDirection * speed * Time.deltaTime);
+    //}
 
     void OnCollisionEnter(Collision collision)
     {
@@ -30,7 +36,7 @@ public class CannonBall : MonoBehaviour
             if (playerRb != null)
             {
                 // 충돌 지점에서 플레이어 방향으로의 벡터 계산
-                Vector3 pushDirection = (collision.transform.position - transform.position).normalized;
+                Vector3 pushDirection = fireDirection.normalized;
 
                 // 플레이어에게 힘을 가함
                 playerRb.AddForce(pushDirection * pushForce, ForceMode.Impulse);

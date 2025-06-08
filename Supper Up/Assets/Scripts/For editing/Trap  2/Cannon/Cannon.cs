@@ -12,6 +12,7 @@ public class Cannon : MonoBehaviour
     [Header("Detection Settings")]
     public float detectDistance = 30f;        // 감지 거리
     public float viewAngle = 45f;             // 시야각 (도 단위)
+    public LayerMask playerLayer;
 
     [Header("References")]
     public GameObject bulletPrefab;
@@ -53,22 +54,28 @@ public class Cannon : MonoBehaviour
 
     private bool CanSeePlayer()
     {
-        Vector3 directionToPlayer = playerTransform.position - transform.position;
-        float distance = directionToPlayer.magnitude;
+        //Vector3 directionToPlayer = playerTransform.position - transform.position;
+        //float distance = directionToPlayer.magnitude;
 
-        // 거리 체크
-        if (distance > detectDistance)
-            return false;
+        //// 거리 체크
+        //if (distance > detectDistance)
+        //    return false;
 
-        // 방향이 시야각 내에 있는지 체크
-        float angle = Vector3.Angle(transform.forward, directionToPlayer);
+        //// 방향이 시야각 내에 있는지 체크
+        //float angle = Vector3.Angle(transform.forward, directionToPlayer);
 
-        if (angle < viewAngle / 2)
+        //if (angle < viewAngle / 2)
+        //{
+        //    // 플레이어가 시야 내에, 그리고 거리 내에 있다면
+        //    return true;
+        //}
+
+        //return false;
+
+        if (Physics.SphereCast(firePoint.transform.position, 0.4f, transform.forward, out RaycastHit hit, 46.5f, playerLayer))
         {
-            // 플레이어가 시야 내에, 그리고 거리 내에 있다면
             return true;
         }
-
         return false;
     }
 
@@ -79,7 +86,12 @@ public class Cannon : MonoBehaviour
         CannonBall bullet = bulletObject.GetComponent<CannonBall>();
         if (bullet != null)
         {
-            bullet.Initialize(bulletSpeed, bulletLifetime);
+            bullet.Initialize(bulletSpeed, bulletLifetime, transform.forward);
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Debug.DrawRay(firePoint.transform.position, transform.forward * 46.5f, Color.red);
     }
 }
