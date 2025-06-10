@@ -262,12 +262,13 @@ public class PlayerController : MonoBehaviour
                 isLanding = true;
             }
         }
-        else if (CheckDistance() < 2.2f && !IsGrounded() && CheckFalling(1) && !isHightLanding)  //이동후, 높은 곳에서 착지모션
+        else if (CheckDistance() < 1.5f && !IsGrounded() && CheckFalling(1) && !isHightLanding)  //이동후, 높은 곳에서 착지모션  //2.2f
         {
             if (!isSuperLanding)
             {
                 isHightLanding = true;
             }
+
             //Debug.Log("현재착지여부: " + CheckDistance());
             //Debug.Log("일반착지 활성화");
         }
@@ -289,7 +290,8 @@ public class PlayerController : MonoBehaviour
     {
         RaycastHit hit;
         Vector3 temp = transform.position + Vector3.up * 1;
-        if (Physics.Raycast(temp, Vector3.down, out hit)) return hit.distance;
+        if (Physics.SphereCast(temp, 0.3f, Vector3.down, out hit)) return hit.distance;
+        //if (Physics.Raycast(temp, Vector3.down, out hit)) return hit.distance;
         return 10f;
     }
 
@@ -301,10 +303,11 @@ public class PlayerController : MonoBehaviour
     public string GetGroundTypeString()
     {
         Vector3 origin = transform.position + Vector3.up * 0.1f;
-        if (Physics.Raycast(origin, Vector3.down, out RaycastHit hit, 10.5f, groundLayer))
+
+        if (Physics.Raycast(origin, Vector3.down, out RaycastHit _hit, 10.5f, groundLayer))
         {
-            if (hit.collider.CompareTag("Wood")) return "Walk(wood)";
-            else if (hit.collider.CompareTag("Stone")) return "Walk(stone)";
+            if (_hit.collider.CompareTag("Wood")) return "Walk(wood)";
+            else if (_hit.collider.CompareTag("Stone")) return "Walk(stone)";
         }
         return "";
     }

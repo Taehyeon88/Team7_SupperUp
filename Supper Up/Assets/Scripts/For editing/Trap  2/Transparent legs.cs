@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Transparentlegs : MonoBehaviour
@@ -13,20 +14,18 @@ public class Transparentlegs : MonoBehaviour
 
     // 원래 위치 저장 (필요시)
     private Vector3 originalPosition;
-    private Collider collider;
-    private MeshRenderer renderer;
+    public Collider[] colliders;
+    public MeshRenderer[] renderers;
 
     void Start()
     {
         originalPosition = transform.position;
-        collider = GetComponent<Collider>();
-        renderer = GetComponent<MeshRenderer>();
     }
 
     // 충돌 감지
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Player") && !isTriggered)
+        if (other.gameObject.CompareTag("Player") && !isTriggered)
         {
             StartCoroutine(DestroyAndRespawn());
         }
@@ -41,8 +40,11 @@ public class Transparentlegs : MonoBehaviour
 
         //Debug.Log(respawnDelay);
 
-        collider.enabled = false;
-        renderer.enabled = false;
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            colliders[i].enabled = false;
+            renderers[i].enabled = false;
+        }
 
         // 일정 시간 후 다시 활성화 (다시 생김)
         yield return new WaitForSeconds(respawnDelay);
@@ -51,8 +53,11 @@ public class Transparentlegs : MonoBehaviour
 
         isTriggered = false;
 
-        collider.enabled = true;
-        renderer.enabled = true;
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            colliders[i].enabled = true;
+            renderers[i].enabled = true;
+        }
     }
 
     private void OnEnable()

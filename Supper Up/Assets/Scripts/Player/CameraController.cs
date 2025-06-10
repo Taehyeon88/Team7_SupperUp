@@ -80,7 +80,7 @@ public class CameraController : MonoBehaviour
         {
             if (!readyStopShake)
             {
-                Debug.Log("¶³¸°´Ù.");
+                //Debug.Log("¶³¸°´Ù.");
 
                 stateTimer += Time.deltaTime;
 
@@ -100,7 +100,7 @@ public class CameraController : MonoBehaviour
                 Shake(0.3f, 100f);
                 cameraDistance = Mathf.Lerp(defaultDistance, currentDis, stateTimer / 2f);
                 Mathf.Clamp(cameraDistance, defaultDistance, MaxCameraDis);
-                Debug.Log(cameraDistance);
+                //Debug.Log(cameraDistance);
             }
         }
         transform.LookAt(origin);
@@ -129,7 +129,7 @@ public class CameraController : MonoBehaviour
         shakingPower = power;
         isShaking = true;
 
-        Debug.Log("¶³¸°´Ù1");
+        //Debug.Log("¶³¸°´Ù1");
     }
 
     public void ReadyToStopCameraShake()

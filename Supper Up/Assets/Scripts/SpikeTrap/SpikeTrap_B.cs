@@ -11,6 +11,7 @@ public class SpikeTrap_B : MonoBehaviour
     [SerializeField] private float startMoveDistance;  //작동시작거리
     [SerializeField] private float pushForce;          //밀쳐내는 힘
     [SerializeField] protected LayerMask playerMask;     //플레이어감지
+    [SerializeField] private GameObject detectPrefab;    //플레이어 감지 블럭
 
     //내부변수
     protected Vector3 originalPos;
@@ -58,7 +59,7 @@ public class SpikeTrap_B : MonoBehaviour
     {
         if (player != null)
         {
-            float distance = Vector3.Distance(originalPos, player.transform.position);
+            float distance = Vector3.Distance(detectPrefab.transform.position, player.transform.position);
             if (distance < startMoveDistance - 1 && !startMove)
             {
                 StartThrust();
@@ -87,6 +88,6 @@ public class SpikeTrap_B : MonoBehaviour
     protected virtual void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, startMoveDistance - 1);
+        Gizmos.DrawWireSphere(detectPrefab.transform.position, startMoveDistance - 1);
     }
 }

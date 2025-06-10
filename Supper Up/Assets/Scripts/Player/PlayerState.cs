@@ -120,6 +120,8 @@ public class JumpingState : PlayerState
     private JumpingState() { }
     public static JumpingState GetInstance() { return instance; }
 
+    private float timer;
+
     public override void Enter()
     {
         pC.Jumping();
@@ -130,11 +132,23 @@ public class JumpingState : PlayerState
         pC.Rotate(false);
         pC.CheckLanding();
         CheckTransitions();
+
+        timer += Time.deltaTime;
+        if(timer > 2f && pC.IsGrounded())
+        {
+            pC.isLanding = true;
+            Debug.Log("점프 스킵중..");
+        }
     }
 
     public override void FixedUpdate()
     {
         pC.Move(false);
+    }
+
+    public override void Exit()
+    {
+        timer = 0f;                       //스킵여부 초기화
     }
 }
 
