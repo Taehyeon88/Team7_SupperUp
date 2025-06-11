@@ -85,10 +85,11 @@ public class MoveState : PlayerState
         pC.Rotate(true);
         pC.CheckLanding();
         CheckTransitions();
-        if (pC.CheckDistance() > 2.2f && !pC.IsGrounded() && SoundManager.instance != null)
+        if (pC.CheckDistance() > 2.2f && !pC.IsGrounded() && SoundManager.instance != null)  //일반낙하시, 사운드 제거
         {
             SoundManager.instance.FadeSound("Walk(stone)", 0f);
             SoundManager.instance.FadeSound("Walk(wood)", 0f);
+            SoundManager.instance.FadeSound("Walk(dirt)", 0f);
         }
     }
 
@@ -103,6 +104,7 @@ public class MoveState : PlayerState
         {
             SoundManager.instance.FadeSound("Walk(stone)", 0f);
             SoundManager.instance.FadeSound("Walk(wood)", 0f);
+            SoundManager.instance.FadeSound("Walk(dirt)", 0f);
         }
         pC.isOneTime = false;
     }
@@ -212,6 +214,7 @@ public class LandingState : PlayerState
         {
             if (pC.GetGroundTypeString() == "Walk(wood)") SoundManager.instance.PlaySound("Landing(wood)");
             else if (pC.GetGroundTypeString() == "Walk(stone)") SoundManager.instance.PlaySound("Landing(stone)");
+            else if (pC.GetGroundTypeString() == "Walk(dirt)") SoundManager.instance.PlaySound("Landing(dirt)");
         }
     }
     public override void Update()
@@ -240,6 +243,7 @@ public class SupperLandingState : PlayerState
         {
             if (pC.GetGroundTypeString() == "Walk(wood)") SoundManager.instance.PlaySound("SuperLanding(wood)");
             else if (pC.GetGroundTypeString() == "Walk(stone)") SoundManager.instance.PlaySound("SuperLanding(stone)");
+            else if (pC.GetGroundTypeString() == "Walk(dirt)") SoundManager.instance.PlaySound("SuperLanding(dirt)");
         }
     }
     public override void Update()

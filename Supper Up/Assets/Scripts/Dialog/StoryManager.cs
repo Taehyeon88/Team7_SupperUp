@@ -59,17 +59,19 @@ public class StoryManager : MonoBehaviour
             Debug.LogError("Story Database is not assigned to Dialog Manager");
         }
 
-        ChoiceDialogObject[] choiceDialogObjects = FindObjectsOfType<ChoiceDialogObject>();
-        var temps = new Dictionary<int, ChoiceDialogObject>();
+        ChoiceStoryObject[] choiceDialogObjects = FindObjectsOfType<ChoiceStoryObject>();
+        var temps = new Dictionary<int, ChoiceStoryObject>();
 
         foreach (var obj in choiceDialogObjects)
             temps.Add(obj.choiceObjectId, obj);
 
         for (int i = 1; i <= choiceDialogObjects.Length; i++)
         {
-            temps.TryGetValue(i, out  ChoiceDialogObject choiceDialogObject);
-            choiceObjects.Add(choiceDialogObject.gameObject);
-            choiceTexts.Add(choiceDialogObject.choiceText);
+            if (temps.TryGetValue(i, out ChoiceStoryObject choiceDialogObject))
+            {
+                choiceObjects.Add(choiceDialogObject.gameObject);
+                choiceTexts.Add(choiceDialogObject.choiceText);
+            }
         }
     }
     public void StartNarration(int storyId)
@@ -222,8 +224,8 @@ public class StoryManager : MonoBehaviour
         {
             if (id != num)                             //선택 대상들 중, 선택되지 못한 발판들의 선택기능 비활성화시키기
             {
-                var temp = choiceObjects.Find(p => p.GetComponent<ChoiceDialogObject>().choiceObjectId == num);
-                temp.GetComponent<ChoiceDialogObject>().isOneTime = true;
+                var temp = choiceObjects.Find(p => p.GetComponent<ChoiceStoryObject>().choiceObjectId == num);
+                temp.GetComponent<ChoiceStoryObject>().isOneTime = true;
             }
         }
 

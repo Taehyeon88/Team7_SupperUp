@@ -63,8 +63,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: wood_table
       objectReference: {fileID: 0}
+    - target: {fileID: 4192375948825163707, guid: 86b4fafc27a8f9e4e8967bc7005201b2,
+        type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: -5003599612667880105, guid: 86b4fafc27a8f9e4e8967bc7005201b2, type: 3}
+    - {fileID: -5010880740092425300, guid: 86b4fafc27a8f9e4e8967bc7005201b2, type: 3}
+    - {fileID: 1930157942432804842, guid: 86b4fafc27a8f9e4e8967bc7005201b2, type: 3}
+    - {fileID: -1077757297660912302, guid: 86b4fafc27a8f9e4e8967bc7005201b2, type: 3}
+    - {fileID: -6723154150412629329, guid: 86b4fafc27a8f9e4e8967bc7005201b2, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 86b4fafc27a8f9e4e8967bc7005201b2, type: 3}

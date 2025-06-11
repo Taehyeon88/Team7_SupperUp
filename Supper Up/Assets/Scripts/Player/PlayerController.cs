@@ -101,11 +101,19 @@ public class PlayerController : MonoBehaviour
                     {
                         SoundManager.instance.FadeSound("Walk(wood)", 1f);
                         SoundManager.instance.FadeSound("Walk(stone)", 0f);
+                        SoundManager.instance.FadeSound("Walk(dirt)", 0f);
                     }
                     else if (GetGroundTypeString() == "Walk(stone)")
                     {
                         SoundManager.instance.FadeSound("Walk(stone)", 1f);
                         SoundManager.instance.FadeSound("Walk(wood)", 0f);
+                        SoundManager.instance.FadeSound("Walk(dirt)", 0f);
+                    }
+                    else if(GetGroundTypeString() == "Walk(dirt)")
+                    {
+                        SoundManager.instance.FadeSound("Walk(dirt)", 1f);
+                        SoundManager.instance.FadeSound("Walk(wood)", 0f);
+                        SoundManager.instance.FadeSound("Walk(stone)", 0f);
                     }
                     isOneTime = true;
                 }
@@ -114,7 +122,10 @@ public class PlayerController : MonoBehaviour
             {
                 if (isOneTime)
                 {
-                    SoundManager.instance.FadeSound(GetGroundTypeString(), 0f);
+                    //SoundManager.instance.FadeSound(GetGroundTypeString(), 0f);
+                    SoundManager.instance.FadeSound("Walk(dirt)", 0f);
+                    SoundManager.instance.FadeSound("Walk(wood)", 0f);
+                    SoundManager.instance.FadeSound("Walk(stone)", 0f);
                     isOneTime = false;
                 }
             }
@@ -308,6 +319,7 @@ public class PlayerController : MonoBehaviour
         {
             if (_hit.collider.CompareTag("Wood")) return "Walk(wood)";
             else if (_hit.collider.CompareTag("Stone")) return "Walk(stone)";
+            else if (_hit.collider.CompareTag("Dirt")) return "Walk(dirt)";
         }
         return "";
     }

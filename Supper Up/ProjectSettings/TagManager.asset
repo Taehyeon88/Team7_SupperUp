@@ -8,6 +8,7 @@ TagManager:
   - Stone
   - spiketrap
   - torch
+  - dirt
   layers:
   - Default
   - TransparentFX
