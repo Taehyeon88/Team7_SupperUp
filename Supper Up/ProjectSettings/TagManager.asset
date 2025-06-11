@@ -8,7 +8,15 @@ TagManager:
   - Stone
   - spiketrap
   - torch
-  - dirt
+  - Dirt
+  - cannon
+  - disappearingplane
+  - selevator
+  - welevator
+  - fackbridge
+  - chest
+  - anvil
+  - enemy
   layers:
   - Default
   - TransparentFX

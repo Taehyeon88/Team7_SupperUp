@@ -16,6 +16,7 @@ public class Transparentlegs : MonoBehaviour
     private Vector3 originalPosition;
     public Collider[] colliders;
     public MeshRenderer[] renderers;
+    public AudioClip playClip;           //부서지는 사운드 클립
 
     void Start()
     {
@@ -39,6 +40,7 @@ public class Transparentlegs : MonoBehaviour
         yield return new WaitForSeconds(fallDelay);
 
         //Debug.Log(respawnDelay);
+        if (SoundManager.instance != null) SoundManager.instance.PlayAllSoundWithClip(playClip);
 
         for (int i = 0; i < renderers.Length; i++)
         {

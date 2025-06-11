@@ -63,13 +63,18 @@ public class ElevatorObject : MonoBehaviour
     private IEnumerator OperateSeauence()
     {
         CloseDoor();
+        if (SoundManager.instance != null) SoundManager.instance.PlaySound("wElevator_Start");
         yield return new WaitUntil(() => isMoving);
         yield return new WaitForSeconds(1f);
         prevPos = transform.position;
         OnElevator();
+        if (SoundManager.instance != null) SoundManager.instance.FadeSound("wElevator_Move", 1f);
         yield return new WaitUntil(() => !isMoving);
+        if (SoundManager.instance != null) SoundManager.instance.FadeSound("wElevator_Move", 0f);
         OpenDoor();
+        if (SoundManager.instance != null) SoundManager.instance.PlaySound("wElevator_Start");
         yield return new WaitUntil(() => isMoving);
+        if (SoundManager.instance != null) SoundManager.instance.PlaySound("wElevator_Start");
         CloseDoor();
         ResetObject();
         yield return new WaitUntil(() => !isMoving);

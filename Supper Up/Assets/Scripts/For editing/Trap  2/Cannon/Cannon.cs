@@ -21,9 +21,11 @@ public class Cannon : MonoBehaviour
     private float nextFireTime;
 
     private Transform playerTransform; // 플레이어 위치 참조
+    private AudioSource playAudio;
 
     void Start()
     {
+        playAudio = GetComponent<AudioSource>();
         nextFireTime = 0f;
         // 플레이어 찾기
         PlayerController player = FindObjectOfType<PlayerController>();
@@ -87,6 +89,13 @@ public class Cannon : MonoBehaviour
         if (bullet != null)
         {
             bullet.Initialize(bulletSpeed, bulletLifetime, transform.forward);
+        }
+
+        if (playAudio != null) playAudio.Play();
+        else
+        {
+            playAudio = GetComponent<AudioSource>();
+            playAudio.Play();
         }
     }
 

@@ -24,6 +24,11 @@ public class ChoiceStoryObject : MonoBehaviour
     [SerializeField] private Vector3 boxHalfExtents;
     [SerializeField] private LayerMask playerLayer;
 
+    [Header("Sound Info")]
+    [SerializeField] private GameObject parentObj;
+    [SerializeField] private AudioClip startClip;
+    [SerializeField] private AudioClip moveClip;
+
     //내부변수
     private Vector3 startPos;
     private Vector3 endPos;
@@ -36,8 +41,28 @@ public class ChoiceStoryObject : MonoBehaviour
     private bool isOneTime2 = false;
     private bool isPlayerLeave = false;
 
+    private AudioSource[] playSources;
+    private AudioSource startSource;
+    private AudioSource moveSource;
+
     void Start()
     {
+        playSources = parentObj.GetComponents<AudioSource>();
+        if (playSources != null)
+        {
+            foreach (AudioSource source in playSources)
+            {
+                if (source.clip == startClip)
+                {
+                    startSource = source;
+                }
+                else
+                {
+                    moveSource = source;
+                }
+            }
+        }
+
         playerRb = FindObjectOfType<PlayerController>().GetComponent<Rigidbody>();
         startPos = transform.position;
         endPos = transform.position + Vector3.up * endHight;
@@ -50,6 +75,26 @@ public class ChoiceStoryObject : MonoBehaviour
         if (CheckPlayer() && !isOneTime2)
         {
             isOneTime2 = true;
+
+            if (playSources == null)
+            {
+                playSources = parentObj.GetComponents<AudioSource>();
+                if (playSources != null)
+                {
+                    foreach (AudioSource source in playSources)
+                    {
+                        if (source.clip == startClip)
+                        {
+                            startSource = source;
+                        }
+                        else
+                        {
+                            moveSource = source;
+                        }
+                    }
+                }
+            }
+
             StartCoroutine(OperateSeauence());
         }
 
@@ -68,13 +113,23 @@ public class ChoiceStoryObject : MonoBehaviour
     private IEnumerator OperateSeauence()
     {
         isMoving = true;
-        yield return new WaitForSeconds(1f);
+        startSource.Play();                                  //움직이기 시작 사운드
+        yield return new WaitForSeconds(1f);              
+        if(SoundManager.instance != null) SoundManager.instance.FadeSound_S(moveSource, 1f);   //움직이는 사운드 On
         prevPos = transform.position;
         OnElevator();
-        isMoving = false;
-        yield return new WaitUntil(() => isMoving);
-        ResetObject();
+
         yield return new WaitUntil(() => !isMoving);
+        if (SoundManager.instance != null) SoundManager.instance.FadeSound_S(moveSource, 0f);    //움직이는 사운드 Off
+
+        yield return new WaitUntil(() => isMoving);
+        startSource.Play();                                    //움직이기 시작 사운드
+        yield return new WaitForSeconds(1f);
+        if (SoundManager.instance != null) SoundManager.instance.FadeSound_S(moveSource, 1f);     //움직이는 사운드 On
+        ResetObject();
+
+        yield return new WaitUntil(() => !isMoving);
+        if (SoundManager.instance != null) SoundManager.instance.FadeSound_S(moveSource, 0f);     //움직이는 사운드 Off
         isOneTime2 = false;
     }
 

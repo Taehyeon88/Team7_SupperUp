@@ -20,6 +20,11 @@ public class EndingObject : MonoBehaviour
                 if (GameManager.Instance.choiceds.Count >= 4)
                     isOneTime = true;
             }
+
+            if (SoundManager.instance != null)
+            {
+                SoundManager.instance.PlaySound("GameEnd");
+            }
         }
     }
 }

@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 1113853110787972635}
   m_Layer: 3
   m_Name: CorinthianHelmet_Bronze
-  m_TagString: Untagged
+  m_TagString: Stone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

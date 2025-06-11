@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3243837293101432075}
   m_Layer: 3
   m_Name: Basket_01_light
-  m_TagString: Untagged
+  m_TagString: Wood
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

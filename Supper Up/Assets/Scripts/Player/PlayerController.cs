@@ -50,6 +50,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private Animator playerAnimator;
     private RaycastHit slopeHit;
+    private string currentPlane;
 
     void Start()
     {
@@ -95,6 +96,11 @@ public class PlayerController : MonoBehaviour
         {
             if (!SoundManager.instance.CheckSoundPlay(GetGroundTypeString()) && movement.magnitude > 0.1f && useMoveSound)
             {
+                if (currentPlane != GetGroundTypeString())  //바닥의 재질이 바뀔 경우 변경
+                {
+                    isOneTime = false;
+                }
+
                 if (!isOneTime)
                 {
                     if (GetGroundTypeString() == "Walk(wood)")
@@ -115,6 +121,7 @@ public class PlayerController : MonoBehaviour
                         SoundManager.instance.FadeSound("Walk(wood)", 0f);
                         SoundManager.instance.FadeSound("Walk(stone)", 0f);
                     }
+                    currentPlane = GetGroundTypeString();
                     isOneTime = true;
                 }
             }

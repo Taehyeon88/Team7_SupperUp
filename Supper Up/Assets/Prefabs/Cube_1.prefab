@@ -70,6 +70,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 80372b56ed245d9498acbc8a45f402f7,
         type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 80372b56ed245d9498acbc8a45f402f7,
+        type: 3}
       propertyPath: m_TagString
       value: Stone
       objectReference: {fileID: 0}

@@ -49,9 +49,6 @@ public class SoundManager : MonoBehaviour
         FindObjectsTool.ResetSetting();
         FindObjectsTool.FindObjectsWithTag();
 
-        List<GameObject> spikeTraps2 = new List<GameObject>(FindObjectsTool.spikeTraps);
-        List<GameObject> torches2 = new List<GameObject>(FindObjectsTool.torches);
-
         //Debug.Log(FindObjectsTool.spikeTraps.Count);
         //Debug.Log(FindObjectsTool.torches.Count);
 
@@ -81,7 +78,7 @@ public class SoundManager : MonoBehaviour
                 {
                     name = sound.name.ToLower();
                 }
-                //Debug.Log("특별한 사운드의 이름은 :" + name);
+                Debug.Log("특별한 사운드의 이름은 :" + name);
 
                 switch (name)
                 {
@@ -121,6 +118,142 @@ public class SoundManager : MonoBehaviour
                             soundSources.Add(sound.source);
                         }
                         break;
+
+                    case FindObjectsTool.cannonName:
+                        foreach (var obj in FindObjectsTool.cannons)
+                        {
+                            sound.source = obj.AddComponent<AudioSource>();
+                            sound.source.clip = sound.clip;
+                            sound.source.volume = sound.volume;
+                            sound.source.pitch = sound.pitch;
+                            sound.source.loop = sound.loop;
+                            sound.source.maxDistance = 60f;
+                            sound.source.rolloffMode = AudioRolloffMode.Linear;
+                            if (sound.is3D) sound.source.spatialBlend = 1f;
+                            sound.source.outputAudioMixerGroup = sound.mixerGroup;
+
+                            soundSources.Add(sound.source);
+                        }
+                        break;
+
+                    case FindObjectsTool.d_PlanName:
+                        foreach (var obj in FindObjectsTool.d_Plans)
+                        {
+                            sound.source = obj.AddComponent<AudioSource>();
+                            sound.source.clip = sound.clip;
+                            sound.source.volume = sound.volume;
+                            sound.source.pitch = sound.pitch;
+                            sound.source.loop = sound.loop;
+                            sound.source.maxDistance = 15f;
+                            sound.source.rolloffMode = AudioRolloffMode.Linear;
+                            if (sound.is3D) sound.source.spatialBlend = 1f;
+                            sound.source.outputAudioMixerGroup = sound.mixerGroup;
+
+                            soundSources.Add(sound.source);
+                        }
+                        break;
+
+                    case FindObjectsTool.fackBridgeName:
+                        foreach (var obj in FindObjectsTool.fackBridges)
+                        {
+                            sound.source = obj.AddComponent<AudioSource>();
+                            sound.source.clip = sound.clip;
+                            sound.source.volume = sound.volume;
+                            sound.source.pitch = sound.pitch;
+                            sound.source.loop = sound.loop;
+                            sound.source.maxDistance = 30f;
+                            sound.source.rolloffMode = AudioRolloffMode.Linear;
+                            if (sound.is3D) sound.source.spatialBlend = 1f;
+                            sound.source.outputAudioMixerGroup = sound.mixerGroup;
+
+                            soundSources.Add(sound.source);
+                        }
+                        break;
+
+                    case FindObjectsTool.s_ElevatorName:
+                        foreach (var obj in FindObjectsTool.s_Elevators)
+                        {
+                            sound.source = obj.AddComponent<AudioSource>();
+                            sound.source.clip = sound.clip;
+                            sound.source.volume = sound.volume;
+                            sound.source.pitch = sound.pitch;
+                            sound.source.loop = sound.loop;
+                            sound.source.maxDistance = 10f;
+                            sound.source.rolloffMode = AudioRolloffMode.Linear;
+                            if (sound.is3D) sound.source.spatialBlend = 1f;
+                            sound.source.outputAudioMixerGroup = sound.mixerGroup;
+
+                            soundSources.Add(sound.source);
+                        }
+                        break;
+
+                    case FindObjectsTool.w_ElevatorName:
+                        foreach (var obj in FindObjectsTool.w_Elevators)
+                        {
+                            sound.source = obj.AddComponent<AudioSource>();
+                            sound.source.clip = sound.clip;
+                            sound.source.volume = sound.volume;
+                            sound.source.pitch = sound.pitch;
+                            sound.source.loop = sound.loop;
+                            sound.source.maxDistance = 10f;
+                            sound.source.rolloffMode = AudioRolloffMode.Linear;
+                            if (sound.is3D) sound.source.spatialBlend = 1f;
+                            sound.source.outputAudioMixerGroup = sound.mixerGroup;
+
+                            soundSources.Add(sound.source);
+                        }
+                        break;
+
+                    case FindObjectsTool.chestName:
+                        foreach (var obj in FindObjectsTool.chests)
+                        {
+                            sound.source = obj.AddComponent<AudioSource>();
+                            sound.source.clip = sound.clip;
+                            sound.source.volume = sound.volume;
+                            sound.source.pitch = sound.pitch;
+                            sound.source.loop = sound.loop;
+                            sound.source.maxDistance = 15f;
+                            sound.source.rolloffMode = AudioRolloffMode.Linear;
+                            if (sound.is3D) sound.source.spatialBlend = 1f;
+                            sound.source.outputAudioMixerGroup = sound.mixerGroup;
+
+                            soundSources.Add(sound.source);
+                        }
+                        break;
+
+                    case FindObjectsTool.anvilName:
+                        foreach (var obj in FindObjectsTool.anvils)
+                        {
+                            sound.source = obj.AddComponent<AudioSource>();
+                            sound.source.clip = sound.clip;
+                            sound.source.volume = sound.volume;
+                            sound.source.pitch = sound.pitch;
+                            sound.source.loop = sound.loop;
+                            sound.source.maxDistance = 10f;
+                            sound.source.rolloffMode = AudioRolloffMode.Linear;
+                            if (sound.is3D) sound.source.spatialBlend = 1f;
+                            sound.source.outputAudioMixerGroup = sound.mixerGroup;
+
+                            soundSources.Add(sound.source);
+                        }
+                        break;
+
+                    case FindObjectsTool.enemyName:
+                        foreach (var obj in FindObjectsTool.enemys)
+                        {
+                            sound.source = obj.AddComponent<AudioSource>();
+                            sound.source.clip = sound.clip;
+                            sound.source.volume = sound.volume;
+                            sound.source.pitch = sound.pitch;
+                            sound.source.loop = sound.loop;
+                            sound.source.maxDistance = 20f;
+                            sound.source.rolloffMode = AudioRolloffMode.Linear;
+                            if (sound.is3D) sound.source.spatialBlend = 1f;
+                            sound.source.outputAudioMixerGroup = sound.mixerGroup;
+
+                            soundSources.Add(sound.source);
+                        }
+                        break;
                 }
             }
         }
@@ -137,6 +270,17 @@ public class SoundManager : MonoBehaviour
         if (soundToPlay != null)
         {
             soundToPlay.source.Play();
+        }
+    }
+
+    public void PlayAllSoundWithClip(AudioClip clip)
+    {
+        var soundToPlays = soundSources.FindAll(sound => sound.clip == clip);
+
+        foreach (var sound in soundToPlays)
+        {
+            sound.Play();
+            Debug.Log("플레이한다");
         }
     }
 
@@ -222,6 +366,22 @@ public class SoundManager : MonoBehaviour
             return name;
         }
         return " ";
+    }
+
+    public AudioClip FindClipWithName(string name)
+    {
+        Sound sound = sounds.Find(sound => sound.name == name);
+
+        if (sound != null)
+        {
+            return sound.clip;
+        }
+        return null;
+    }
+
+    public AudioSource[] FindSourcesWithClip(AudioClip clip)
+    {
+        return soundSources.FindAll(sound => sound.clip == clip).ToArray();
     }
 
     public void PauseAllSounds()

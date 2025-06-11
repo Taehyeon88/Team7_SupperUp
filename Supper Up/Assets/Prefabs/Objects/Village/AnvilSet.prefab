@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5747468987599811751}
   m_Layer: 0
   m_Name: AnvilSet
-  m_TagString: Untagged
+  m_TagString: anvil
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -106,6 +106,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Anvil (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2779429253795270528, guid: bdab2c8a0872aa44a864f6c4975290bc,
+        type: 3}
+      propertyPath: m_TagString
+      value: Stone
       objectReference: {fileID: 0}
     - target: {fileID: 3303764722137666874, guid: bdab2c8a0872aa44a864f6c4975290bc,
         type: 3}

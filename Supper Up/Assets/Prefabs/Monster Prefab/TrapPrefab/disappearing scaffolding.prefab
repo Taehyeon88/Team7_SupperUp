@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4955296647336317836}
   - component: {fileID: 3958554929468672449}
   m_Layer: 3
-  m_Name: 'disappearing scaffolding '
+  m_Name: disappearing scaffolding
   m_TagString: Wood
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -81,6 +81,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Pallet 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3240608087504013392, guid: 1c5e91d57a0b1e54cad85729cc17ec58,
+        type: 3}
+      propertyPath: m_TagString
+      value: disappearingplane
       objectReference: {fileID: 0}
     - target: {fileID: 5476761828860534597, guid: 1c5e91d57a0b1e54cad85729cc17ec58,
         type: 3}

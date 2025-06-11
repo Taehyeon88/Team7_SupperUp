@@ -168,6 +168,37 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &6653146780307989522
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3581288199934760040}
+  m_Layer: 7
+  m_Name: SoundObj
+  m_TagString: selevator
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3581288199934760040
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6653146780307989522}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8448247112744072882}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7399522338893000169
 GameObject:
   m_ObjectHideFlags: 0
@@ -345,7 +376,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4940932423421273732, guid: 68809e9581cc0224da388f04510df0fd,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3581288199934760040}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 5754025208940624958, guid: 68809e9581cc0224da388f04510df0fd,
         type: 3}
@@ -388,4 +423,6 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
-  endPos: {x: 0, y: 0, z: 0}
+  parentObj: {fileID: 6653146780307989522}
+  startClip: {fileID: 8300000, guid: 33aeb2d9c905d024cb275df7853e2206, type: 3}
+  moveClip: {fileID: 8300000, guid: 90b5d3d8b6d28194e8c913cf537e7031, type: 3}

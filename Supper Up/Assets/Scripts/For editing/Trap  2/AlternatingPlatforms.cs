@@ -8,12 +8,15 @@ public class AlternatingPlatforms : MonoBehaviour
     public List<GameObject> platforms; // 발판 오브젝트들을 드래그 앤 드롭할 리스트
     public float platformCycleTime = 2f; // 발판 변화 주기
     private float currentSpeed = 1f;
+    private AudioSource playSource;
 
     private void Start()
     {
         // 처음에는 첫 번째 발판만 활성화
         InitializePlatforms();
         StartCoroutine(PlatformCycle());
+
+        playSource = gameObject.transform.GetComponentInChildren<AudioSource>();
     }
 
     private void InitializePlatforms()
@@ -69,6 +72,15 @@ public class AlternatingPlatforms : MonoBehaviour
 
     private void ActivatePlatform(int index)
     {
+        if (playSource != null)
+        {
+            playSource.Play();
+        }
+        else
+        {
+            playSource = gameObject.transform.GetComponentInChildren<AudioSource>();
+        }
+
         platforms[index].GetComponent<Collider>().enabled = true;
         platforms[index].transform.GetChild(0).GetComponent<Renderer>().enabled = true;
 
