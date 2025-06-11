@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -68,14 +69,15 @@ public class AlternatingPlatforms : MonoBehaviour
 
     private void ActivatePlatform(int index)
     {
-        platforms[index].GetComponent<Renderer>().enabled = true;
         platforms[index].GetComponent<Collider>().enabled = true;
+        platforms[index].transform.GetChild(0).GetComponent<Renderer>().enabled = true;
+
     }
 
     private void DeactivatePlatform(int index)
     {
-        platforms[index].GetComponent<Renderer>().enabled = false;
         platforms[index].GetComponent<Collider>().enabled = false;
+        platforms[index].transform.GetChild(0).GetComponent<Renderer>().enabled = false;
     }
 
     public void ChangeSpeed(float speed)

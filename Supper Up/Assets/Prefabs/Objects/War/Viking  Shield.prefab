@@ -16,6 +16,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Wood
       objectReference: {fileID: 0}
+    - target: {fileID: 100006, guid: bff13af1cb02fe5478102b3fec706c91, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: bff13af1cb02fe5478102b3fec706c91, type: 3}
       propertyPath: m_RootOrder
       value: 11
