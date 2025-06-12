@@ -7,9 +7,9 @@ using UnityEngine.UI;
 public class SettingManager : MonoBehaviour
 {
     public static float mouseSenesitivity = 100.0f;
-    public static float sound_Master = 0.6f;
-    public static float sound_BGM = 0.5f;
-    public static float sound_SFX = 0.5f;
+    public static float sound_Master = 0.35f;
+    public static float sound_BGM = 0.35f;
+    public static float sound_SFX = 0.4f;
 
     public Slider mouseSensitivitySlider;
     public Slider sound_MasterSlider;
@@ -53,7 +53,7 @@ public class SettingManager : MonoBehaviour
     void SetMouseSenesitivity(float value)
     {
         mouseSenesitivity = value * 200;
-        Debug.Log("마우스 감도 : " + mouseSenesitivity);
+        //Debug.Log("마우스 감도 : " + mouseSenesitivity);
         if (CameraController != null)
         {
             CameraController.mouseSenesitivity = mouseSenesitivity;

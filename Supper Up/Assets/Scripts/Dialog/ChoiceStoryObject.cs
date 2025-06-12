@@ -33,6 +33,7 @@ public class ChoiceStoryObject : MonoBehaviour
     private Vector3 startPos;
     private Vector3 endPos;
     private Rigidbody playerRb;
+    private Rigidbody _playerRb;  //추가 해주는 용
     private Vector3 currenPos;
     private Vector3 prevPos;
     private float timer;
@@ -63,7 +64,7 @@ public class ChoiceStoryObject : MonoBehaviour
             }
         }
 
-        playerRb = FindObjectOfType<PlayerController>().GetComponent<Rigidbody>();
+        _playerRb = FindObjectOfType<PlayerController>().GetComponent<Rigidbody>();
         startPos = transform.position;
         endPos = transform.position + Vector3.up * endHight;
     }
@@ -75,8 +76,9 @@ public class ChoiceStoryObject : MonoBehaviour
         if (CheckPlayer() && !isOneTime2)
         {
             isOneTime2 = true;
+            playerRb = _playerRb;     //플레이어 있을 감지후, 할당
 
-            if (playSources == null)
+            if (playSources == null)  //사운드 적용
             {
                 playSources = parentObj.GetComponents<AudioSource>();
                 if (playSources != null)
@@ -148,7 +150,20 @@ public class ChoiceStoryObject : MonoBehaviour
 
                 currenPos = transform.position;
                 Vector3 dir = currenPos - prevPos;
-                playerRb.MovePosition(playerRb.position + dir);
+
+                if (!CheckPlayer())   //플레이어가 발판 위에 있는지 실시간 체크 --> 플레이어가 떨어졌을 때
+                {
+                    playerRb = null;
+                }
+                else
+                {
+                    playerRb = _playerRb;
+                }
+
+                if (playerRb != null)
+                {
+                    playerRb.MovePosition(playerRb.position + dir);
+                }
 
                 prevPos = currenPos;
 
@@ -160,6 +175,29 @@ public class ChoiceStoryObject : MonoBehaviour
     {
         transform.DOMove(startPos, duration)
             .SetEase(moveEase)
+            .SetUpdate(UpdateType.Fixed)
+            .OnUpdate(() => {
+
+                currenPos = transform.position;
+                Vector3 dir = currenPos - prevPos;
+
+                if (!CheckPlayer())   //플레이어가 발판 위에 있는지 실시간 체크 --> 플레이어가 떨어졌을 때
+                {
+                    playerRb = null;
+                }
+                else
+                {
+                    playerRb = _playerRb;
+                }
+
+                if (playerRb != null)
+                {
+                    playerRb.MovePosition(playerRb.position + dir);
+                }
+
+                prevPos = currenPos;
+
+            })
             .OnComplete(() => isMoving = false);
     }
     

@@ -42,6 +42,8 @@ public class PlayerAnimationController : MonoBehaviour
             case ClimbingState:
                 if (currentState is MoveState) ChangeAnimation("Climbing");
                 else if (currentState is JumpingState) ChangeAnimation_Smooth("Climbing", 0.1f);
+                else if (currentState is FallingState) ChangeAnimation("Climbing");
+                else if (currentState is LandingState) ChangeAnimation("Climbing");
                 break;
         }
     }

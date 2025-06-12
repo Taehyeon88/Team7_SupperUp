@@ -39,6 +39,8 @@ public class StoryManager : MonoBehaviour
     private int eventCount = 0;
     private string eventSoundPlayText;
 
+    private string currentSoundNarration;   //최근 마지막 사운드 나레이션
+
     private void Awake()
     {
         if (Instance == null)
@@ -88,7 +90,13 @@ public class StoryManager : MonoBehaviour
             currentStoryId = currentNarration.nextId;                               //다음으로 실행될 Id 할당
             narrationPanel.SetActive(true);                                         //나레이션 패널 활성화
 
+            if (!string.IsNullOrEmpty(currentSoundNarration))                   //이전(최근) 나레이션 종료
+            {
+                SoundManager.instance.PauseSound(currentSoundNarration);
+            }
             SoundManager.instance.PlaySound("Narration_" + soundPlayId);         //해당 Id에 맞는 나레이션 실행
+            currentSoundNarration = $"Narration_{soundPlayId}";                  //최근 나레이션 갱신
+
             ShowStory(currentNarration.text);                                    //나레이션 Text생성
 
             if (currentStoryId < 0 && currentStoryId >= -1)                       //선택지일 경우, 실행
@@ -143,14 +151,17 @@ public class StoryManager : MonoBehaviour
     {
         yield return new WaitUntil(() => !isTyping);
         narrationPanel.SetActive(true);                                           //나레이션 패널 활성화
-        SoundManager.instance.PlaySound("Narration_" + eventSoundPlayText);
+
+        SoundManager.instance.PlaySound("Narration_" + eventSoundPlayText);    //해당 Id에 맞는 나레이션 실행
+        currentSoundNarration = $"Narration_{eventSoundPlayText}";                  //최근 나레이션 갱신
+
         eventSoundPlayText = "";
         StartTypingEffect(text);
     }
 
     private void StartTypingEffect(string text)
     {
-        Debug.Log(text);
+        //Debug.Log(text);
 
         isTyping = true;
         if (typingCoroutine != null)
@@ -211,7 +222,7 @@ public class StoryManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("선택 텍스트가 없습니다.");
+                //Debug.Log("선택 텍스트가 없습니다.");
             }
         }
     }
@@ -245,7 +256,7 @@ public class StoryManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("해당 선택지를 찾을 수 없습니다.");
+            //Debug.Log("해당 선택지를 찾을 수 없습니다.");
         }
     }
 
@@ -270,11 +281,17 @@ public class StoryManager : MonoBehaviour
         i_temp = i_temp.Substring(i_temp.Length - 1);
         int id = int.Parse(i_temp);
 
-        Debug.Log(id);
+        //Debug.Log(id);
 
-        SoundManager.instance.PlaySound("Ending_" + id);
+        StartCoroutine(WaitforEnding(id));
         //엔딩 사운드 추가
 
         //엔딩 텍스트가 희미하보기 시작하는 연출 추가
+    }
+
+    IEnumerator WaitforEnding(int id)
+    {
+        yield return new WaitForSeconds(2f);
+        SoundManager.instance.PlaySound("Ending_" + id);
     }
 }

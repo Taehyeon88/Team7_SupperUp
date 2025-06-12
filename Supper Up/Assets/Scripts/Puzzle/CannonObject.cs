@@ -53,7 +53,7 @@ public class CannonObject : MonoBehaviour
 
         if (angle < checkingAngle / 2)
         {
-            Debug.Log(angle);
+            //Debug.Log(angle);
             //SlerpHead();
             CheckFire();
         }

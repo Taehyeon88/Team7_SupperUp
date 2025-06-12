@@ -78,7 +78,7 @@ public class SoundManager : MonoBehaviour
                 {
                     name = sound.name.ToLower();
                 }
-                Debug.Log("특별한 사운드의 이름은 :" + name);
+                //Debug.Log("특별한 사운드의 이름은 :" + name);
 
                 switch (name)
                 {
@@ -258,7 +258,7 @@ public class SoundManager : MonoBehaviour
             }
         }
 
-        Debug.Log($"총 사운드의 개수는 : {soundSources.Count}");
+        //Debug.Log($"총 사운드의 개수는 : {soundSources.Count}");
     }
 
 
@@ -280,7 +280,7 @@ public class SoundManager : MonoBehaviour
         foreach (var sound in soundToPlays)
         {
             sound.Play();
-            Debug.Log("플레이한다");
+            //Debug.Log("플레이한다");
         }
     }
 
@@ -313,6 +313,14 @@ public class SoundManager : MonoBehaviour
         {
             soundToPlay.source.pitch = soundToPlay.pitch * value;
         }
+    }
+
+    public bool CheckSoundExist(string name)
+    {
+        Sound soundToPlay = sounds.Find(sound => sound.name == name);
+
+        if (soundToPlay != null) return true;
+        return false;
     }
 
     public void FadeSound(string name, float value, bool isUseStop = false)

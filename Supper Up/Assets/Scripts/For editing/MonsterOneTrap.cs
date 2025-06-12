@@ -57,7 +57,7 @@ public class MonsterOneTrap : MonoBehaviour
         // 플레이어를 밀어내는 방식 구현
         Vector3 pushDirection = (player.position - transform.position).normalized;
         player.GetComponent<Rigidbody>().AddForce(pushDirection * attackForce, ForceMode.Impulse);
-        Debug.Log("플레이어를 공격합니다!");
+        //Debug.Log("플레이어를 공격합니다!");
     }
 
     void StopAndWait()

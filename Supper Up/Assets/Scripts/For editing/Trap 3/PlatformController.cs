@@ -20,7 +20,7 @@ public class PlatformController : MonoBehaviour
     {
         if (collision.collider.CompareTag("Player"))
         {
-            Debug.Log("Player collided with platform.");
+            //Debug.Log("Player collided with platform.");
             playerOnPlatform = true;
             timer = 0f;
 
@@ -29,7 +29,7 @@ public class PlatformController : MonoBehaviour
             {
                 Vector3 spawnPosition = transform.position + bridgeOffset;
                 currentBridge = Instantiate(bridgePrefab, spawnPosition, Quaternion.identity);
-                Debug.Log("Bridge instantiated at: " + spawnPosition);
+                //Debug.Log("Bridge instantiated at: " + spawnPosition);
             }
         }
     }
@@ -38,7 +38,7 @@ public class PlatformController : MonoBehaviour
     {
         if (collision.collider.CompareTag("Player"))
         {
-            Debug.Log("Player separated from platform.");
+            //Debug.Log("Player separated from platform.");
             playerOnPlatform = false;
             timer = 0f; // 시간 측정을 다시 시작
         }
@@ -53,7 +53,7 @@ public class PlatformController : MonoBehaviour
             {
                 Destroy(currentBridge);
                 currentBridge = null;
-                Debug.Log("Bridge destroyed");
+                //Debug.Log("Bridge destroyed");
             }
         }
     }

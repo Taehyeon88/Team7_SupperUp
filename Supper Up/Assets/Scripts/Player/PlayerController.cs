@@ -316,7 +316,7 @@ public class PlayerController : MonoBehaviour
     public bool IsGrounded()
     {
         //Debug.Log("바닥여부체크: " + Physics.CheckBox(transform.position, groundHalfExtents, Quaternion.identity, groundLayer));
-        return Physics.CheckBox(transform.position, groundHalfExtents, Quaternion.identity, groundLayer);
+        return Physics.CheckBox(transform.position, groundHalfExtents, transform.rotation, groundLayer);
     }
     public string GetGroundTypeString()
     {
@@ -343,7 +343,9 @@ public class PlayerController : MonoBehaviour
 
     private bool CheckHitWall(Vector3 movement)
     {
-        float distance = 0.32f;
+        float distance = 0.33f;
+
+        //if (isJumping) distance = 0f;
 
         List<Vector3> rayPos = new List<Vector3>();
         rayPos.Add(transform.position + transform.up * 0.3f);
@@ -362,13 +364,13 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-    private void OnDrawGizmos()
-    {
-        //플레이어 바닥체크용
+    //private void OnDrawGizmos()
+    //{
+    //    //플레이어 바닥체크용
 
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireCube(transform.position, groundHalfExtents * 2);
-        //Gizmos.DrawWireSphere(start, radius);
-    }
+    //    Gizmos.color = Color.green;
+    //    Gizmos.DrawWireCube(transform.position, groundHalfExtents * 2);
+    //    //Gizmos.DrawWireSphere(start, radius);
+    //}
 
 }

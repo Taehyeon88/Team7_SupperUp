@@ -95,6 +95,6 @@ public class AlternatingPlatforms : MonoBehaviour
     public void ChangeSpeed(float speed)
     {
         currentSpeed = Mathf.Clamp(speed, 0.1f, 5f); // 속도 범위 제한
-        Debug.Log("Current Platform Speed: " + currentSpeed);
+        //Debug.Log("Current Platform Speed: " + currentSpeed);
     }
 }

@@ -31,9 +31,7 @@ public class CannonBullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //StartCoroutine(DestroyBullet());
-
-        Debug.Log("´ê¾Ò´Ù");
+        StartCoroutine(DestroyBullet());
         Instantiate(target, transform.position, Quaternion.identity);
     }
 }

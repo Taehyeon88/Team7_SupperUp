@@ -82,6 +82,16 @@ MonoBehaviour:
     mixerGroup: {fileID: 8407765202436664909, guid: 90906ba18301c2946b00be12ec11e08a,
       type: 2}
     source: {fileID: 0}
+  - name: Walk(dirt)
+    clip: {fileID: 8300000, guid: 438c93fdac01d09478c97ec0545497de, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 1
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
   - name: Landing(wood)
     clip: {fileID: 8300000, guid: 8391f17f2f5c90a419d8800f82c1bc38, type: 3}
     volume: 0.2
@@ -100,6 +110,16 @@ MonoBehaviour:
     is3D: 0
     isSpecial: 0
     mixerGroup: {fileID: 8407765202436664909, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Landing(dirt)
+    clip: {fileID: 8300000, guid: c1664ce76b31c0d49bd3f8d2d21a1108, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
       type: 2}
     source: {fileID: 0}
   - name: SuperLanding(wood)
@@ -122,6 +142,16 @@ MonoBehaviour:
     mixerGroup: {fileID: 8407765202436664909, guid: 90906ba18301c2946b00be12ec11e08a,
       type: 2}
     source: {fileID: 0}
+  - name: SuperLanding(dirt)
+    clip: {fileID: 8300000, guid: 45154dbcf4095b043825e42d7f286ec8, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
   - name: Falling
     clip: {fileID: 8300000, guid: 80db426ae0ca396429eb5d266ab2054e, type: 3}
     volume: 1
@@ -130,6 +160,306 @@ MonoBehaviour:
     is3D: 0
     isSpecial: 0
     mixerGroup: {fileID: 8407765202436664909, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Narration_1
+    clip: {fileID: 8300000, guid: d718b8144e67b1e45b0947b7416fd86b, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Narration_2
+    clip: {fileID: 8300000, guid: 25ab550d16b2778489bdcf6507f76070, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Narration_3
+    clip: {fileID: 8300000, guid: 9c3511a39d4421449a9412620bf889b0, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Narration_4
+    clip: {fileID: 8300000, guid: 8e98082c92c98e14aaafd6f3b6a20536, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Narration_5
+    clip: {fileID: 8300000, guid: de852c0efc60f1d40b72d06e33eb89ec, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Narration_6
+    clip: {fileID: 8300000, guid: 0bd56b0c1c382aa489c512321bf82691, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Narration_7
+    clip: {fileID: 8300000, guid: b4a2e537202f10f4a97507ff36bdad61, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Narration_8
+    clip: {fileID: 8300000, guid: f847f30747f59ab44a8852d01e21c597, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Narration_9
+    clip: {fileID: 8300000, guid: 96d80c7df01f88240821468ac6407d30, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Narration_10
+    clip: {fileID: 8300000, guid: ac151e095f0f6b94188884c1405455e3, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Narration_11
+    clip: {fileID: 8300000, guid: 4a3196f5035eb8b43892bd786f3dd6ec, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Narration_12
+    clip: {fileID: 8300000, guid: 4a75d2c23d3a1704ab64af2cb68512f0, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Narration_13
+    clip: {fileID: 8300000, guid: db28488440403634d95271c2cc8ee32f, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Narration_101
+    clip: {fileID: 8300000, guid: 00527865cd32c334c934d20df9dde49f, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Narration_102
+    clip: {fileID: 8300000, guid: 1461d395f23ffe245b20e5fbea6f2b7f, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Narration_103
+    clip: {fileID: 8300000, guid: efb55d617ddf8dc44af55b741c029f9a, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Narration_104
+    clip: {fileID: 8300000, guid: 31f7bce90a9bece4885df9d29182141c, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Narration_105
+    clip: {fileID: 8300000, guid: c3e33f989901d064292ea799ba4fff72, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Narration_106
+    clip: {fileID: 8300000, guid: cea57b0e74877c8469f3b792980c902a, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: "Narration_\uBB3C\uC744 \uCC59\uAE34\uB2E4"
+    clip: {fileID: 8300000, guid: 2580c4e09ddfd4d448181f99e958d488, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: "Narration_\uBB3C\uC744 \uCC59\uAE30\uC9C0 \uC54A\uB294\uB2E4"
+    clip: {fileID: 8300000, guid: eecb891a3f18f3f4694abd845136000b, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: "Narration_\uBCF4\uBB3C\uC744 \uCC59\uAE34\uB2E4"
+    clip: {fileID: 8300000, guid: f9aa3819dd966864796aa1c0ed01b49d, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: "Narration_\uBCF4\uBB3C\uC744 \uCC59\uAE30\uC9C0 \uC54A\uB294\uB2E4"
+    clip: {fileID: 8300000, guid: a7e92d10ecf985448838fe31579fff19, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Ending_1
+    clip: {fileID: 8300000, guid: abe10b7ef19d00749914157c231d2ad6, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Ending_2
+    clip: {fileID: 8300000, guid: 5a3ed7ff058de7840828385907b787d9, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Ending_3
+    clip: {fileID: 8300000, guid: 21d74592c44f7344abd8879c54ec7b44, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Ending_4
+    clip: {fileID: 8300000, guid: 7b8080e5bd076aa4e949d9621befe7db, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Ending_5
+    clip: {fileID: 8300000, guid: ef390112ca741bc4891e6776a9e20afe, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Ending_6
+    clip: {fileID: 8300000, guid: 875966d582ac38f41972db3e6cc3b5b6, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Ending_7
+    clip: {fileID: 8300000, guid: 4ccccdaa59c38364681f0abd9c5a1095, type: 3}
+    volume: 0.6
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
       type: 2}
     source: {fileID: 0}
   - name: Torch
@@ -144,7 +474,7 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: SpikeTrap_Ray
     clip: {fileID: 8300000, guid: c0e56fe9d4bcac24a859745841af3bdc, type: 3}
-    volume: 0.6
+    volume: 0.3
     pitch: 1
     loop: 1
     is3D: 1
@@ -170,6 +500,176 @@ MonoBehaviour:
     is3D: 1
     isSpecial: 1
     mixerGroup: {fileID: 8407765202436664909, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Cannon_Fire
+    clip: {fileID: 8300000, guid: eac4754e99c8dcb49b3376214949a198, type: 3}
+    volume: 0.8
+    pitch: 1
+    loop: 0
+    is3D: 1
+    isSpecial: 1
+    mixerGroup: {fileID: 8407765202436664909, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: DisappearingPlane
+    clip: {fileID: 8300000, guid: 6a79eac6f75b2eb4599c0d4b3266f784, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    is3D: 1
+    isSpecial: 1
+    mixerGroup: {fileID: 8407765202436664909, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: sElevator_Start
+    clip: {fileID: 8300000, guid: 33aeb2d9c905d024cb275df7853e2206, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    is3D: 1
+    isSpecial: 1
+    mixerGroup: {fileID: 8407765202436664909, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: sElevator_Move
+    clip: {fileID: 8300000, guid: 90b5d3d8b6d28194e8c913cf537e7031, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 1
+    is3D: 1
+    isSpecial: 1
+    mixerGroup: {fileID: 8407765202436664909, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: wElevator_Start
+    clip: {fileID: 8300000, guid: 0c7a044e3f2167e45905e0ccabad2834, type: 3}
+    volume: 1
+    pitch: 2
+    loop: 0
+    is3D: 1
+    isSpecial: 1
+    mixerGroup: {fileID: 8407765202436664909, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: wElevator_Move
+    clip: {fileID: 8300000, guid: bc03c96c1959e9240b01e3d226f65b21, type: 3}
+    volume: 1
+    pitch: 3
+    loop: 0
+    is3D: 1
+    isSpecial: 1
+    mixerGroup: {fileID: 8407765202436664909, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: FackBridge
+    clip: {fileID: 8300000, guid: d97a9837467d84e4194fbf29b3490fb4, type: 3}
+    volume: 0.3
+    pitch: 1
+    loop: 0
+    is3D: 1
+    isSpecial: 1
+    mixerGroup: {fileID: 8407765202436664909, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: DrinkWater
+    clip: {fileID: 8300000, guid: b6f158e2daaa06f42bc27a7b322392c3, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: 8407765202436664909, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: WolfHowling
+    clip: {fileID: 8300000, guid: 3e6e25fe56cb3364bbe9aa7f863d2f30, type: 3}
+    volume: 0.65
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: 8407765202436664909, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Chest_Open
+    clip: {fileID: 8300000, guid: bad49dc07e938f044810ef48c295504c, type: 3}
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    is3D: 1
+    isSpecial: 1
+    mixerGroup: {fileID: 8407765202436664909, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: EatFood
+    clip: {fileID: 8300000, guid: b03a8db7dcbad0d4aad6acb7bbec2b4d, type: 3}
+    volume: 0.7
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: 8407765202436664909, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Anvil_Strike
+    clip: {fileID: 8300000, guid: f07725fd7f20a9b4db77fc0e1ddd840b, type: 3}
+    volume: 1
+    pitch: 1.5
+    loop: 1
+    is3D: 1
+    isSpecial: 1
+    mixerGroup: {fileID: 8407765202436664909, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Enemy_Kill
+    clip: {fileID: 8300000, guid: 9872856b7053679419522d504634d758, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    is3D: 1
+    isSpecial: 1
+    mixerGroup: {fileID: 8407765202436664909, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: WarStart
+    clip: {fileID: 8300000, guid: 6c645762c56779a4892b37af52ebcd15, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: 8407765202436664909, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: GameEnd
+    clip: {fileID: 8300000, guid: bd354fccbe276264ba467ed119c368f3, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: 8407765202436664909, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: DayTime
+    clip: {fileID: 8300000, guid: 2c4d75ff1f30ad343b20861d115af322, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 1
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
+      type: 2}
+    source: {fileID: 0}
+  - name: Evening
+    clip: {fileID: 8300000, guid: 0e13ad2806100164d8a238f48b569bff, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 1
+    is3D: 0
+    isSpecial: 0
+    mixerGroup: {fileID: -7395788780259592791, guid: 90906ba18301c2946b00be12ec11e08a,
       type: 2}
     source: {fileID: 0}
   audioMixer: {fileID: 24100000, guid: 90906ba18301c2946b00be12ec11e08a, type: 2}

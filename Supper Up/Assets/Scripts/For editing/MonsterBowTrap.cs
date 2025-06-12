@@ -36,7 +36,7 @@ public class MonsterBowTrap : MonoBehaviour
             ArrowController arrowController = arrow.GetComponent<ArrowController>();
             arrowController.Initialize(player.position, attackForce);
             fireTimer = 0f; // 타이머 초기화
-            Debug.Log("화살을 발사합니다!");
+            //Debug.Log("화살을 발사합니다!");
         }
     }
 

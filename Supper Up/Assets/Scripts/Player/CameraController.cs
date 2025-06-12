@@ -58,7 +58,7 @@ public class CameraController : MonoBehaviour
         Quaternion rotation = Quaternion.Euler(CurrentY, CurrentX, 0.0f);
 
         Vector3 origin = player.transform.position + Vector3.up * 1.5f - player.transform.forward * 0.1f;
-        Debug.DrawRay(origin, rotation * dir, Color.red);
+        //Debug.DrawRay(origin, rotation * dir, Color.red);
 
         if (Physics.SphereCast(origin, 0.2f, rotation * dir, out RaycastHit hit, cameraDistance, collisionLayer))
         {
@@ -149,9 +149,9 @@ public class CameraController : MonoBehaviour
         timer = 0;
     }
 
-    private void OnDrawGizmos()
-    {
-        Vector3 origin = player.transform.position + Vector3.up * 1.5f - player.transform.forward * 0.1f;
-        Gizmos.DrawWireSphere(origin, 0.2f);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Vector3 origin = player.transform.position + Vector3.up * 1.5f - player.transform.forward * 0.1f;
+    //    Gizmos.DrawWireSphere(origin, 0.2f);
+    //}
 }

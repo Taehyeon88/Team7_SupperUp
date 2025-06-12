@@ -14,7 +14,7 @@ public class NarrationObject : MonoBehaviour
             if (StoryManager.Instance != null)
             {
                 StoryManager.Instance.StartNarration(id);
-                Debug.Log("OK");
+                //Debug.Log("OK");
             }
             isOneTime = true;
 
@@ -65,7 +65,7 @@ public class NarrationObject : MonoBehaviour
     {
         yield return new WaitForSeconds(stayTime);
 
-        Debug.Log("들린다");
+        //Debug.Log("들린다");
 
         if (SoundManager.instance != null) SoundManager.instance.PlaySound(soundName);
 

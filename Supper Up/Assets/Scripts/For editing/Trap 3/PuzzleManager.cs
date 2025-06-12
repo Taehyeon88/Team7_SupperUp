@@ -24,7 +24,7 @@ public class PuzzleManager : MonoBehaviour
     {
         if (puzzleSolved) return;
 
-        Debug.Log($"Stepped on platform {platformIndex}");
+        //Debug.Log($"Stepped on platform {platformIndex}");
 
         playerSequence.Add(platformIndex);
         platforms[platformIndex - 1].GetComponent<Renderer>().material.color = correctColor;

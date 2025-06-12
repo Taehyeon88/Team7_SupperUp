@@ -53,10 +53,12 @@ public abstract class PlayerState
                 {
                     sM.TransitionToState(SupperLandingState.GetInstance());
                 }
+                else if (mC.CheckClimbing() && !pC.isFalling) sM.TransitionToState(ClimbingState.GetInstance());    //파쿠르상태
                 break;
             case LandingState:
                 if (pC.isJumping && !pC.isLanding) sM.TransitionToState(MoveState.GetInstance());                 //점프낙하 -> 이동상태
                 else if(!pC.isJumping && !pC.isHightLanding) sM.TransitionToState(MoveState.GetInstance());       //일반낙하 -> 이동상태
+                else if (mC.CheckClimbing()) sM.TransitionToState(ClimbingState.GetInstance());               //파쿠르상태
                 break;
             case SupperLandingState:
                 sM.TransitionToState(MoveState.GetInstance());                                             //이동상태
@@ -82,6 +84,11 @@ public class MoveState : PlayerState
     }
     public override void Update()
     {
+        if (GameManager.Instance != null)
+        {
+            if (GameManager.Instance.isGameEnd) return;
+        }
+
         pC.Rotate(true);
         pC.CheckLanding();
         CheckTransitions();
@@ -95,7 +102,12 @@ public class MoveState : PlayerState
 
     public override void FixedUpdate()
     {
-        if(!pC.isSuperLanding) pC.Move(true);
+        if (GameManager.Instance != null)
+        {
+            if (GameManager.Instance.isGameEnd) return;
+        }
+
+        if (!pC.isSuperLanding) pC.Move(true);
     }
 
     public override void Exit()
@@ -139,7 +151,6 @@ public class JumpingState : PlayerState
         if(timer > 2f && pC.IsGrounded())
         {
             pC.isLanding = true;
-            Debug.Log("점프 스킵중..");
         }
     }
 
@@ -164,9 +175,13 @@ public class FallingState : PlayerState
     {
         if (!pC.isTrusted)
         {
-            pC.isFalling = true;
+            sM.StartCoroutine(WaitSuperLanding(1f));
         }
-        else sM.StartCoroutine(WaitSuperLanding());
+        else
+        {
+            sM.StartCoroutine(WaitSuperLanding(0.3f));
+        }
+
         sM.cameraController.StartCameraShake(0.05f);
         if (SoundManager.instance != null)
             SoundManager.instance.FadeSound("Falling", 1f);
@@ -180,6 +195,9 @@ public class FallingState : PlayerState
     public override void FixedUpdate()
     {
         pC.Move(false);
+
+        if (!pC.isFalling) return;
+
         if (pC.CheckDistance() < 10f)
         {
             sM.cameraController.ReadyToStopCameraShake();
@@ -194,10 +212,16 @@ public class FallingState : PlayerState
             SoundManager.instance.FadeSound("Falling", 0f, true);
     }
 
-    IEnumerator WaitSuperLanding()
+    IEnumerator WaitSuperLanding(float time)
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(time);
         pC.isFalling = true;
+
+        yield return new WaitForSeconds(0.3f);
+
+        sM.cameraController.StartCameraShake(0.05f);
+        if (SoundManager.instance != null)
+            SoundManager.instance.FadeSound("Falling", 1f);
     }
 }
 

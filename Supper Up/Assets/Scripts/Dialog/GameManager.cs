@@ -8,12 +8,12 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-
     [Header("Story References")]
     [SerializeField] private StoryDatebaseSO storyDatabase;
 
     //스토리 데이터
     public List<string> choiceds = new List<string>();    //선택지에서 선택된 선택지 누적 데이터
+    public bool isGameEnd = false;
 
     //[Header("살아서 집으로 돌아가고 싶다")]
     //public bool choice_1_1 = false;
@@ -37,6 +37,8 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+       //Debug.Log("게임시작된다");
+
         if (Instance == null)
         {
             Instance = this;
@@ -46,6 +48,8 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
+        isGameEnd = false;
     }
 
     private void Update()
@@ -86,7 +90,7 @@ public class GameManager : MonoBehaviour
                 if (conditions.Contains(choice))
                 {
                     metchingCount--;
-                    Debug.Log($"{metchingCount},{choice}");
+                    //Debug.Log($"{metchingCount},{choice}");
                 }
             }
 

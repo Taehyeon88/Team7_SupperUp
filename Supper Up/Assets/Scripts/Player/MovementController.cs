@@ -39,16 +39,17 @@ public class MovementController : MonoBehaviour
     public bool CheckClimbing()
     {
         Vector3 origin = transform.position + transform.up * heightValue + transform.forward * frontValue;
-        Collider[] target = Physics.OverlapBox(origin, boxHalfExtents, transform.rotation, wallLayer);
 
-        float climbHeight = origin.y + boxHalfExtents.y;
-        if (target.Length >= 1)
+        if (Physics.CheckBox(origin, boxHalfExtents, transform.rotation, wallLayer))
         {
+            float climbHeight = origin.y + boxHalfExtents.y;
             Vector3 rayOrigin = transform.position + transform.up * rayHeight + transform.forward * rayFront;
 
             List<Vector3> rayPoses = new List<Vector3>();
 
             rayPoses.Add(rayOrigin);
+            rayPoses.Add(rayOrigin + transform.right * 0.1f);
+            rayPoses.Add(rayOrigin - transform.right * 0.1f);
             rayPoses.Add(rayOrigin + transform.right * 0.2f);
             rayPoses.Add(rayOrigin - transform.right * 0.2f);
 
@@ -63,7 +64,7 @@ public class MovementController : MonoBehaviour
 
                     if (Vector3.Angle(Vector3.up, hit.normal) <= playerController.maxSlopeAngle + 2f)
                     {
-                        climbDirection = target[0].transform.position - transform.position;
+                        climbDirection = hit.transform.position - transform.position;
                         climbDirection.y = 0;
                         if (height <= climbHeight) return true;
                     }

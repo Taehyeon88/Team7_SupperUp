@@ -23,14 +23,17 @@ public class UiManager : MonoBehaviour
 
     [Header("Setting UI")]
     [SerializeField] private GameObject settingCanvas;
+
+    [Header("Ending UI")]
+    [SerializeField] private Button rePlayButton;
+    [SerializeField] private Button exitGameButton2;
+    [SerializeField] private GameObject endingCanvas;
     //내부변수들
     private Scene currentScene;
-    private bool onSetting = false;
-    private bool endPause = false;
     private GameObject pauseCanvas;
 
     //한번만 실행
-    private bool isOneTime = false;
+    private bool isPlayGame = false;
 
     //Pause씬 활성화전달변수
     [HideInInspector] public bool onPause = false;
@@ -67,7 +70,6 @@ public class UiManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)  //초기화함수
     {
         currentScene = scene;
-        endPause = false;
 
         Time.timeScale = 1f;  //일정지 후 변수 초기화
         onPause = false;
@@ -92,14 +94,31 @@ public class UiManager : MonoBehaviour
             settingCanvas.SetActive(false);
         }
         SetButtonDeligate_T();
+
+        isPlayGame = false;  //게임시작 준비
     }
     private void Initialize_P()   //게임 플레이 씬 초기화 함수
     {
+        //Debug.Log("초기화 된다");
+
         pauseCanvas = GameObject.Find("PauseCanvas");
         reGameButton = GameObject.Find("ReGameButton").GetComponent<Button>();
         continueButton = GameObject.Find("ContinueButton").GetComponent<Button>();
         settingButton2 = GameObject.Find("SettingButton").GetComponent<Button>();
         exitGameButton = GameObject.Find("ExitGameButton").GetComponent<Button>();
+
+        rePlayButton = GameObject.Find("RePlayButton").GetComponent<Button>();          //엔딩용
+        exitGameButton2 = GameObject.Find("ExitGameButton2").GetComponent<Button>();
+        endingCanvas = GameObject.Find("EndingCanvas");
+
+        reGameButton.onClick.RemoveAllListeners();
+        continueButton.onClick.RemoveAllListeners();
+        settingButton2.onClick.RemoveAllListeners();
+        exitGameButton.onClick.RemoveAllListeners();
+        rePlayButton.onClick.RemoveAllListeners();                
+        exitGameButton2.onClick.RemoveAllListeners();
+
+
         reGameButton.onClick.AddListener(StartPlay);
         continueButton.onClick.AddListener(ContinueGame);
         settingButton2.onClick.AddListener(OnSettingMenu);
@@ -108,6 +127,10 @@ public class UiManager : MonoBehaviour
 
         settingCanvas = GameObject.Find("SettingCanvas");
         settingCanvas.SetActive(false);
+
+        rePlayButton.onClick.AddListener(StartPlay);                 //엔딩용
+        exitGameButton2.onClick.AddListener(GoToTitle);
+        endingCanvas.SetActive(false);
     }
 
 
@@ -123,7 +146,11 @@ public class UiManager : MonoBehaviour
 
     private void StartPlay()  //게임 시작함수
     {
-        SceneManager.LoadScene("ProtoTypeScene");
+        if (!isPlayGame)
+        {
+            isPlayGame = true;
+            SceneManager.LoadScene("ProtoTypeScene");
+        }
     }
 
     private void OnSettingMenu()  //세팅 시작함수
@@ -138,6 +165,11 @@ public class UiManager : MonoBehaviour
 
     private void CheckPauseCondition()
     {
+        if (GameManager.Instance != null)
+        {
+            if (GameManager.Instance.isGameEnd) return;  //게임 종료시 일시정지 금지
+        }
+
         if (currentScene.name == "ProtoTypeScene")
         {
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -150,6 +182,8 @@ public class UiManager : MonoBehaviour
 
     private void PauseGame()   //게임 일시정지 함수
     {
+        isPlayGame = false;    //게임 재시작용 준비
+
         Cursor.lockState = CursorLockMode.None;
 
         SoundManager.instance.PauseAllSounds();

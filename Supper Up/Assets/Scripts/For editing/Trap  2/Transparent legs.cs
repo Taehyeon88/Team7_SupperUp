@@ -51,7 +51,7 @@ public class Transparentlegs : MonoBehaviour
         // 일정 시간 후 다시 활성화 (다시 생김)
         yield return new WaitForSeconds(respawnDelay);
 
-        Debug.Log(respawnDelay);
+        //Debug.Log(respawnDelay);
 
         isTriggered = false;
 

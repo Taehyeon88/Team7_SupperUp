@@ -20,6 +20,7 @@ public class SpikeTrap_B : MonoBehaviour
     protected Rigidbody rb;
     private Rigidbody playerRb;
 
+    //사운드용 변수
     protected List<AudioSource> audioSources = new List<AudioSource>();
     protected int rayId;
     protected int pushId;
@@ -41,6 +42,8 @@ public class SpikeTrap_B : MonoBehaviour
             audioSources.Add(t_audioSources[i]);
             string name = SoundManager.instance.FindAudioWithClip(t_audioSources[i].clip);
 
+            if(SoundManager.instance != null) 
+
             switch (name)
             {
                 case "Ray": rayId = i; break;
@@ -48,6 +51,8 @@ public class SpikeTrap_B : MonoBehaviour
                 case "Pull": pullId = i; break;
             }
         }
+
+        //Debug.Log($"Ray{rayId}, Push{pushId}, Pull{pullId}");
     }
 
     protected virtual void Update()

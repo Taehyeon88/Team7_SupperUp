@@ -9,21 +9,29 @@ public class EndingObject : MonoBehaviour
     {
         if (other.CompareTag("Player") && !isOneTime)
         {
-            if (StoryManager.Instance != null)
-            {
-                StoryManager.Instance.EndGame();
-                Debug.Log("End");
-            }
 
             if (GameManager.Instance != null)
             {
-                if (GameManager.Instance.choiceds.Count >= 4)
-                    isOneTime = true;
-            }
+                if (GameManager.Instance.choiceds.Count < 4) return;
 
-            if (SoundManager.instance != null)
-            {
-                SoundManager.instance.PlaySound("GameEnd");
+                isOneTime = true;
+                Cursor.lockState = CursorLockMode.None;
+
+                GameManager.Instance.isGameEnd = true;
+
+                if (StoryManager.Instance != null)
+                {
+                    StoryManager.Instance.EndGame();
+                    Debug.Log("End");
+                }
+
+                if (SoundManager.instance != null)
+                {
+                    SoundManager.instance.PauseAllSounds();
+                    SoundManager.instance.PlaySound("GameEnd");
+                }
+
+                //Time.timeScale = 0f;
             }
         }
     }

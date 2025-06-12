@@ -95,5 +95,13 @@ public class FindObjectsTool : MonoBehaviour
     {
         spikeTraps.Clear();
         torches.Clear();
+        cannons.Clear();
+        d_Plans.Clear();
+        fackBridges.Clear();
+        s_Elevators.Clear();
+        w_Elevators.Clear();
+        chests.Clear();
+        anvils.Clear();
+        enemys.Clear();
     }
 }

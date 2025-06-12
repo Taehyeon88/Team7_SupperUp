@@ -40,6 +40,9 @@ public class CannonBall : MonoBehaviour
 
                 // 플레이어에게 힘을 가함
                 playerRb.AddForce(pushDirection * pushForce, ForceMode.Impulse);
+
+                PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+                player.isTrusted = true;
             }
         }
 

@@ -101,6 +101,6 @@ public class Cannon : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Debug.DrawRay(firePoint.transform.position, transform.forward * 46.5f, Color.red);
+        //Debug.DrawRay(firePoint.transform.position, transform.forward * 46.5f, Color.red);
     }
 }
