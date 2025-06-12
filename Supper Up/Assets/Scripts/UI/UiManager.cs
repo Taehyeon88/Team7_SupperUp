@@ -61,10 +61,10 @@ public class UiManager : MonoBehaviour
         CheckPauseCondition();
 
         //사진촬영용
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            Time.timeScale = 0f;
-        }
+        //if (Input.GetKeyDown(KeyCode.V))
+        //{
+        //    Time.timeScale = 0f;
+        //}
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)  //초기화함수
