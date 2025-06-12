@@ -32,7 +32,7 @@ public abstract class PlayerState
             case MoveState:
                 if (Input.GetKeyDown(KeyCode.Space) && pC.IsGrounded()) sM.TransitionToState(JumpingState.GetInstance());     //점프상태
                 else if (mC.CheckClimbing()) sM.TransitionToState(ClimbingState.GetInstance());                               //파쿠르상태
-                else if (pC.CheckDistance() > 25f && !pC.isFalling && !pC.IsGrounded() && pC.CheckFalling(6))                 //낙하상태
+                else if (pC.CheckDistance() > 25f && !pC.isFalling && !pC.IsGrounded() && pC.CheckFalling(12))                 //낙하상태
                 {
                     sM.TransitionToState(FallingState.GetInstance());
                 }
@@ -42,7 +42,7 @@ public abstract class PlayerState
             case JumpingState:
                 if (pC.isLanding) sM.TransitionToState(LandingState.GetInstance());                           //착지상태
                 else if (mC.CheckClimbing()) sM.TransitionToState(ClimbingState.GetInstance());               //파쿠르상태
-                else if (pC.CheckDistance() > 25f && !pC.isFalling && !pC.IsGrounded() && pC.CheckFalling(6)) //낙하상태
+                else if (pC.CheckDistance() > 25f && !pC.isFalling && !pC.IsGrounded() && pC.CheckFalling(12)) //낙하상태
                 {
                     sM.TransitionToState(FallingState.GetInstance());
                 }
@@ -53,7 +53,7 @@ public abstract class PlayerState
                 {
                     sM.TransitionToState(SupperLandingState.GetInstance());
                 }
-                else if (mC.CheckClimbing() && !pC.isFalling) sM.TransitionToState(ClimbingState.GetInstance());    //파쿠르상태
+                //else if (mC.CheckClimbing() && !pC.isFalling) sM.TransitionToState(ClimbingState.GetInstance());    //파쿠르상태
                 break;
             case LandingState:
                 if (pC.isJumping && !pC.isLanding) sM.TransitionToState(MoveState.GetInstance());                 //점프낙하 -> 이동상태
@@ -196,8 +196,6 @@ public class FallingState : PlayerState
     {
         pC.Move(false);
 
-        if (!pC.isFalling) return;
-
         if (pC.CheckDistance() < 10f)
         {
             sM.cameraController.ReadyToStopCameraShake();
@@ -207,6 +205,7 @@ public class FallingState : PlayerState
     public override void Exit()
     {
         sM.cameraController.StopCameraShake();
+
         pC.isTrusted = false;
         if (SoundManager.instance != null)
             SoundManager.instance.FadeSound("Falling", 0f, true);
@@ -216,12 +215,6 @@ public class FallingState : PlayerState
     {
         yield return new WaitForSeconds(time);
         pC.isFalling = true;
-
-        yield return new WaitForSeconds(0.3f);
-
-        sM.cameraController.StartCameraShake(0.05f);
-        if (SoundManager.instance != null)
-            SoundManager.instance.FadeSound("Falling", 1f);
     }
 }
 
@@ -288,6 +281,8 @@ public class ClimbingState : PlayerState
 
     public override void Enter()
     {
+        pC.isFalling = false;  //떨이지기 직전에 벽타기 시, 낙하 초기화용
+
         mC.isClimbing = true;
         mC.StartClimbing();
     }
