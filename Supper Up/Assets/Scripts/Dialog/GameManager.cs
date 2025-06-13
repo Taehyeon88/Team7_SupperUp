@@ -71,12 +71,68 @@ public class GameManager : MonoBehaviour
         //if (choice_4_2) AddValueOneTime("살려보낸다");
     }
 
-    //private void AddValueOneTime(string text)
-    //{
-    //    if (choiceds.Contains(text)) return;
+    private void AddValueOneTime(string text)
+    {
+        if (choiceds.Contains(text)) return;
 
-    //    choiceds.Add(text);
-    //}
+        choiceds.Add(text);
+    }
+    //살아서 집으로 돌아가고 싶다_모두 죽인다_보물을 챙기지 않는다
+    //살아서 집으로 돌아가고 싶다_모두 죽인다_보물을 챙긴다
+    //살아서 집으로 돌아가고 싶다_살려보낸다_물을 챙기지 않는다
+    //살아서 집으로 돌아가고 싶다_살려보낸다_물을 챙긴다
+    //죽고 싶지 않다
+    //나는 기사를 될 것이다_보물을 챙기지 않는다
+    //나는 기사를 될 것이다_보물을 챙긴다
+
+    public void EndingCheat(int num)
+    {
+        switch (num)
+        {
+            case 1:
+                AddValueOneTime("살아서 집으로 돌아가고 싶다");
+                AddValueOneTime("모두 죽인다");
+                AddValueOneTime("보물을 챙기지 않는다");
+                AddValueOneTime("물을 챙기지 않는다");
+                break;
+            case 2:
+                AddValueOneTime("살아서 집으로 돌아가고 싶다");
+                AddValueOneTime("모두 죽인다");
+                AddValueOneTime("보물을 챙긴다");
+                AddValueOneTime("물을 챙기지 않는다");
+                break;
+            case 3:
+                AddValueOneTime("살아서 집으로 돌아가고 싶다");
+                AddValueOneTime("살려보낸다");
+                AddValueOneTime("보물을 챙긴다");
+                AddValueOneTime("물을 챙기지 않는다");
+                break;
+            case 4:
+                AddValueOneTime("살아서 집으로 돌아가고 싶다");
+                AddValueOneTime("살려보낸다");
+                AddValueOneTime("보물을 챙긴다");
+                AddValueOneTime("물을 챙긴다");
+                break;
+            case 5:
+                AddValueOneTime("죽고 싶지 않다");
+                AddValueOneTime("살려보낸다");
+                AddValueOneTime("보물을 챙긴다");
+                AddValueOneTime("물을 챙긴다");
+                break;
+            case 6:
+                AddValueOneTime("나는 기사를 될 것이다");
+                AddValueOneTime("살려보낸다");
+                AddValueOneTime("보물을 챙긴다");
+                AddValueOneTime("물을 챙긴다");
+                break;
+            case 7:
+                AddValueOneTime("나는 기사를 될 것이다");
+                AddValueOneTime("살려보낸다");
+                AddValueOneTime("보물을 챙기지 않는다");
+                AddValueOneTime("물을 챙긴다");
+                break;
+        }
+    }
 
     public int CheckEnding()
     {
